@@ -1,7 +1,9 @@
 <script lang="ts">
 	import '../app.css';
+	import Loader from '../routes/Loader.svelte';
+	import Header from '../routes/Header.svelte';
+	import Sidebar from '../routes/Sidebar.svelte';
 	import { onMount } from 'svelte';
-	import Loading from '../routes/loading.svelte';
 
 	onMount(() => {
 		const loader = document.getElementById('loader')!;
@@ -16,10 +18,12 @@
 
 <main>
 	<div class="flex flex-row h-full">
-		<Loading />
+		<Loader />
 
 		<div class="flex flex-col w-full">
+			<Header />
 			<div class="flex flex-row w-full h-full">
+				<Sidebar />
 				<div
 					id="frame_container"
 					class="flex flex-col px-[10px] pb-[50px] w-full h-full bg-[#202123]"
