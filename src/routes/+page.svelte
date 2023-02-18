@@ -4,6 +4,7 @@
   import Header from '../routes/Header.svelte';
   import Sidebar from '../routes/Sidebar.svelte';
   import MainFrame from './MainFrame.svelte';
+  import NotSelected from './NotSelected.svelte';
   import { onMount } from 'svelte';
 
   onMount(() => {
@@ -30,19 +31,11 @@
           <MainFrame />
         </div>
 
-        <div
-          class="flex flex-col h-full bg-[#2e2f31] overflow-auto w-[275px] pb-[60px] z-1 shrink-0"
-          id="noscroll"
-        >
+        <div class="flex flex-col h-screen bg-[#2e2f31] w-[275px] shrink-0" id="noscroll">
+          <NotSelected />
           <!-- screen when no element selected -->
         </div>
       </div>
     </div>
-  </div>
-  <div
-    id="ghost_image"
-    class="flex h-min w-min items-center justify-center rounded-full bg-violet-500 px-[14px] py-[4px] font-sans text-[12px] font-semibold tracking-wide text-white drop-shadow-md absolute invisible"
-  >
-    Heading
   </div>
 </main>
