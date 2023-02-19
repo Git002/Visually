@@ -34,12 +34,6 @@
     ELEMENTS
   </div>
 
-  <!-- <Components
-    icon="Icons/heading.svg"
-    text="HEADING"
-    description="Big section heading"
-    id="Heading"
-  /> -->
   {#each components as component}
     <div
       class="flex flex-row gap-[16px] py-[12px] px-[16px] cursor-grab"
@@ -61,31 +55,4 @@
 
     <div class="border-t border-[#202123] w-full" />
   {/each}
-
-  <!-- <Components
-    icon="Icons/font.svg"
-    text="TEXT"
-    description="Plain text"
-    id="Text"
-  /> -->
-
-  <!-- <div class="border-t border-[#202123] w-full" /> -->
-
-  <!-- <Components
-    icon="Icons/button.svg"
-    text="BUTTON"
-    description="Simple clickable button"
-    id="Button"
-  /> -->
-
-  <!-- <div class="border-t border-[#202123] w-full" /> -->
-
-  <!-- <Components
-    icon="Icons/div2.svg"
-    text="DIV"
-    description="Container for components"
-    id="Div"
-  /> -->
-
-  <!-- <div class="border-t border-[#202123] w-full" /> -->
 </div>
