@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   let components = [
     {
       icon: '../src/Icons/heading.svg',
@@ -34,6 +34,7 @@
     ELEMENTS
   </div>
 
+  <!-- Components -->
   {#each components as component}
     <div
       class="flex flex-row gap-[16px] py-[12px] px-[16px] cursor-grab"
