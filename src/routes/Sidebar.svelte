@@ -1,4 +1,4 @@
-<main class="flex flex-row">
+<div class="flex flex-row">
   <div
     class="flex flex-col h-full bg-[#2e2f31] py-[12px] px-[23px] gap-[30px] items-center w-[42px]"
   >
@@ -22,4 +22,4 @@
   </div>
 
   <!-- <Panel /> -->
-</main>
+</div>

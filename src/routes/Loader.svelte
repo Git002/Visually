@@ -14,5 +14,6 @@
     loop
     autoplay
   />
+
   <div>Loading assets...</div>
 </div>
