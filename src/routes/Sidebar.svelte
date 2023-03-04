@@ -26,7 +26,7 @@
   >
     <button
       id="addNew"
-      class="font-sans text-center text-[17px] text-black bg-[#ebe9e9] rounded-full px-[7px]"
+      class="font-sans text-center text-[17px] text-black bg-[#ebe9e9] rounded-md px-[7px]"
       >+</button
     >
 

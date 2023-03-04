@@ -1,32 +1,29 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { htmlCode } from '../Stores';
 
-  let components = [
-    {
+  let elements: any = {
+    Heading: {
       icon: '../src/Icons/heading.svg',
-      text: 'Heading',
       description: 'Add a big heading',
-      id: 'HeadingComponent'
+      code: '<h1>Heading</h1>'
     },
-    {
+    Text: {
       icon: '../src/Icons/text.svg',
-      text: 'Text',
       description: 'New paragraph',
-      id: 'TextComponent'
+      code: '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique posuere.</p>'
     },
-    {
+    Button: {
       icon: '../src/Icons/button.svg',
-      text: 'Button',
       description: 'Simple clickable button',
-      id: 'ButtonComponent'
+      code: '<button>Click here</button>'
     },
-    {
+    Div: {
       icon: '../src/Icons/div.svg',
-      text: 'Div',
       description: 'Container for your elements',
-      id: 'DivComponent'
+      code: '<div new-empty-div></div>'
     }
-  ];
+  };
 
   onMount(() => {
     const ghost_img = <HTMLDivElement>document.getElementById('ghost_img');
@@ -34,7 +31,9 @@
     document.addEventListener('dragstart', (e) => {
       const blank = document.createElement('div');
       e.dataTransfer!.setDragImage(blank, 0, 0);
-      ghost_img.innerText = (e.target as HTMLDivElement).getAttribute('data-name')!;
+      const ghostText = (e.target as HTMLDivElement).getAttribute('data-name')!;
+      ghost_img.innerText = ghostText;
+      htmlCode.update(() => elements[ghostText].code);
     });
 
     document.addEventListener('dragover', (e) => {
@@ -59,23 +58,21 @@
     ELEMENTS
   </div>
 
-  <!-- Components -->
-  {#each components as component}
+  {#each Object.entries(elements) as [key]}
     <div
       class="flex flex-row gap-[16px] py-[12px] px-[16px] cursor-grab"
       draggable="true"
-      id={component.id}
-      data-name={component.text}
+      data-name={key}
     >
       <div class="flex flex-row border-2 border-[#404040] rounded-md items-center p-[8px]">
-        <object data={component.icon} title="" style="pointer-events: none;" />
+        <object data={elements[key].icon} title="" style="pointer-events: none;" />
       </div>
       <div class="flex flex-col justify-evenly">
         <div class="font-sans text-[11px] font-semibold tracking-wider uppercase text-[#ded9d9]">
-          {component.text}
+          {key}
         </div>
         <div class="font-Inter text-[11.5px] font-semibold text-[#acaaaa]">
-          {component.description}
+          {elements[key].description}
         </div>
       </div>
     </div>
@@ -86,7 +83,7 @@
 
 <div
   id="ghost_img"
-  class="flex h-min w-min items-center justify-center rounded-full bg-violet-500 px-[14px] py-[4px] font-sans text-[12px] font-semibold tracking-wide text-white drop-shadow-md invisible absolute capitalize"
+  class="flex h-min w-min items-center justify-center rounded-full bg-violet-500 px-[14px] py-[4px] font-sans text-[12px] font-semibold tracking-wide text-white drop-shadow-md invisible absolute capitalize z-20"
 >
   Ghost
 </div>

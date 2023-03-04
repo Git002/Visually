@@ -11,7 +11,6 @@
   onMount(() => {
     const loader = document.getElementById('loader')!;
     if (document.readyState === 'complete') {
-      console.log('page loaded');
       setTimeout(() => {
         loader.style.visibility = 'hidden';
       }, 1500);
