@@ -33,6 +33,8 @@
       e.dataTransfer!.setDragImage(blank, 0, 0);
       const ghostText = (e.target as HTMLDivElement).getAttribute('data-name')!;
       ghost_img.innerText = ghostText;
+
+      // get code of the dragged element
       htmlCode.update(() => elements[ghostText].code);
     });
 
