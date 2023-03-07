@@ -52,7 +52,7 @@
 
 <div
   id="showPanel"
-  class="flex flex-col ml-[46.5px] h-full bg-[#2e2f31] w-[300px] absolute invisible z-40"
+  class="flex flex-col ml-[46px] h-full bg-[#2e2f31] w-[300px] absolute invisible z-40"
 >
   <div
     class="font-sans text-[10px] font-semibold tracking-wider text-[#b7b4b4] mt-[16px] mb-[6px] px-[16px]"
