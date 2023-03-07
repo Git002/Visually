@@ -27,6 +27,7 @@
       let h = rect.height;
 
       click_selector.style.visibility = 'visible';
+
       click_selector.style.width = w + 'px';
       click_selector.style.height = h + 'px';
       click_selector.style.left = l + window.scrollX + 'px';
@@ -48,8 +49,7 @@
       hover_selector.style.top = t + window.scrollY + 'px';
     });
 
-    window.addEventListener('resize', (e) => {
-      clickedElement.click();
+    shadow.addEventListener('mouseout', (e) => {
       hover_selector.style.visibility = 'hidden';
     });
 
@@ -60,11 +60,20 @@
     shadow.addEventListener('drop', (e) => {
       shadow.querySelector('[data-body]')!.insertAdjacentHTML('beforeend', String($htmlCode));
     });
+
+    window.addEventListener('resize', (e) => {
+      clickedElement.click();
+      hover_selector.style.visibility = 'hidden';
+    });
   });
 </script>
 
 <!-- shadow root -->
-<div class="bg-[#ececec] w-full h-full z-0" id="frame-root" />
+<div
+  class="bg-[#ececec] w-full h-[730px] z-0 overflow-y-scroll"
+  style="color-scheme: dark;"
+  id="frame-root"
+/>
 
 <!-- default empty template -->
 <template id="load-template">

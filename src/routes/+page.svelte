@@ -32,7 +32,7 @@
         <MainFrame />
       </div>
 
-      <div class="flex flex-col h-screen bg-[#2e2f31] w-[275px] shrink-0" id="noscroll">
+      <div class="flex flex-col h-screen bg-[#2e2f31] w-[270px] shrink-0" id="noscroll">
         <NotSelected />
         <!-- screen when no element selected -->
       </div>
