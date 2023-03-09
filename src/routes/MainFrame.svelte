@@ -15,6 +15,8 @@
     const hover_selector = <HTMLDivElement>document.getElementById('hover-selector');
     const indicator = <HTMLDivElement>document.getElementById('indicator');
 
+    type InsertPosition = 'beforebegin' | 'afterbegin' | 'beforeend' | 'afterend';
+    let position: InsertPosition;
     let clickedElement: HTMLElement;
 
     shadow.addEventListener('click', (e) => {
@@ -53,14 +55,17 @@
       indicator.style.left = rect.left + window.scrollX + 'px';
       indicator.style.top = rect.top + window.scrollY + 'px';
 
-      // indicator logic on dragover
       if (!elem.hasAttribute('data-body')) {
         if (Math.abs((e as MouseEvent).pageY - rect.top) <= rect.height / 2) {
           indicator.style.borderTop = '3px solid #007bfb';
           indicator.style.borderBottom = '';
+          // insert before the element
+          position = 'beforebegin';
         } else {
           indicator.style.borderTop = '';
           indicator.style.borderBottom = '3px solid #007bfb';
+          // insert after the element
+          position = 'afterend';
         }
       } else {
         indicator.style.display = 'none';
@@ -70,7 +75,13 @@
     });
 
     shadow.addEventListener('drop', (e) => {
-      shadow.querySelector('[data-body]')!.insertAdjacentHTML('beforeend', String($htmlCode));
+      let elem = e.target as HTMLElement;
+      if (elem.hasAttribute('data-body')) {
+        shadow.querySelector('[data-body]')!.insertAdjacentHTML('beforeend', String($htmlCode));
+      } else {
+        elem.insertAdjacentHTML(position, String($htmlCode));
+      }
+
       indicator.style.display = 'none';
     });
 
