@@ -31,17 +31,13 @@
     document.addEventListener('dragstart', (e) => {
       const blank = document.createElement('div');
       e.dataTransfer!.setDragImage(blank, 0, 0);
+
       const ghostText = (e.target as HTMLDivElement).getAttribute('data-name')!;
       ghost_img.innerText = ghostText;
+      ghost_img.style.visibility = 'visible';
 
       // get code of the dragged element
       htmlCode.update(() => elements[ghostText].code);
-    });
-
-    document.addEventListener('dragover', (e) => {
-      ghost_img.style.left = e.clientX + 15 + 'px';
-      ghost_img.style.top = e.clientY + 15 + 'px';
-      ghost_img.style.visibility = 'visible';
     });
 
     document.addEventListener('dragend', (e) => {

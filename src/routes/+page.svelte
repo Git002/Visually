@@ -13,7 +13,7 @@
     if (document.readyState === 'complete') {
       setTimeout(() => {
         loader.style.visibility = 'hidden';
-      }, 1500);
+      }, 2000);
     }
   });
 </script>
@@ -28,7 +28,10 @@
       <Sidebar />
       <Panel />
 
-      <div id="frame_container" class="flex flex-col p-[10px] w-full h-full bg-[#202123]">
+      <div
+        id="frame_container"
+        class="flex flex-col px-[10px] overflow-hidden w-full h-full bg-[#202123]"
+      >
         <MainFrame />
       </div>
 

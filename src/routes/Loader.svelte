@@ -1,5 +1,7 @@
-<script>
-  import '@lottiefiles/lottie-player';
+<script lang="ts">
+  if (typeof window !== 'undefined') {
+    import('@lottiefiles/lottie-player');
+  }
 </script>
 
 <div
