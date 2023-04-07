@@ -9,11 +9,6 @@
     selector.style.height = rect.height + 'px';
     selector.style.top = rect.top + 'px';
     selector.style.left = rect.left + 'px';
-
-    if (print) {
-      console.log(selector.style.height, rect.height);
-      console.log(selector.style.top, rect.top);
-    }
   }
 
   onMount(() => {
@@ -21,6 +16,7 @@
     const iFrameContainer = <HTMLDivElement>document.getElementById('frame_container');
     const ghost_img = <HTMLDivElement>document.getElementById('ghost_img');
 
+    // (needs to be tested)
     iFrameContainer.style.height = String(window.innerHeight - 43) + 'px';
 
     // helper selectors
@@ -119,7 +115,7 @@
         calculateRect(clickedElement, click_selector);
         hover_selector.style.display = 'none';
       }
-      // updating iframe's div on resize
+      // updating iframe's div on resize (needs to be tested)
       iFrameContainer.style.height = String(window.innerHeight - 43) + 'px';
     });
   });
@@ -143,6 +139,7 @@
   /* Helper divs */
   div#hover-selector,
   div#click-selector {
+    box-sizing: border-box;
     display: none;
     pointer-events: none;
     border: 1px solid rgb(76, 120, 255);
@@ -152,6 +149,7 @@
   }
 
   div#indicator {
+    box-sizing: border-box;
     display: none;
     pointer-events: none;
     position: absolute;
