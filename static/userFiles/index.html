@@ -16,6 +16,7 @@
 
       html {
         scroll-behavior: smooth !important;
+        color-scheme: dark;
       }
 
       /* Remove default margin */
@@ -66,7 +67,6 @@
         color: white;
         border: 0;
         margin-bottom: 10px;
-        line-height: 18px;
       }
 
       /* Set body's default width and height */
@@ -107,5 +107,41 @@
       cupiditate reprehenderit distinctio pariatur temporibus.
     </p>
     <button>Click me</button>
+
+    <div
+      id="click-selector"
+      style="
+        box-sizing: border-box;
+        display: none;
+        pointer-events: none;
+        border: 1px solid rgb(76, 120, 255);
+        position: absolute;
+        border-radius: 0px;
+        background-color: transparent;
+      "
+    ></div>
+    <div
+      id="hover-selector"
+      style="
+        box-sizing: border-box;
+        display: none;
+        pointer-events: none;
+        border: 1px solid rgb(76, 120, 255);
+        position: absolute;
+        border-radius: 0px;
+        background-color: transparent;
+      "
+    ></div>
+    <div
+      id="indicator"
+      style="
+        box-sizing: border-box;
+        display: none;
+        pointer-events: none;
+        position: absolute;
+        border-radius: 0px;
+        background-color: transparent;
+      "
+    ></div>
   </body>
 </html>

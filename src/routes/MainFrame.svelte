@@ -3,12 +3,12 @@
   import { htmlCode } from '../Stores';
 
   // calculating the outline box pixels for helper divs
-  function calculateRect(element: HTMLElement, selector: HTMLDivElement, print?: boolean) {
+  function calculateRect(element: HTMLElement, selector: HTMLDivElement, window: Window) {
     let rect = element.getBoundingClientRect();
     selector.style.width = rect.width + 'px';
     selector.style.height = rect.height + 'px';
-    selector.style.top = rect.top + 'px';
-    selector.style.left = rect.left + 'px';
+    selector.style.top = rect.top + window.scrollY + 'px';
+    selector.style.left = rect.left + window.scrollX + 'px';
   }
 
   onMount(() => {
@@ -19,31 +19,36 @@
     // (needs to be tested)
     iFrameContainer.style.height = String(window.innerHeight - 43) + 'px';
 
-    // helper selectors
-    const click_selector = <HTMLDivElement>document.getElementById('click-selector');
-    const hover_selector = <HTMLDivElement>document.getElementById('hover-selector');
-    const indicator = <HTMLDivElement>document.getElementById('indicator');
-
-    // object type for insertAdjacentHTML on drop
+    // object type for insertAdjacentHTML on drop() event
     type InsertPosition = 'beforebegin' | 'afterbegin' | 'beforeend' | 'afterend';
     let position: InsertPosition;
 
-    let clickedElement: HTMLElement;
-    let hoveredElement: HTMLElement;
+    let clickedElement: HTMLElement, hoveredElement: HTMLElement;
 
+    let iFrameWindow: Window;
+    let click_selector: HTMLDivElement, hover_selector: HTMLDivElement, indicator: HTMLDivElement;
+
+    // make the iframe reload
     iFrame.src = 'userFiles/index.html';
+
     iFrame.addEventListener('load', () => {
       let iFrameDoc = iFrame.contentDocument!;
+      iFrameWindow = iFrame.contentWindow!;
+
+      // helper selectors
+      click_selector = <HTMLDivElement>iFrameDoc.getElementById('click-selector');
+      hover_selector = <HTMLDivElement>iFrameDoc.getElementById('hover-selector');
+      indicator = <HTMLDivElement>iFrameDoc.getElementById('indicator');
 
       iFrameDoc.addEventListener('click', (e) => {
         clickedElement = e.target as HTMLElement;
-        calculateRect(clickedElement, click_selector, true);
+        calculateRect(clickedElement, click_selector, iFrameWindow);
         click_selector.style.display = 'block';
       });
 
       iFrameDoc.addEventListener('mouseover', (e) => {
         hoveredElement = e.target as HTMLElement;
-        calculateRect(hoveredElement, hover_selector);
+        calculateRect(hoveredElement, hover_selector, iFrameWindow);
         hover_selector.style.display = 'block';
       });
 
@@ -61,14 +66,14 @@
         let elem = e.target as HTMLElement;
         let rect = elem.getBoundingClientRect();
 
+        calculateRect(elem, indicator, iFrameWindow);
+
         indicator.style.display = 'block';
-        indicator.style.width = rect.width + 'px';
-        indicator.style.height = rect.height + 'px';
-        indicator.style.top = rect.top + 'px';
-        indicator.style.left = rect.left + 'px';
+        hover_selector.style.display = 'none';
+        click_selector.style.display = 'none';
 
         if (elem.tagName !== 'BODY') {
-          if (Math.abs((e as MouseEvent).clientY - rect.top) <= rect.height / 2) {
+          if (Math.abs((e as MouseEvent).pageY - rect.top) <= rect.height / 2) {
             indicator.style.borderTop = '3px solid #007bfb';
             indicator.style.borderBottom = '';
             // insert before the element
@@ -99,9 +104,9 @@
       // recalculate selector styles on scroll
       iFrameDoc.addEventListener('scroll', (e) => {
         if (clickedElement) {
-          calculateRect(clickedElement, click_selector);
+          calculateRect(clickedElement, click_selector, iFrameWindow);
         }
-        calculateRect(hoveredElement, hover_selector);
+        calculateRect(hoveredElement, hover_selector, iFrameWindow);
       });
     });
 
@@ -112,7 +117,7 @@
     window.addEventListener('resize', (e) => {
       // updating selector styles on resize
       if (clickedElement) {
-        calculateRect(clickedElement, click_selector);
+        calculateRect(clickedElement, click_selector, iFrameWindow);
         hover_selector.style.display = 'none';
       }
       // updating iframe's div on resize (needs to be tested)
@@ -130,30 +135,7 @@
     id="frame"
     style="color-scheme: dark;"
   />
-  <div id="click-selector" />
-  <div id="hover-selector" />
-  <div id="indicator" />
 </div>
 
 <style>
-  /* Helper divs */
-  div#hover-selector,
-  div#click-selector {
-    box-sizing: border-box;
-    display: none;
-    pointer-events: none;
-    border: 1px solid rgb(76, 120, 255);
-    position: absolute;
-    border-radius: 0px;
-    background-color: transparent;
-  }
-
-  div#indicator {
-    box-sizing: border-box;
-    display: none;
-    pointer-events: none;
-    position: absolute;
-    border-radius: 0px;
-    background-color: transparent;
-  }
 </style>
