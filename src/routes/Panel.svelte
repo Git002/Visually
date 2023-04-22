@@ -61,6 +61,7 @@
       class="flex flex-row gap-[16px] py-[12px] px-[16px] cursor-grab"
       draggable="true"
       data-name={key}
+      style="-moz-user-drag: none;"
     >
       <div class="flex flex-row border-2 border-[#404040] rounded-md items-center p-[8px]">
         <object data={elements[key].icon} title="" style="pointer-events: none;" />
