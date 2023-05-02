@@ -18,6 +18,14 @@
     Div: {
       icon: '../src/Icons/div.png',
       code: '<div new-empty-div></div>'
+    },
+    Input: {
+      icon: '../src/Icons/input.png',
+      code: '<input type="text">'
+    },
+    Images: {
+      icon: '../src/Icons/image.png',
+      code: '<img src="" alt="My default image">'
     }
   };
 
@@ -52,11 +60,11 @@
   <div class="grid grid-cols-2 gap-[16px] pt-[12px]">
     {#each Object.entries(elements) as [key]}
       <div
-        class="flex flex-col border-2 border-[#404040] w-[86px] h-[86px] rounded-md items-center justify-center cursor-grab"
+        class="flex flex-col border-2 border-[#404040] w-[82px] h-[82px] rounded-md items-center justify-center cursor-grab"
         draggable="true"
         data-name={key}
       >
-        <img src={elements[key].icon} alt="" class="pointer-events-none" width="70" />
+        <img src={elements[key].icon} alt="" class="pointer-events-none" width="75" />
       </div>
     {/each}
   </div>
