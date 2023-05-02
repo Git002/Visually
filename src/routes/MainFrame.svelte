@@ -60,6 +60,7 @@
         e.preventDefault();
 
         // setting ghost_img drag position
+        ghost_img.style.visibility = 'visible';
         ghost_img.style.top = e.clientY + 60 + 'px';
         ghost_img.style.left = e.clientX + 75 + 'px';
 
