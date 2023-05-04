@@ -29,15 +29,15 @@
     >
 
     <button>
-      <object data="./src/Icons/components.svg" title="" style="pointer-events: none;" />
+      <object data="./Icons/components.svg" title="" style="pointer-events: none;" />
     </button>
 
     <button>
-      <object data="./src/Icons/files.svg" title="" style="pointer-events: none;" />
+      <object data="./Icons/files.svg" title="" style="pointer-events: none;" />
     </button>
 
     <button>
-      <object data="./src/Icons/folder.svg" title="" style="pointer-events: none;" />
+      <object data="./Icons/folder.svg" title="" style="pointer-events: none;" />
     </button>
   </div>
 

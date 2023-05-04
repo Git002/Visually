@@ -5,7 +5,7 @@
 >
   <div class="flex flex-row items-center">
     <button class="rounded-full py-2 px-2 bg-[#393a3c]">
-      <object data="../src/Icons/menu.svg" title="" style=" pointer-events: none;" />
+      <object data="../Icons/menu.svg" title="" style=" pointer-events: none;" />
     </button>
   </div>
 

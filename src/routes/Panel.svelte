@@ -4,27 +4,27 @@
 
   let elements: any = {
     Heading: {
-      icon: '../src/Icons/heading.png',
+      icon: '/../Icons/heading.png',
       code: '<h1>Heading</h1>'
     },
     Text: {
-      icon: '../src/Icons/text.png',
+      icon: '/../Icons/text.png',
       code: '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique posuere.</p>'
     },
     Button: {
-      icon: '../src/Icons/button.png',
+      icon: '/../Icons/button.png',
       code: '<button>Click here</button>'
     },
     Div: {
-      icon: '../src/Icons/div.png',
+      icon: '/../Icons/div.png',
       code: '<div new-empty-div></div>'
     },
     Input: {
-      icon: '../src/Icons/input.png',
+      icon: '/../Icons/input.png',
       code: '<input type="text">'
     },
     Images: {
-      icon: '../src/Icons/image.png',
+      icon: '/../Icons/image.png',
       code: '<img src="" alt="My default image">'
     }
   };
