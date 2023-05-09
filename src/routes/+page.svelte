@@ -6,7 +6,13 @@
   import MainFrame from './MainFrame.svelte';
   import NotSelected from './NotSelected.svelte';
   import Panel from './Panel.svelte';
+  import Properties from './Properties.svelte';
+  import { clickedElement } from '../Stores';
   import { onMount } from 'svelte';
+
+  $: if ($clickedElement !== undefined) {
+    document.getElementById('not_selected')!.style.visibility = 'hidden';
+  }
 
   onMount(() => {
     const loader = document.getElementById('loader')!;
@@ -18,7 +24,7 @@
   });
 </script>
 
-<div class="flex flex-row h-full">
+<div class="flex flex-row min-h-screen">
   <Loader />
 
   <div class="flex flex-col w-full">
@@ -35,8 +41,10 @@
         <MainFrame />
       </div>
 
-      <div class="flex flex-col h-screen bg-[#2e2f31] w-[270px] shrink-0" id="noscroll">
+      <div class="flex flex-col h-full bg-[#2e2f31] w-[270px] shrink-0" id="noscroll">
         <NotSelected />
+
+        <Properties />
         <!-- screen when no element selected -->
       </div>
     </div>

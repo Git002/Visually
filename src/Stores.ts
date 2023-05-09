@@ -1,3 +1,4 @@
-import { writable } from "svelte/store";
+import { writable, type Writable } from "svelte/store";
 
-export const htmlCode = writable();
+export const htmlCode: Writable<HTMLElement> = writable();
+export const clickedElement: Writable<HTMLElement> = writable();

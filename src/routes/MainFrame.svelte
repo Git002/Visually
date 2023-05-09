@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { htmlCode } from '../Stores';
+  import { htmlCode, clickedElement } from '../Stores';
 
   // calculating the outline box pixels for helper divs
   function calculateRect(element: HTMLElement, selector: HTMLDivElement, window: Window) {
@@ -13,19 +13,16 @@
 
   onMount(() => {
     const iFrame = <HTMLIFrameElement>document.getElementById('frame');
-    const iFrameContainer = <HTMLDivElement>document.getElementById('frame_container');
     const ghost_img = <HTMLDivElement>document.getElementById('ghost_img');
-
-    // (needs to be tested)
-    iFrameContainer.style.height = String(window.innerHeight - 43) + 'px';
 
     // object type for insertAdjacentHTML on drop() event
     type InsertPosition = 'beforebegin' | 'afterbegin' | 'beforeend' | 'afterend';
     let position: InsertPosition;
 
-    let clickedElement: HTMLElement, hoveredElement: HTMLElement;
+    let hoveredElement: HTMLElement;
 
     let iFrameWindow: Window;
+    // helper selectors for drag n drop
     let click_selector: HTMLDivElement, hover_selector: HTMLDivElement, indicator: HTMLDivElement;
 
     // make the iframe reload
@@ -41,8 +38,8 @@
       indicator = <HTMLDivElement>iFrameDoc.getElementById('indicator');
 
       iFrameDoc.addEventListener('click', (e) => {
-        clickedElement = e.target as HTMLElement;
-        calculateRect(clickedElement, click_selector, iFrameWindow);
+        clickedElement.update(() => e.target as HTMLElement);
+        calculateRect($clickedElement, click_selector, iFrameWindow);
         click_selector.style.display = 'block';
       });
 
@@ -104,8 +101,8 @@
 
       // recalculate selector styles on scroll
       iFrameDoc.addEventListener('scroll', (e) => {
-        if (clickedElement) {
-          calculateRect(clickedElement, click_selector, iFrameWindow);
+        if ($clickedElement) {
+          calculateRect($clickedElement, click_selector, iFrameWindow);
         }
         calculateRect(hoveredElement, hover_selector, iFrameWindow);
       });
@@ -118,11 +115,9 @@
     window.addEventListener('resize', (e) => {
       // updating selector styles on resize
       if (clickedElement) {
-        calculateRect(clickedElement, click_selector, iFrameWindow);
+        calculateRect($clickedElement, click_selector, iFrameWindow);
         hover_selector.style.display = 'none';
       }
-      // updating iframe's div on resize (needs to be tested)
-      iFrameContainer.style.height = String(window.innerHeight - 43) + 'px';
     });
   });
 </script>
