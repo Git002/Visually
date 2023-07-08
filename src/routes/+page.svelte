@@ -41,7 +41,10 @@
         <MainFrame />
       </div>
 
-      <div class="flex flex-col h-full bg-[#2e2f31] w-[270px] shrink-0" id="noscroll">
+      <div
+        class="flex flex-col h-full bg-[#2e2f31] w-[270px] shrink-0 overscroll-none"
+        id="noscroll"
+      >
         <NotSelected />
 
         <Properties />

@@ -4,27 +4,32 @@
 
   let elements: any = {
     Heading: {
-      icon: '/../Icons/heading.png',
+      icon: 'Icons/heading.png',
       code: '<h1>Heading</h1>'
     },
+
     Text: {
-      icon: '/../Icons/text.png',
+      icon: 'Icons/paragraph.png',
       code: '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique posuere.</p>'
     },
+
     Button: {
-      icon: '/../Icons/button.png',
+      icon: 'Icons/button.png',
       code: '<button>Click here</button>'
     },
-    Div: {
-      icon: '/../Icons/div.png',
-      code: '<div new-empty-div></div>'
-    },
+
     Input: {
-      icon: '/../Icons/input.png',
+      icon: 'Icons/input.png',
       code: '<input type="text">'
     },
+
+    Div: {
+      icon: 'Icons/div.png',
+      code: '<div new-empty-div></div>'
+    },
+
     Images: {
-      icon: '/../Icons/image.png',
+      icon: 'Icons/image.png',
       code: '<img src="" alt="My default image">'
     }
   };
@@ -51,7 +56,7 @@
 
 <div
   id="showPanel"
-  class="flex flex-col ml-[46px] py-[20px] px-[26px] h-full bg-[#2e2f31] absolute invisible z-40"
+  class="flex flex-col ml-[42px] py-[20px] px-[26px] h-full bg-[#2e2f31] absolute invisible z-40"
 >
   <div class="font-sans text-[10px] mb-[4px] font-semibold tracking-wider text-[#ded9d9]">
     ELEMENTS
@@ -60,7 +65,7 @@
   <div class="grid grid-cols-2 gap-[16px] pt-[12px]">
     {#each Object.entries(elements) as [key]}
       <div
-        class="flex flex-col border-2 border-[#404040] w-[82px] h-[82px] rounded-md items-center justify-center cursor-grab"
+        class="flex flex-col border-2 border-[#404040] w-[86px] h-[80px] rounded-md items-center justify-center cursor-grab"
         draggable="true"
         data-name={key}
       >

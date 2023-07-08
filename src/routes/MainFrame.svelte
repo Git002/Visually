@@ -114,7 +114,7 @@
 
     window.addEventListener('resize', (e) => {
       // updating selector styles on resize
-      if (clickedElement) {
+      if ($clickedElement) {
         calculateRect($clickedElement, click_selector, iFrameWindow);
         hover_selector.style.display = 'none';
       }
