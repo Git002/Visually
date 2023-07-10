@@ -10,12 +10,17 @@
 
     Text: {
       icon: 'Icons/paragraph.png',
-      code: '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique posuere.</p>'
+      code: '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget est quis lacus euismod ultricies. Phasellus luctus efficitur dapibus. Nam ultrices faucibus massa non scelerisque. Etiam posuere eget erat non varius. Nam nec urna pulvinar, tincidunt augue a, convallis neque. Vivamus vel erat libero. Mauris id aliquam nibh. Pellentesque tincidunt augue id dui egestas dictum. </p>'
     },
 
     Button: {
       icon: 'Icons/button.png',
       code: '<button>Click here</button>'
+    },
+
+    Images: {
+      icon: 'Icons/image.png',
+      code: '<img src="default_image.svg" alt="My default image" width="200">'
     },
 
     Input: {
@@ -26,11 +31,6 @@
     Div: {
       icon: 'Icons/div.png',
       code: '<div new-empty-div></div>'
-    },
-
-    Images: {
-      icon: 'Icons/image.png',
-      code: '<img src="" alt="My default image">'
     }
   };
 
@@ -56,13 +56,13 @@
 
 <div
   id="showPanel"
-  class="flex flex-col ml-[42px] py-[20px] px-[26px] h-full bg-[#2e2f31] absolute invisible z-40"
+  class="flex flex-col ml-[42px] py-[20px] px-[20px] h-full bg-[#2e2f31] absolute invisible z-10"
 >
   <div class="font-sans text-[10px] mb-[4px] font-semibold tracking-wider text-[#ded9d9]">
     ELEMENTS
   </div>
 
-  <div class="grid grid-cols-2 gap-[16px] pt-[12px]">
+  <div class="grid grid-cols-2 gap-[20px] pt-[12px]">
     {#each Object.entries(elements) as [key]}
       <div
         class="flex flex-col border-2 border-[#404040] w-[86px] h-[80px] rounded-md items-center justify-center cursor-grab"

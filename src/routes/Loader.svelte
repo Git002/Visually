@@ -5,7 +5,7 @@
 </script>
 
 <div
-  class="bg-[#202123] absolute flex flex-col justify-center w-full h-screen items-center font-semibold text-[#656667] text-[16px] z-50 gap-[30px]"
+  class="bg-[#202123] absolute flex flex-col justify-center w-full h-screen items-center font-semibold text-[#656667] text-[16px] z-10 gap-[30px]"
   id="loader"
 >
   <lottie-player

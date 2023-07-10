@@ -56,7 +56,7 @@
 
 <div
   id="ghost_img"
-  class="flex h-min w-min items-center justify-center rounded-full bg-violet-500 px-[14px] py-[4px] font-sans text-[12px] font-semibold tracking-wide text-white drop-shadow-md invisible absolute capitalize z-20"
+  class="flex h-min w-min items-center justify-center rounded-full bg-violet-500 px-[14px] py-[4px] font-sans text-[12px] font-semibold tracking-wide text-white drop-shadow-md invisible absolute capitalize z-11"
 >
   Ghost
 </div>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Dropdown from '../Components/Dropdown.svelte';
+  import Dropdown from '../UIComponents/Dropdown.svelte';
 
   let dropItems = ['None', 'On Hover', 'On Press', 'On Focus'];
 </script>
