@@ -39,10 +39,6 @@
         hover_selector.style.display = 'block';
       });
 
-      iFrameDoc.addEventListener('mouseout', (e) => {
-        hover_selector.style.display = 'none';
-      });
-
       iFrameDoc.addEventListener('dragover', (e) => {
         e.preventDefault();
 
@@ -54,28 +50,30 @@
         let elem = e.target as HTMLElement;
         let rect = elem.getBoundingClientRect();
 
-        calculateRect(elem, indicator);
-
         indicator.style.display = 'block';
         hover_selector.style.display = 'none';
         click_selector.style.display = 'none';
 
-        if (elem.tagName !== 'BODY') {
-          if (Math.abs((e as MouseEvent).pageY - rect.top) <= rect.height / 2) {
-            indicator.style.borderTop = '3px solid #007bfb';
-            indicator.style.borderBottom = '';
-            // insert before the element
-            position = 'beforebegin';
-          } else {
-            indicator.style.borderTop = '';
-            indicator.style.borderBottom = '3px solid #007bfb';
-            // insert after the element
-            position = 'afterend';
-          }
-        } else {
+        // show indicator on drag
+        calculateRect(elem, indicator);
+
+        if (elem.tagName === 'BODY') {
           indicator.style.display = 'none';
           indicator.style.borderTop = '';
           indicator.style.borderBottom = '';
+        } else {
+          // insert above the the element
+          if (Math.abs((e as MouseEvent).pageY - rect.top) <= rect.height / 2) {
+            indicator.style.borderTop = '3px solid #007bfb';
+            indicator.style.borderBottom = '';
+            position = 'beforebegin';
+          }
+          // insert below the element
+          else {
+            indicator.style.borderTop = '';
+            indicator.style.borderBottom = '3px solid #007bfb';
+            position = 'afterend';
+          }
         }
       });
 
@@ -96,10 +94,6 @@
         }
         calculateRect(hoveredElement, hover_selector);
       });
-    });
-
-    document.addEventListener('dragend', () => {
-      indicator.style.display = 'none';
     });
 
     window.addEventListener('resize', (e) => {
