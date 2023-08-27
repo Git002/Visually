@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { htmlCode } from '../Stores';
+  import { htmlCode, show } from '../Stores';
 
   let elements: any = {
     Heading: {
@@ -41,22 +41,21 @@
       const blank = document.createElement('div');
       e.dataTransfer!.setDragImage(blank, 0, 0);
 
-      const ghostText = (e.target as HTMLDivElement).getAttribute('data-name')!;
+      const ghostText = (e.target as HTMLDivElement).getAttribute('data-tagname')!;
       ghost_img.innerText = ghostText;
+      ghost_img.style.visibility = 'visible';
 
-      // get code of the dragged element
+      // set the code for the dragged element
       htmlCode.update(() => elements[ghostText].code);
-    });
-
-    document.addEventListener('dragend', (e) => {
-      ghost_img.style.visibility = 'hidden';
     });
   });
 </script>
 
 <div
-  id="showPanel"
-  class="flex flex-col ml-[42px] py-[20px] px-[20px] h-full bg-[#2e2f31] absolute invisible z-10"
+  id="elementsPanel"
+  class={$show
+    ? 'flex flex-col ml-[42px] py-[20px] px-[20px] h-full bg-[#2e2f31] absolute z-10'
+    : 'absolute invisible'}
 >
   <div class="font-sans text-[10px] mb-[4px] font-semibold tracking-wider text-[#ded9d9]">
     ELEMENTS
@@ -67,7 +66,7 @@
       <div
         class="flex flex-col border-2 border-[#404040] w-[86px] h-[80px] rounded-md items-center justify-center cursor-grab"
         draggable="true"
-        data-name={key}
+        data-tagname={key}
       >
         <img src={elements[key].icon} alt="" class="pointer-events-none" width="70" />
       </div>

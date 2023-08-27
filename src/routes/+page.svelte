@@ -34,10 +34,7 @@
       <Sidebar />
       <Panel />
 
-      <div
-        id="frame_container"
-        class="flex flex-col px-[10px] overflow-hidden w-full h-full bg-[#202123]"
-      >
+      <div class="flex flex-col px-[10px] overflow-hidden w-full h-full bg-[#202123]">
         <MainFrame />
       </div>
 
