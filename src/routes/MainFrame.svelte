@@ -1,21 +1,46 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { htmlCode, clickedElement, show } from '../Stores';
+  import { clickedElement, show } from '../Stores';
   import { calculateRect } from '../lib/Modules/helperFunctions';
+  import { elements } from './Panel.svelte';
+
+  // type for insertAdjacentHTML on the drop() event
+  type InsertPosition = 'beforebegin' | 'afterbegin' | 'beforeend' | 'afterend';
+  let position: InsertPosition;
+
+  let hoveredElement: HTMLElement;
+  let draggedElement: HTMLElement | null = null;
+
+  function ghostImageHandler(top: number, left: number, visibility?: 'visible' | 'hidden') {
+    const ghost_img = <HTMLDivElement>document.getElementById('ghost_img');
+    if (visibility) {
+      ghost_img.style.visibility = visibility;
+    }
+    ghost_img.style.top = top + 'px';
+    ghost_img.style.left = left + 'px';
+  }
 
   onMount(() => {
     const iFrame = <HTMLIFrameElement>document.getElementById('frame');
     const ghost_img = <HTMLDivElement>document.getElementById('ghost_img');
-
-    // type for insertAdjacentHTML on drop() event
-    type InsertPosition = 'beforebegin' | 'afterbegin' | 'beforeend' | 'afterend';
-
-    let position: InsertPosition;
-    let hoveredElement: HTMLElement;
-    let draggedElement: HTMLElement | null = null;
+    let htmlCode: string;
 
     // helper selectors for drag n drop
-    let click_selector: HTMLDivElement, hover_selector: HTMLDivElement, indicator: HTMLDivElement;
+    const click_selector = <HTMLDivElement>document.getElementById('click-selector');
+    const hover_selector = <HTMLDivElement>document.getElementById('hover-selector');
+    const indicator = <HTMLDivElement>document.getElementById('indicator');
+
+    // drag and drop operations for document ---------->
+    document.addEventListener('dragstart', (e) => {
+      const blank = document.createElement('div');
+      e.dataTransfer!.setDragImage(blank, 0, 0);
+
+      const ghostText = (e.target as HTMLDivElement).getAttribute('data-tagname')!;
+      ghost_img.innerText = ghostText;
+      ghost_img.style.visibility = 'visible';
+
+      htmlCode = elements[ghostText].code;
+    });
 
     document.addEventListener('dragover', (e) => {
       e.preventDefault();
@@ -26,9 +51,13 @@
 
     document.addEventListener('drop', (e) => {
       e.preventDefault();
-      ghost_img.style.visibility = 'hidden';
-      ghost_img.style.top = 60 + 'px';
-      ghost_img.style.left = 75 + 'px';
+      ghostImageHandler(60, 75, 'hidden');
+      draggedElement = null;
+    });
+
+    document.addEventListener('dragend', (e) => {
+      e.preventDefault();
+      ghostImageHandler(60, 75, 'hidden');
       draggedElement = null;
     });
 
@@ -38,16 +67,15 @@
     iFrame.addEventListener('load', () => {
       let iFrameDoc = iFrame.contentDocument!;
 
-      // helper selectors
-      click_selector = <HTMLDivElement>document.getElementById('click-selector');
-      hover_selector = <HTMLDivElement>document.getElementById('hover-selector');
-      indicator = <HTMLDivElement>document.getElementById('indicator');
-
       iFrameDoc.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
 
-        // hide elements panel when clicked anywhere in iFrame
+        // hide NotSelected panel on click
+        let NotSelected = <HTMLDivElement>document.getElementById('not_selected');
+        NotSelected.style.visibility = 'hidden';
+
+        // hide elements panel on click
         show.update(() => false);
 
         clickedElement.update(() => e.target as HTMLElement);
@@ -71,13 +99,14 @@
         elem.removeAttribute('draggable');
       });
 
+      // iFrame Drag Operations ---------->
       iFrameDoc.addEventListener('dragstart', (e) => {
         e.stopPropagation();
         const blank = iFrameDoc.createElement('div');
         e.dataTransfer!.setDragImage(blank, 0, 0);
 
         draggedElement = e.target as HTMLElement;
-        htmlCode.update(() => draggedElement!.outerHTML);
+        htmlCode = draggedElement!.outerHTML;
         ghost_img.style.visibility = 'hidden';
       });
 
@@ -86,8 +115,7 @@
         e.stopPropagation();
 
         // update the ghost's position when inside the iFrame
-        ghost_img.style.top = e.clientY + 60 + 'px';
-        ghost_img.style.left = e.clientX + 75 + 'px';
+        ghostImageHandler(e.clientY + 60, e.clientX + 75);
 
         let elem = e.target as HTMLElement;
         let rect = elem.getBoundingClientRect();
@@ -125,13 +153,11 @@
         e.stopPropagation();
 
         // reset the ghost's position on drop
-        ghost_img.style.top = 60 + 'px';
-        ghost_img.style.left = 75 + 'px';
-        ghost_img.style.visibility = 'hidden';
+        ghostImageHandler(60, 75, 'hidden');
 
         // add the copied element to the dom
         let elem = e.target as HTMLElement;
-        elem.insertAdjacentHTML(position, $htmlCode);
+        elem.insertAdjacentHTML(position, htmlCode);
 
         // then delete the original to create an illusion of elements being moved
         if (draggedElement) {
@@ -208,6 +234,3 @@
   "
   />
 </div>
-
-<style>
-</style>

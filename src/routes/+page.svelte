@@ -7,15 +7,12 @@
   import NotSelected from './NotSelected.svelte';
   import Panel from './Panel.svelte';
   import Properties from './Properties.svelte';
-  import { clickedElement } from '../Stores';
   import { onMount } from 'svelte';
 
-  $: if ($clickedElement !== undefined) {
-    document.getElementById('not_selected')!.style.visibility = 'hidden';
-  }
-
   onMount(() => {
-    const loader = document.getElementById('loader')!;
+    // show the loading screen and hide it after 2 seconds when the page is done loading
+    const loader = <HTMLDivElement>document.getElementById('loader');
+
     if (document.readyState === 'complete') {
       setTimeout(() => {
         loader.style.visibility = 'hidden';

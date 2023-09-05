@@ -1,8 +1,7 @@
-<script lang="ts">
-  import { onMount } from 'svelte';
-  import { htmlCode, show } from '../Stores';
+<script lang="ts" context="module">
+  import { show } from '../Stores';
 
-  let elements: any = {
+  export let elements: any = {
     Heading: {
       icon: 'Icons/heading.png',
       code: '<h1>Heading</h1>'
@@ -33,28 +32,12 @@
       code: '<div new-empty-div></div>'
     }
   };
-
-  onMount(() => {
-    const ghost_img = <HTMLDivElement>document.getElementById('ghost_img');
-
-    document.addEventListener('dragstart', (e) => {
-      const blank = document.createElement('div');
-      e.dataTransfer!.setDragImage(blank, 0, 0);
-
-      const ghostText = (e.target as HTMLDivElement).getAttribute('data-tagname')!;
-      ghost_img.innerText = ghostText;
-      ghost_img.style.visibility = 'visible';
-
-      // set the code for the dragged element
-      htmlCode.update(() => elements[ghostText].code);
-    });
-  });
 </script>
 
 <div
   id="elementsPanel"
   class={$show
-    ? 'flex flex-col ml-[42px] py-[20px] px-[20px] h-full bg-[#2e2f31] absolute z-10'
+    ? 'flex flex-col ml-[42px] py-[20px] px-[26px] h-full bg-[#2e2f31] absolute z-10'
     : 'absolute invisible'}
 >
   <div class="font-sans text-[10px] mb-[4px] font-semibold tracking-wider text-[#ded9d9]">

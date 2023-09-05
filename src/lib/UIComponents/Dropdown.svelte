@@ -2,7 +2,7 @@
   import { Button, Dropdown, DropdownItem } from 'flowbite-svelte';
 
   export let DropdownName: string = 'Dropdown';
-  export let ItemsArray = ['Apple', 'Mango', 'Orange', 'Strawberry'];
+  export let ItemsArray: string[] = ['Apple', 'Mango', 'Orange', 'Strawberry'];
 
   let dropdownOpen = false;
 
