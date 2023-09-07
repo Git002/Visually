@@ -11,6 +11,7 @@
   let hoveredElement: HTMLElement;
   let draggedElement: HTMLElement | null = null;
 
+  // handle the ghost position + visibility
   function ghostImageHandler(top: number, left: number, visibility?: 'visible' | 'hidden') {
     const ghost_img = <HTMLDivElement>document.getElementById('ghost_img');
     if (visibility) {
@@ -97,6 +98,7 @@
       iFrameDoc.addEventListener('mouseout', (e) => {
         let elem = e.target as HTMLElement;
         elem.removeAttribute('draggable');
+        hover_selector.style.display = 'none';
       });
 
       // iFrame Drag Operations ---------->

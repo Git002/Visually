@@ -19,7 +19,7 @@
 
     Images: {
       icon: 'Icons/image.png',
-      code: '<img src="default_image.svg" alt="My default image" width="200">'
+      code: '<img src="default_image.svg" alt="Default image" width="200">'
     },
 
     Input: {
@@ -37,7 +37,7 @@
 <div
   id="elementsPanel"
   class={$show
-    ? 'flex flex-col ml-[42px] py-[20px] px-[26px] h-full bg-[#2e2f31] absolute z-10'
+    ? 'flex flex-col ml-[46px] py-[20px] px-[26px] h-full bg-[#2e2f31] absolute z-10'
     : 'absolute invisible'}
 >
   <div class="font-sans text-[10px] mb-[4px] font-semibold tracking-wider text-[#ded9d9]">
