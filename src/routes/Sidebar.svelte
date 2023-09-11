@@ -17,7 +17,7 @@
   <div class="flex flex-col h-full bg-[#2e2f31] py-[14px] px-[10px] gap-[30px] items-center">
     <button
       id="addNew"
-      class="font-sans text-[17px] text-black bg-[#ebe9e9] rounded-lg px-[7px]"
+      class="font-sans text-[17px] text-black bg-[#ebe9e9] rounded-[6px] px-[7px]"
       on:click={toggleVisibility}>+</button
     >
 

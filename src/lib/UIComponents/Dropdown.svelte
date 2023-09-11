@@ -1,20 +1,30 @@
 <script lang="ts">
+  import { afterUpdate } from 'svelte';
   import { Button, Dropdown, DropdownItem } from 'flowbite-svelte';
 
-  export let DropdownName: string = 'Dropdown';
+  export let DropdownName: string = 'Select';
   export let ItemsArray: string[] = ['Apple', 'Mango', 'Orange', 'Strawberry'];
-
+  export let customFunction: (() => void) | null = null;
   let dropdownOpen = false;
 
-  function DropDownEvents(e: Event) {
-    let btn = <HTMLButtonElement>e.target;
-    // set dropdown name to clicked dropdownitem
-    DropdownName = btn.innerText;
+  function handleDropdownClick(e: Event) {
+    const clickedButton = e.target as HTMLButtonElement;
+    // set dropdown name to the clicked dropdown item
+    DropdownName = clickedButton.innerText;
+    // set Open to false to close the dropdown
     dropdownOpen = false;
   }
+
+  // if a custom function is passed then execute it
+  afterUpdate(() => {
+    if (customFunction) {
+      customFunction();
+    }
+  });
 </script>
 
 <Button
+  id="selectorBtn"
   btnClass="flex justify-between flex-row rounded-[6px] bg-[#404040] py-[6px] px-[12px] border-2 border-[#505050] items-center text-center text-[12px] font-semibold text-[#b8b6b6] font-sans w-full"
 >
   {DropdownName}
@@ -29,7 +39,7 @@
     <DropdownItem
       class="px-[16px] hover:bg-[#0070e7] hover:text-white"
       on:click={(e) => {
-        DropDownEvents(e);
+        handleDropdownClick(e);
       }}
     >
       {item}

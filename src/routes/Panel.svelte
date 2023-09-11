@@ -51,7 +51,7 @@
         draggable="true"
         data-tagname={key}
       >
-        <img src={elements[key].icon} alt="" class="pointer-events-none" width="70" />
+        <img src={elements[key].icon} alt="" class="pointer-events-none" width="70" height="70" />
       </div>
     {/each}
   </div>
