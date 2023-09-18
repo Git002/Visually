@@ -3,7 +3,7 @@
  "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
 <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
  width="40" height="40" viewBox="0 0 512.000000 512.000000"
- preserveAspectRatio="xMidYMid meet">
+ preserveAspectRatio="xMidYMid meet" pointer-events="none">
 
 <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
 fill="#8f8b8b" stroke="none">

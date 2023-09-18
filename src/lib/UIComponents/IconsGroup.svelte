@@ -1,23 +1,28 @@
 <script lang="ts">
-  export let ItemsArray = ['Apple', 'Mango'];
+  export let IconsArray = ['Icon1', 'Icon2'];
   export let IdArray = ['apple', 'mango'];
 
   let activeId: string = IdArray[0];
 
   function changeColor(e: Event) {
-    activeId = (e.target as HTMLElement).id;
+    let parent = e.currentTarget as HTMLDivElement;
+    let clickedElem = e.target as HTMLElement;
+    // case to handle clicks on elements border
+    if (parent.contains(clickedElem) && parent != clickedElem) {
+      activeId = clickedElem.id;
+    }
     e.stopPropagation();
   }
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
-  class="flex justify-between rounded-[6px] bg-[#404040] border-2 border-[#505050] text-[12px] font-sans font-bold tracking-widest h-[32px]"
+  class="flex justify-between rounded-[6px] bg-[#404040] border-2 border-[#505050] text-[12px] font-sans font-bold tracking-widest gap-[2px]"
   on:click={(e) => {
     changeColor(e);
   }}
 >
-  {#each ItemsArray as item, i}
+  {#each IconsArray as item, i}
     {#if activeId === IdArray[i]}
       <button
         type="button"

@@ -1,10 +1,8 @@
-<script></script>
-
 <div
-  class="flex justify-between items-center flex-row w-full bg-[#2e2f31] px-[8px] pr-[14px] border-b border-[#202124]"
+  class="flex justify-between items-center flex-row w-full bg-[#2e2f31] px-[8px] border-b border-[#202124]"
 >
   <div class="flex flex-row items-center">
-    <button class="rounded-full py-2 px-2 bg-[#393a3c]">
+    <button class="rounded-full py-[8px] px-[8px] bg-[#393a3c]">
       <object data="../Icons/menu.svg" title="" style=" pointer-events: none;" />
     </button>
   </div>

@@ -25,7 +25,7 @@
 
 <Button
   id="selectorBtn"
-  btnClass="flex justify-between flex-row rounded-[6px] bg-[#404040] py-[6px] px-[12px] border-2 border-[#505050] items-center text-center text-[12px] font-semibold text-[#b8b6b6] font-sans w-full"
+  btnClass="flex justify-between flex-row rounded-[6px] bg-[#404040] py-[6px] px-[12px] border-2 border-[#505050] items-center text-center text-[12px] font-semibold text-[#b8b6b6] font-sans w-full h-[32px]"
 >
   {DropdownName}
   <object data="Icons/dropdown.svg" title="" style="pointer-events: none;" />
