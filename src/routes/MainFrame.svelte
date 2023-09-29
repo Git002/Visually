@@ -53,12 +53,14 @@
     document.addEventListener('drop', (e) => {
       e.preventDefault();
       ghostImageHandler(60, 75, 'hidden');
+      indicator.style.display = 'none';
       draggedElement = null;
     });
 
     document.addEventListener('dragend', (e) => {
       e.preventDefault();
       ghostImageHandler(60, 75, 'hidden');
+      indicator.style.display = 'none';
       draggedElement = null;
     });
 
@@ -101,7 +103,6 @@
         hover_selector.style.display = 'none';
       });
 
-      // iFrame Drag Operations ---------->
       iFrameDoc.addEventListener('dragstart', (e) => {
         e.stopPropagation();
         const blank = iFrameDoc.createElement('div');
@@ -168,6 +169,11 @@
 
         indicator.style.display = 'none';
         draggedElement = null;
+      });
+
+      iFrameDoc.addEventListener('dragend', (e) => {
+        e.stopPropagation();
+        indicator.style.display = 'none';
       });
 
       // recalculate selector styles on scroll for smooth experience
