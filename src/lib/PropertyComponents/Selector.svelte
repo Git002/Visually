@@ -3,10 +3,13 @@
   import ButtonGroup from '../UIComponents/ButtonGroup.svelte';
 </script>
 
-<div class="flex px-[15px] gap-[10px]">
+<div class="flex justify-between px-[12px] gap-[10px]">
   <!-- Button group -->
   <ButtonGroup ItemsArray={['Class', 'ID']} IdArray={['selector_class', 'selector_id']} />
 
   <!-- dropdown -->
-  <Dropdown DropdownName={'Default'} ItemsArray={['Default', 'On Hover', 'On Press', 'On Focus']} />
+  <Dropdown
+    DropdownBtnText={'Set State'}
+    ItemsArray={['Default', 'On Hover', 'On Press', 'On Focus']}
+  />
 </div>
