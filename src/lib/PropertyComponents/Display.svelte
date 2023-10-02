@@ -26,14 +26,12 @@
   ];
 
   let showFlexGroup = false;
+  let showGridGroup = false;
 
   function displayBarHandler(e: Event) {
     let clickedItem = e.target as HTMLButtonElement;
-    if (clickedItem.id === 'flex') {
-      showFlexGroup = true;
-    } else {
-      showFlexGroup = false;
-    }
+    showFlexGroup = clickedItem.id === 'flex';
+    showGridGroup = clickedItem.id === 'grid';
   }
 </script>
 
@@ -66,5 +64,13 @@
         'flex-justify-evenly'
       ]}
     />
+  </div>
+
+  <div
+    class={showGridGroup
+      ? 'visible flex justify-center items-center rounded-[6px] bg-[#404040] border-2 border-[#505050] text-[12px] font-sans font-bold text-[#b8b6b6] text-center py-[6px]'
+      : 'hidden'}
+  >
+    Grid isn't ready yet, and we are still working on it 🙃
   </div>
 </div>
