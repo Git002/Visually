@@ -1,34 +1,34 @@
 <script lang="ts" context="module">
   import { show } from '../Stores';
 
-  export let elements: any = {
+  export const elements: any = {
     Heading: {
-      icon: 'Icons/heading.png',
+      icon: 'Icons/Panel/heading.png',
       code: '<h1>Heading</h1>'
     },
 
     Text: {
-      icon: 'Icons/paragraph.png',
+      icon: 'Icons/Panel/paragraph.png',
       code: '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eget est quis lacus euismod ultricies. Phasellus luctus efficitur dapibus. Nam ultrices faucibus massa non scelerisque. Etiam posuere eget erat non varius. Nam nec urna pulvinar, tincidunt augue a, convallis neque. Vivamus vel erat libero. Mauris id aliquam nibh. Pellentesque tincidunt augue id dui egestas dictum. </p>'
     },
 
     Button: {
-      icon: 'Icons/button.png',
+      icon: 'Icons/Panel/button.png',
       code: '<button>Click here</button>'
     },
 
     Images: {
-      icon: 'Icons/image.png',
+      icon: 'Icons/Panel/image.png',
       code: '<img src="default_image.svg" alt="Default image" width="200">'
     },
 
     Input: {
-      icon: 'Icons/input.png',
+      icon: 'Icons/Panel/input.png',
       code: '<input type="text">'
     },
 
     Div: {
-      icon: 'Icons/div.png',
+      icon: 'Icons/Panel/div.png',
       code: '<div new-empty-div></div>'
     }
   };

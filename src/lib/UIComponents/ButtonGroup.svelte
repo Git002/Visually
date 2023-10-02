@@ -3,7 +3,7 @@
 
   export let ItemsArray = ['Apple', 'Mango'];
   export let IdArray = ['apple_id', 'mango_id'];
-  export let customFunction: (() => any) | null = null;
+  export let customFunction: ((...args: any[]) => any) | null = null;
   let activeId: string = IdArray[0];
 
   // change color of the active button in the button group
@@ -14,14 +14,13 @@
       // if a custom function is passed then execute it after the DOM is in sync
       await tick();
       if (customFunction) {
-        customFunction();
+        customFunction(e);
       }
     }
     e.stopPropagation();
   }
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
   class="flex justify-between rounded-[6px] bg-[#404040] border-2 border-[#505050] text-[12px] font-sans font-bold tracking-widest h-[34px]"
   on:click={(e) => {

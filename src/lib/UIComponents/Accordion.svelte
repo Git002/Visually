@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { ComponentType, SvelteComponentTyped } from 'svelte';
+  import type { ComponentType, SvelteComponent } from 'svelte';
 
   type AccordianComponentTyped = {
-    [title: string]: ComponentType<SvelteComponentTyped>;
+    [title: string]: ComponentType<SvelteComponent>;
   };
   export let componentsArray: AccordianComponentTyped;
 
@@ -20,7 +20,6 @@
   }
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
 {#each Object.entries(componentsArray) as [key]}
   <div
     class="flex gap-[8px] px-[9px] text-gray-300 cursor-pointer w-full text-[13px] font-bold text-center tracking-wide;"
