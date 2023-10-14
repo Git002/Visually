@@ -8,29 +8,31 @@
 
   function accordianToggle(e: Event) {
     let panel = (e.target as HTMLElement).nextElementSibling as HTMLElement;
-    let arrowDownBtn = (e.target as HTMLElement).firstChild as HTMLObjectElement;
+    let arrowDownBtn = (e.target as HTMLElement).children[0] as HTMLObjectElement;
 
-    if (panel.style.maxHeight && panel.style.maxHeight !== '0px') {
+    if (panel.style.display && panel.style.display !== 'none') {
       arrowDownBtn.style.transform = 'rotate(-90deg)';
-      panel.style.maxHeight = '0';
+      panel.style.display = 'none';
     } else {
       arrowDownBtn.style.transform = 'rotate(360deg)';
-      panel.style.maxHeight = '100%';
+      panel.style.display = 'flex';
     }
   }
 </script>
 
 {#each Object.entries(componentsArray) as [key]}
   <div
-    class="flex gap-[8px] px-[9px] text-gray-300 cursor-pointer w-full text-[13px] font-bold text-center tracking-wide;"
+    class="flex justify-between px-[14px] py-[14px] text-[#d2d2d2] cursor-pointer w-full text-[13px] font-bold text-center tracking-wide"
     on:click={accordianToggle}
   >
-    <object data="Icons/caret-down.svg" title="" style="pointer-events: none;" />
     {key}
+    <object data="Icons/caret-down.svg" title="" style="pointer-events: none;" />
   </div>
-  <div class="pl-[24px] overflow-hidden" style="max-height: 100%;">
+  <div class="flex flex-col gap-[12px] overflow-hidden pb-[14px]" style="display: flex;">
     <svelte:component this={componentsArray[key]} />
   </div>
+
+  <div class="border-t border-[#252527] w-full" />
 {/each}
 
 <style>

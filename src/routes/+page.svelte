@@ -10,13 +10,11 @@
   import { onMount } from 'svelte';
 
   onMount(() => {
-    const loader = <HTMLDivElement>document.getElementById('loader');
     // show the loading screen and hide it after 2 seconds when the page is done loading
-    if (document.readyState === 'complete') {
-      setTimeout(() => {
-        loader.style.visibility = 'hidden';
-      }, 1500);
-    }
+    const loader: HTMLDivElement = <HTMLDivElement>document.getElementById('loader');
+    setTimeout(() => {
+      loader.style.visibility = 'hidden';
+    }, 1500);
   });
 </script>
 
@@ -35,7 +33,7 @@
       </div>
 
       <div
-        class="flex flex-col h-full bg-[#2e2f31] w-[275px] shrink-0 overscroll-none"
+        class="flex flex-col h-full bg-[#2e2f31] w-[250px] shrink-0 overscroll-none"
         id="noscroll"
       >
         <NotSelected />

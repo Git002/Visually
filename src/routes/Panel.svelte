@@ -17,7 +17,7 @@
       code: '<button>Click here</button>'
     },
 
-    Images: {
+    Image: {
       icon: 'Icons/Panel/image.png',
       code: '<img src="default_image.svg" alt="Default image" width="200">'
     },

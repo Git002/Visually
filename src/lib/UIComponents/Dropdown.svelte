@@ -18,19 +18,18 @@
   }
 </script>
 
-<div class="relative w-full">
+<div class="relative text-[11px] w-full">
   <button
-    class="selector-btn flex justify-between flex-row rounded-[6px] bg-[#404040] py-[6px] px-[12px] border-2 border-[#505050] items-center text-center text-[12px] font-semibold text-[#b8b6b6] h-[34px] w-full"
+    class="selector-btn flex justify-between flex-row rounded-[6px] bg-[#404040] py-[6px] px-[12px] border-2 border-[#505050] items-center text-center font-semibold text-[#b8b6b6] h-[34px] w-full"
     on:click={() => (dropdownOpen = !dropdownOpen)}
   >
     {DropdownBtnText}
     <object data="Icons/dropdown.svg" title="" style="pointer-events: none;" />
   </button>
 
-  <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div
     class={dropdownOpen
-      ? 'absolute w-full bg-[#404040] text-[12px] rounded-[6px] mt-[8px] font-semibold text-[#b8b6b6] overflow-hidden shadow-2xl'
+      ? 'absolute w-full bg-[#404040] rounded-[6px] mt-[8px] font-semibold text-[#b8b6b6] overflow-hidden shadow-2xl z-10'
       : 'hidden'}
   >
     {#each ItemsArray as item (item)}

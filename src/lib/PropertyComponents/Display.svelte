@@ -35,7 +35,7 @@
   }
 </script>
 
-<div class="flex flex-col px-[10px] gap-[12px]">
+<div class="flex flex-col px-[14px] gap-[12px]">
   <!-- Button groups -->
   <ButtonGroup
     ItemsArray={DisplayArr}
@@ -68,9 +68,9 @@
 
   <div
     class={showGridGroup
-      ? 'visible flex justify-center items-center rounded-[6px] bg-[#404040] border-2 border-[#505050] text-[12px] font-sans font-bold text-[#b8b6b6] text-center py-[6px]'
+      ? 'visible flex justify-center items-center rounded-[6px] bg-[#404040] border-2 border-[#505050] text-[11px] font-sans font-bold text-[#b8b6b6] text-center h-[34px]'
       : 'hidden'}
   >
-    Grid isn't ready yet, and we are still working on it 🙃
+    Grid is still under development
   </div>
 </div>
