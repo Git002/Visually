@@ -1,10 +1,10 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { show } from '../Stores';
+  import { showPanel } from '../Stores';
 
   onMount(() => {
     document.addEventListener('dragover', () => {
-      show.update(() => false);
+      showPanel.update(() => false);
     });
   });
 </script>
@@ -14,7 +14,7 @@
     <button
       id="addNew"
       class="font-sans text-[17px] text-black bg-[#ebe9e9] rounded-lg px-[7px]"
-      on:click={() => show.update(() => !$show)}>+</button
+      on:click={() => showPanel.update(() => !$showPanel)}>+</button
     >
 
     <button>

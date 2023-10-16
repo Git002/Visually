@@ -17,12 +17,11 @@
         customFunction(e);
       }
     }
-    e.stopPropagation();
   }
 </script>
 
 <div
-  class="flex justify-between rounded-[6px] bg-[#404040] border-2 border-[#505050] text-[11px] font-sans font-bold tracking-widest h-[34px]"
+  class="flex justify-between rounded-[6px] bg-[#404040] border-2 border-[#505050] text-[12px] font-sans font-bold tracking-widest h-[34px]"
   on:click={(e) => {
     changeColor(e);
   }}

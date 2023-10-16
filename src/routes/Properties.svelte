@@ -2,9 +2,10 @@
   import Accordion from '$lib/UIComponents/Accordion.svelte';
   import Selector from '../lib/PropertyComponents/Selector.svelte';
   import Display from '$lib/PropertyComponents/Display.svelte';
+  import Spacing from '$lib/PropertyComponents/Spacing.svelte';
   import Sizing from '$lib/PropertyComponents/Sizing.svelte';
 
-  let arr = { Display, Sizing };
+  let arr = { Display, Spacing, Sizing };
 </script>
 
 <div class="flex flex-col select-none">

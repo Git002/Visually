@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { clickedElement, show } from '../Stores';
+  import { clickedElement, showPanel } from '../Stores';
   import { calculateRect } from '../lib/Modules/helperFunctions';
   import { elements } from './Panel.svelte';
 
@@ -79,7 +79,7 @@
         NotSelected.style.visibility = 'hidden';
 
         // hide elements panel on click
-        show.update(() => false);
+        showPanel.update(() => false);
 
         clickedElement.update(() => e.target as HTMLElement);
 

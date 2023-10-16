@@ -2,27 +2,27 @@
   import ButtonGroup from '../UIComponents/ButtonGroup.svelte';
 
   let DisplayArr = [
-    "<img style='pointer-events: none; width:18px height:18px' src='Icons/Display/block.svg' />",
-    "<img style='pointer-events: none; width:18px height:18px' src='Icons/Display/flex.svg' />",
-    "<img style='pointer-events: none; width:18px height:18px' src='Icons/Display/grid.svg' />",
-    "<img style='pointer-events: none; width:18px height:18px' src='Icons/Display/inline-block.svg' />",
-    "<img style='pointer-events: none; width:18px height:18px' src='Icons/Display/inline.svg' />"
+    "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/block.svg' />",
+    "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/flex.svg' />",
+    "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/grid.svg' />",
+    "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/inline-block.svg' />",
+    "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/inline.svg' />"
   ];
 
   let FlexAlignArr = [
-    "<img style='pointer-events: none; width:18px height:18px' src='Icons/Display/Align/start.svg' />",
-    "<img style='pointer-events: none; width:18px height:18px' src='Icons/Display/Align/center.svg' />",
-    "<img style='pointer-events: none; width:18px height:18px' src='Icons/Display/Align/end.svg' />",
-    "<img style='pointer-events: none; width:18px height:18px' src='Icons/Display/Align/stretch.svg' />",
-    "<img style='pointer-events: none; width:18px height:18px' src='Icons/Display/Align/baseline.svg' />"
+    "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Align/start.svg' />",
+    "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Align/center.svg' />",
+    "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Align/end.svg' />",
+    "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Align/stretch.svg' />",
+    "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Align/baseline.svg' />"
   ];
 
   let FlexJustifyArr = [
-    "<img style='pointer-events: none; width:18px height:18px' src='Icons/Display/Justify/start.svg' />",
-    "<img style='pointer-events: none; width:18px height:18px' src='Icons/Display/Justify/center.svg' />",
-    "<img style='pointer-events: none; width:18px height:18px' src='Icons/Display/Justify/end.svg' />",
-    "<img style='pointer-events: none; width:18px height:18px' src='Icons/Display/Justify/between.svg' />",
-    "<img style='pointer-events: none; width:18px height:18px' src='Icons/Display/Justify/evenly.svg' />"
+    "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Justify/start.svg' />",
+    "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Justify/center.svg' />",
+    "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Justify/end.svg' />",
+    "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Justify/between.svg' />",
+    "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Justify/evenly.svg' />"
   ];
 
   let showFlexGroup = false;
@@ -35,7 +35,7 @@
   }
 </script>
 
-<div class="flex flex-col px-[14px] gap-[12px]">
+<div class="flex flex-col gap-[12px]">
   <!-- Button groups -->
   <ButtonGroup
     ItemsArray={DisplayArr}

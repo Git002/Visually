@@ -6,22 +6,29 @@
   export let customFunction: (() => any) | null = null;
   let dropdownOpen = false;
 
-  async function onDropdownClick(e: Event) {
-    const clickedButton = e.target as HTMLButtonElement;
-    DropdownBtnText = clickedButton.innerText;
-    dropdownOpen = false;
+  async function onItemClick(e: Event) {
+    const clickedItem = e.target as HTMLButtonElement;
+    DropdownBtnText = clickedItem.innerText;
     // if a custom function is passed then execute it after the DOM is in sync
     await tick();
     if (customFunction) {
       customFunction();
     }
   }
+
+  function dropdownClose() {
+    dropdownOpen = false;
+    document.body.removeEventListener('click', dropdownClose);
+  }
 </script>
 
-<div class="relative text-[11px] w-full">
+<div class="relative text-[12px] w-full">
   <button
-    class="selector-btn flex justify-between flex-row rounded-[6px] bg-[#404040] py-[6px] px-[12px] border-2 border-[#505050] items-center text-center font-semibold text-[#b8b6b6] h-[34px] w-full"
-    on:click={() => (dropdownOpen = !dropdownOpen)}
+    class="flex justify-between flex-row rounded-[6px] bg-[#404040] py-[6px] px-[12px] border-2 border-[#505050] items-center text-center font-semibold text-[#b8b6b6] h-[34px] w-full"
+    on:click|stopPropagation={() => {
+      dropdownOpen = !dropdownOpen;
+      document.body.addEventListener('click', dropdownClose);
+    }}
   >
     {DropdownBtnText}
     <object data="Icons/dropdown.svg" title="" style="pointer-events: none;" />
@@ -29,16 +36,14 @@
 
   <div
     class={dropdownOpen
-      ? 'absolute w-full bg-[#404040] rounded-[6px] mt-[8px] font-semibold text-[#b8b6b6] overflow-hidden shadow-2xl z-10'
+      ? 'absolute w-full bg-[#404040] rounded-[6px] mt-[10px] font-semibold text-[#b8b6b6] overflow-hidden shadow-2xl z-10'
       : 'hidden'}
+    on:click={(e) => {
+      onItemClick(e);
+    }}
   >
     {#each ItemsArray as item (item)}
-      <div
-        class="px-[16px] py-[8px] hover:bg-[#0070e7] hover:text-white"
-        on:click={(e) => {
-          onDropdownClick(e);
-        }}
-      >
+      <div class="px-[16px] py-[8px] hover:bg-[#0070e7] hover:text-white">
         {item}
       </div>
     {/each}

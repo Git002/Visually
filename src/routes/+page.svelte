@@ -10,7 +10,7 @@
   import { onMount } from 'svelte';
 
   onMount(() => {
-    // show the loading screen and hide it after 2 seconds when the page is done loading
+    // show the loading screen and hide it after 1.5 seconds when the page is done loading
     const loader: HTMLDivElement = <HTMLDivElement>document.getElementById('loader');
     setTimeout(() => {
       loader.style.visibility = 'hidden';
