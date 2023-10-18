@@ -11,8 +11,8 @@
 
   onMount(() => {
     // show the loading screen and hide it after 1.5 seconds when the page is done loading
-    const loader: HTMLDivElement = <HTMLDivElement>document.getElementById('loader');
     setTimeout(() => {
+      const loader: HTMLDivElement = <HTMLDivElement>document.getElementById('loader');
       loader.style.visibility = 'hidden';
     }, 1500);
   });
@@ -32,10 +32,7 @@
         <MainFrame />
       </div>
 
-      <div
-        class="flex flex-col h-full bg-[#2e2f31] w-[250px] shrink-0 overscroll-none"
-        id="noscroll"
-      >
+      <div class="flex flex-col h-full bg-[#2e2f31] w-[250px] shrink-0">
         <NotSelected />
 
         <Properties />

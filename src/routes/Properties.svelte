@@ -21,5 +21,13 @@
   >
     PROPERTIES
   </div>
-  <Accordion componentsArray={arr} />
+  <div id="properties-panel" class="overflow-auto h-screen pb-[150px]">
+    <Accordion componentsArray={arr} />
+  </div>
 </div>
+
+<style>
+  #properties-panel::-webkit-scrollbar {
+    display: none;
+  }
+</style>
