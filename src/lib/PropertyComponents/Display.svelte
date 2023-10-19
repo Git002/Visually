@@ -68,7 +68,7 @@
 
   <div
     class={showGridGroup
-      ? 'visible flex justify-center items-center rounded-[6px] bg-[#404040] border-2 border-[#505050] text-[11px] font-sans font-bold text-[#b8b6b6] text-center h-[34px]'
+      ? 'visible flex justify-center items-center rounded-[6px] bg-[#404040] border-2 border-[#505050] text-[12px] font-sans font-bold text-[#b8b6b6] text-center h-[34px]'
       : 'hidden'}
   >
     Grid is still under development

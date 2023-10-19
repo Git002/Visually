@@ -21,7 +21,7 @@
   >
     PROPERTIES
   </div>
-  <div id="properties-panel" class="overflow-auto h-screen pb-[150px]">
+  <div id="properties-panel" class="overflow-auto h-screen pb-[200px]">
     <Accordion componentsArray={arr} />
   </div>
 </div>

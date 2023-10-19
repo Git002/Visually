@@ -4,7 +4,7 @@
 </script>
 
 <div class="flex flex-col gap-[12px] text-[10px] tracking-wide text-[#b8b6b6]">
-  <div class="grid grid-cols-2 gap-[10px]">
+  <div class="grid grid-cols-2 gap-[8px]">
     <InputBar FieldName="width" value="100" />
     <InputBar FieldName="height" value="80" />
     <InputBar FieldName="min w" value="50" />

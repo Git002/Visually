@@ -24,10 +24,15 @@
 
 <div class="relative text-[12px] w-full">
   <button
-    class="flex justify-between flex-row rounded-[6px] bg-[#404040] py-[6px] px-[12px] border-2 border-[#505050] items-center text-center font-semibold text-[#b8b6b6] h-[34px] w-full"
+    class="flex justify-between flex-row rounded-[6px] bg-[#404040] py-[6px] px-[12px] border-2 border-[#505050] items-center text-center font-semibold text-[#b8b6b6] h-[34px] w-full focus:outline-0"
     on:click|stopPropagation={() => {
       dropdownOpen = !dropdownOpen;
       document.body.addEventListener('click', dropdownClose);
+    }}
+    on:keydown|stopPropagation={(e) => {
+      if (e.key === 'Escape') {
+        dropdownOpen = false;
+      }
     }}
   >
     {DropdownBtnText}
@@ -36,14 +41,14 @@
 
   <div
     class={dropdownOpen
-      ? 'absolute w-full bg-[#404040] rounded-[6px] mt-[10px] font-semibold text-[#b8b6b6] overflow-hidden shadow-2xl z-10'
+      ? 'absolute w-full bg-[#484848] rounded-[6px] mt-[10px] font-semibold text-[#b8b6b6] overflow-hidden drop-shadow-2xl z-10'
       : 'hidden'}
     on:click={(e) => {
       onItemClick(e);
     }}
   >
     {#each ItemsArray as item (item)}
-      <div class="px-[16px] py-[8px] hover:bg-[#0070e7] hover:text-white">
+      <div class="px-[16px] py-[10px] hover:bg-[#0070e7] hover:text-white">
         {item}
       </div>
     {/each}
