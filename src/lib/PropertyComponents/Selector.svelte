@@ -1,6 +1,7 @@
 <script lang="ts">
   import Dropdown from '../UIComponents/Dropdown.svelte';
   import ButtonGroup from '../UIComponents/ButtonGroup.svelte';
+  import Input from '$lib/UIComponents/Input.svelte';
 
   let classInputOpen = true;
   let idInputOpen = false;
@@ -33,21 +34,6 @@
     />
   </div>
 
-  <input
-    id="class-input"
-    class={classInputOpen
-      ? 'w-full text-[11px] bg-[#404040] font-sans font-semibold placeholder-[#b8b6b6a1] text-[#b8b6b6] border-[2px] border-[#505050] rounded-[5px] px-[10px] py-[7px] outline-none'
-      : 'hidden'}
-    placeholder="add a new class"
-    spellcheck="false"
-  />
-
-  <input
-    id="id-input"
-    class={idInputOpen
-      ? 'w-full text-[11px] bg-[#404040] font-sans font-semibold placeholder-[#b8b6b6a1] text-[#b8b6b6] border-[2px] border-[#505050] rounded-[5px] px-[10px] py-[7px] outline-none'
-      : 'hidden'}
-    placeholder="add a new ID"
-    spellcheck="false"
-  />
+  <Input show={classInputOpen} id={'class-input'} placeholder={'add a new class'} />
+  <Input show={idInputOpen} id={'id-input'} placeholder={'add a new ID'} />
 </div>
