@@ -6,23 +6,39 @@
   import Tagify from '@yaireo/tagify';
   import '@yaireo/tagify/dist/tagify.css';
 
+  // show/hide class & ID input on button click
   function toggleClassId(e: Event) {
     let clickedBtn = e.target as HTMLButtonElement;
-    let classInput = <HTMLInputElement>document.querySelector('.tagify.tag-input');
+    let tagifiedClassInput = <HTMLInputElement>document.querySelector('.tagify.class-input');
     let idInput = <HTMLInputElement>document.querySelector('.id-input');
 
     if (clickedBtn.id === 'selector-class-btn') {
-      classInput.classList.remove('hidden');
+      tagifiedClassInput.classList.remove('hidden');
       idInput.classList.add('hidden');
     } else if (clickedBtn.id === 'selector-id-btn') {
       idInput.classList.remove('hidden');
-      classInput.classList.add('hidden');
+      tagifiedClassInput.classList.add('hidden');
     }
   }
 
   onMount(() => {
-    let classInput = <HTMLInputElement>document.querySelector('.tag-input');
-    let tagify = new Tagify(classInput);
+    let classInput = <HTMLInputElement>document.querySelector('.class-input');
+    let tagifyInstance = new Tagify(classInput);
+    let tagifiedClassInput = <HTMLElement>(
+      document.querySelector('.tagify.class-input .tagify__input')
+    );
+
+    tagifyInstance.on('add', (e) => {
+      tagifiedClassInput.removeAttribute('data-placeholder');
+    });
+
+    tagifyInstance.on('remove', () => {
+      if (tagifyInstance.getCleanValue().length === 1) {
+        tagifiedClassInput.setAttribute('data-placeholder', 'Add a class');
+      }
+    });
+
+    tagifyInstance.addTags('yo');
   });
 </script>
 
@@ -40,12 +56,12 @@
     />
   </div>
 
-  <Input placeholder={'Add a new class'} Class={'tag-input'} />
+  <Input placeholder={'Add a new class'} Class={'class-input'} />
   <Input placeholder={'Add a new id'} Class={'id-input hidden'} />
 </div>
 
 <style>
-  :global(.tag-input) {
+  :global(.class-input) {
     --tag-bg: #0070e7;
     --tag-hover: #0070e7c1;
     --tags-hover-border-color: #0070e7c1;
@@ -63,5 +79,9 @@
     border-color: #505050;
     border-width: 2px;
     border-radius: 5px;
+  }
+
+  :global(.tagify__input) {
+    min-width: 0px;
   }
 </style>
