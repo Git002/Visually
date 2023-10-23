@@ -12,10 +12,10 @@
   let draggedElement: HTMLElement | null = null;
 
   // handle the ghost position + visibility
-  function ghostImageHandler(top: number, left: number, visibility?: 'visible' | 'hidden') {
+  function ghostImageHandler(top: number, left: number, display?: 'block' | 'none') {
     const ghost_img = <HTMLDivElement>document.getElementById('ghost_img');
-    if (visibility) {
-      ghost_img.style.visibility = visibility;
+    if (display) {
+      ghost_img.style.display = display;
     }
     ghost_img.style.top = top + 'px';
     ghost_img.style.left = left + 'px';
@@ -38,7 +38,7 @@
 
       const ghostText = (e.target as HTMLDivElement).getAttribute('data-tagname')!;
       ghost_img.innerText = ghostText;
-      ghost_img.style.visibility = 'visible';
+      ghost_img.style.display = 'block';
 
       htmlCode = elements[ghostText].code;
     });
@@ -52,14 +52,14 @@
 
     document.addEventListener('drop', (e) => {
       e.preventDefault();
-      ghostImageHandler(60, 75, 'hidden');
+      ghostImageHandler(60, 75, 'none');
       indicator.style.display = 'none';
       draggedElement = null;
     });
 
     document.addEventListener('dragend', (e) => {
       e.preventDefault();
-      ghostImageHandler(60, 75, 'hidden');
+      ghostImageHandler(60, 75, 'none');
       indicator.style.display = 'none';
       draggedElement = null;
     });
@@ -156,7 +156,7 @@
         e.stopPropagation();
 
         // reset the ghost's position on drop
-        ghostImageHandler(60, 75, 'hidden');
+        ghostImageHandler(60, 75, 'none');
 
         // add the copied element to the dom
         let elem = e.target as HTMLElement;

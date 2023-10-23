@@ -1,6 +1,6 @@
 <script>
-  import InputBar from '$lib/UIComponents/InputBar.svelte';
-  import Dropdown from '$lib/UIComponents/Dropdown.svelte';
+  import InputBar from '$lib/UI/InputBar.svelte';
+  import Dropdown from '$lib/UI/Dropdown.svelte';
 </script>
 
 <div class="flex flex-col gap-[12px] text-[10px] tracking-wide text-[#b8b6b6]">

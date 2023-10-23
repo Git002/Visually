@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ButtonGroup from '../UIComponents/ButtonGroup.svelte';
+  import ButtonGroup from '../UI/ButtonGroup.svelte';
 
   let DisplayArr = [
     "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/block.svg' />",

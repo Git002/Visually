@@ -18,21 +18,21 @@
   });
 </script>
 
-<div class="flex flex-row min-h-screen">
+<div class="flex flex-row h-screen">
   <Loader />
 
   <div class="flex flex-col w-full">
     <Header />
 
-    <div class="flex flex-row w-full h-full">
+    <div class="flex flex-row w-full flex-1">
       <Sidebar />
       <Panel />
 
-      <div class="flex flex-col px-[10px] overflow-hidden w-full h-full bg-[#202123]">
+      <div class="flex flex-col px-[10px] w-full flex-1 bg-[#202123]">
         <MainFrame />
       </div>
 
-      <div class="flex flex-col h-full bg-[#2e2f31] w-[250px] shrink-0">
+      <div class="flex flex-col bg-[#2e2f31] w-[250px] shrink-0 relative">
         <NotSelected />
 
         <Properties />
@@ -44,7 +44,13 @@
 
 <div
   id="ghost_img"
-  class="flex h-min w-min items-center justify-center rounded-full bg-violet-500 px-[14px] py-[4px] font-sans text-[12px] font-semibold tracking-wide text-white drop-shadow-md invisible absolute capitalize z-11"
+  class="h-min w-min items-center justify-center rounded-full bg-violet-500 px-[14px] py-[4px] font-sans text-[12px] font-semibold tracking-wide text-white drop-shadow-md absolute capitalize z-20 hidden"
 >
   Ghost
 </div>
+
+<style>
+  :global(.hidden) {
+    display: none;
+  }
+</style>

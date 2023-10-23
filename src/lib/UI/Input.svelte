@@ -14,9 +14,3 @@
   {placeholder}
   spellcheck="false"
 />
-
-<style>
-  .hidden {
-    display: none;
-  }
-</style>
