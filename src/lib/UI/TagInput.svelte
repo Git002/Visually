@@ -78,4 +78,8 @@
     max-width: 100%;
     white-space: nowrap;
   }
+
+  :global(.tagify__tag > div > [contenteditable]) {
+    text-overflow: clip;
+  }
 </style>
