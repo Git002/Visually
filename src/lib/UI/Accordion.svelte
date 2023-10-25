@@ -27,7 +27,7 @@
   {#each Object.entries(componentsArray) as [key]}
     <div
       data-accordian-header
-      class="flex justify-between px-[14px] py-[14px] text-[#d2d2d2] cursor-pointer w-full text-[13px] font-bold text-center tracking-wide"
+      class="flex justify-between px-[14px] pt-[12px] text-[#d2d2d2] cursor-pointer w-full text-[13px] font-bold text-center tracking-wide pb-[14px]"
     >
       {key}
       <object data="Icons/caret-down.svg" title="" style="pointer-events: none;" />

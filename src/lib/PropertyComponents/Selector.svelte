@@ -1,8 +1,8 @@
 <script lang="ts">
   import Dropdown from '../UI/Dropdown.svelte';
   import ButtonGroup from '../UI/ButtonGroup.svelte';
-  import Input from '$lib/UI/Input.svelte';
-  import TagInput from '$lib/UI/TagInput.svelte';
+  import InputBar from '$lib/UI/InputBar.svelte';
+  import TagInputBar from '$lib/UI/TagInputBar.svelte';
 
   // show/hide class & ID input on button click
   function toggleClassId(e: Event) {
@@ -29,6 +29,6 @@
     />
   </div>
 
-  <TagInput placeholder={'Add a new class'} id={'class-input'} />
-  <Input placeholder={'Add a new id'} Class={'id-input hidden'} />
+  <TagInputBar placeholder={'Add a new class'} id={'class-input'} />
+  <InputBar placeholder={'Add a new id'} Class={'id-input hidden'} />
 </div>
