@@ -30,9 +30,7 @@
       document.body.addEventListener('click', dropdownClose);
     }}
     on:keydown|stopPropagation={(e) => {
-      if (e.key === 'Escape') {
-        dropdownOpen = false;
-      }
+      if (e.key === 'Escape') dropdownOpen = false;
     }}
   >
     {DropdownBtnText}

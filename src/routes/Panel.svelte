@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
   import { showPanel } from '../Stores';
 
-  export const elements: any = {
+  export const PanelElements: any = {
     Heading: {
       icon: 'Icons/Panel/heading.png',
       code: '<h1>Heading</h1>'
@@ -45,13 +45,19 @@
   </div>
 
   <div class="grid grid-cols-2 gap-[20px] pt-[12px]">
-    {#each Object.entries(elements) as [key]}
+    {#each Object.entries(PanelElements) as [key]}
       <div
         class="flex flex-col border-2 border-[#404040] w-[86px] h-[80px] rounded-md items-center justify-center cursor-grab"
         draggable="true"
         data-tagname={key}
       >
-        <img src={elements[key].icon} alt="" class="pointer-events-none" width="70" height="70" />
+        <img
+          src={PanelElements[key].icon}
+          alt=""
+          class="pointer-events-none"
+          width="70"
+          height="70"
+        />
       </div>
     {/each}
   </div>

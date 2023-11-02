@@ -1,25 +1,15 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { clickedElement, showPanel } from '../Stores';
-  import { calculateRect } from '../lib/Modules/helperFunctions';
-  import { elements } from './Panel.svelte';
+  import { calculateRect, ghostImageHandler } from '../lib/Modules/helperFunctions';
+  import { PanelElements } from './Panel.svelte';
 
-  // type for insertAdjacentHTML on the drop() event
+  // types for insertAdjacentHTML on the drop() event
   type InsertPosition = 'beforebegin' | 'afterbegin' | 'beforeend' | 'afterend';
   let position: InsertPosition;
 
   let hoveredElement: HTMLElement;
   let draggedElement: HTMLElement | null = null;
-
-  // handle the ghost position + visibility
-  function ghostImageHandler(top: number, left: number, display?: 'block' | 'none') {
-    const ghost_img = <HTMLDivElement>document.getElementById('ghost_img');
-    if (display) {
-      ghost_img.style.display = display;
-    }
-    ghost_img.style.top = top + 'px';
-    ghost_img.style.left = left + 'px';
-  }
 
   onMount(() => {
     const iFrame = <HTMLIFrameElement>document.getElementById('frame');
@@ -40,31 +30,39 @@
       ghost_img.innerText = ghostText;
       ghost_img.style.display = 'block';
 
-      htmlCode = elements[ghostText].code;
+      htmlCode = PanelElements[ghostText].code;
     });
 
     document.addEventListener('dragover', (e) => {
       e.preventDefault();
+
       ghost_img.style.top = e.clientY + 15 + 'px';
       ghost_img.style.left = e.clientX + 25 + 'px';
+
       indicator.style.display = 'none';
     });
 
     document.addEventListener('drop', (e) => {
       e.preventDefault();
+
       ghostImageHandler(60, 75, 'none');
+
       indicator.style.display = 'none';
+
       draggedElement = null;
     });
 
     document.addEventListener('dragend', (e) => {
       e.preventDefault();
+
       ghostImageHandler(60, 75, 'none');
+
       indicator.style.display = 'none';
+
       draggedElement = null;
     });
 
-    // make the iframe reload
+    // make the iframe reload for changes
     iFrame.src = 'userFiles/index.html';
 
     iFrame.addEventListener('load', () => {
@@ -74,43 +72,46 @@
         e.preventDefault();
         e.stopPropagation();
 
-        // hide NotSelected panel on click
+        // hide NotSelected.svelte
         let NotSelected = <HTMLDivElement>document.getElementById('not_selected');
         NotSelected.style.visibility = 'hidden';
 
-        // hide elements panel on click
+        // hide Panel.svelte
         showPanel.update(() => false);
 
         clickedElement.update(() => e.target as HTMLElement);
 
-        calculateRect($clickedElement, click_selector);
+        calculateRect(e.target as HTMLElement, click_selector);
+
         click_selector.style.display = 'block';
       });
 
       iFrameDoc.addEventListener('mouseover', (e) => {
         hoveredElement = e.target as HTMLElement;
-        if (hoveredElement.tagName !== 'BODY') {
-          hoveredElement.draggable = true;
-        }
+        if (hoveredElement.tagName !== 'BODY') hoveredElement.draggable = true;
 
         calculateRect(hoveredElement, hover_selector);
+
         hover_selector.style.display = 'block';
       });
 
       iFrameDoc.addEventListener('mouseout', (e) => {
-        let elem = e.target as HTMLElement;
-        elem.removeAttribute('draggable');
+        const mouseoutElem = e.target as HTMLElement;
+        mouseoutElem.removeAttribute('draggable');
+
         hover_selector.style.display = 'none';
       });
 
       iFrameDoc.addEventListener('dragstart', (e) => {
         e.stopPropagation();
+
         const blank = iFrameDoc.createElement('div');
         e.dataTransfer!.setDragImage(blank, 0, 0);
 
         draggedElement = e.target as HTMLElement;
-        htmlCode = draggedElement!.outerHTML;
-        ghost_img.style.visibility = 'hidden';
+        htmlCode = draggedElement.outerHTML;
+
+        ghost_img.style.display = 'none';
       });
 
       iFrameDoc.addEventListener('dragover', (e) => {
@@ -134,18 +135,21 @@
           indicator.style.display = 'none';
           indicator.style.borderTop = '';
           indicator.style.borderBottom = '';
+
           position = 'beforeend';
         } else {
           // insert above the the element
           if (Math.abs((e as MouseEvent).pageY - rect.top) <= rect.height / 2) {
             indicator.style.borderTop = '3px solid #007bfb';
             indicator.style.borderBottom = '';
+
             position = 'beforebegin';
           }
           // insert below the element
           else {
             indicator.style.borderTop = '';
             indicator.style.borderBottom = '3px solid #007bfb';
+
             position = 'afterend';
           }
         }
@@ -168,24 +172,24 @@
         }
 
         indicator.style.display = 'none';
+
         draggedElement = null;
       });
 
       iFrameDoc.addEventListener('dragend', (e) => {
         e.stopPropagation();
+
         indicator.style.display = 'none';
       });
 
       // recalculate selector styles on scroll for smooth experience
-      iFrameDoc.addEventListener('scroll', (e) => {
-        if ($clickedElement) {
-          calculateRect($clickedElement, click_selector);
-        }
+      iFrameDoc.addEventListener('scroll', () => {
+        if ($clickedElement) calculateRect($clickedElement, click_selector);
         calculateRect(hoveredElement, hover_selector);
       });
     });
 
-    window.addEventListener('resize', (e) => {
+    window.addEventListener('resize', () => {
       // updating selector styles on resize
       if ($clickedElement) {
         calculateRect($clickedElement, click_selector);

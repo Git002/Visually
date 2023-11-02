@@ -3,6 +3,7 @@
   export let Class: string = '';
   export let show: boolean = true;
   export let placeholder: string = 'placeholder';
+  export let customFunction: ((...args: any[]) => any) | null = null;
 </script>
 
 <input
@@ -13,4 +14,8 @@
     : 'hidden'}
   {placeholder}
   spellcheck="false"
+  on:blur={customFunction}
+  on:keydown|stopPropagation={(e) => {
+    if (customFunction && e.key === 'Enter') customFunction();
+  }}
 />

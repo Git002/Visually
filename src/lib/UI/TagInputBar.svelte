@@ -1,8 +1,14 @@
+<script lang="ts" context="module">
+  export let tagifyInstance: any;
+  export let tagifyInput: HTMLElement;
+</script>
+
 <script lang="ts">
+  import { onMount } from 'svelte';
+  import { createEventDispatcher } from 'svelte';
+  import { random } from '$lib/Modules/helperFunctions';
   import Tagify from '@yaireo/tagify';
   import '@yaireo/tagify/dist/tagify.css';
-  import { random } from '$lib/Modules/helperFunctions';
-  import { onMount } from 'svelte';
 
   export let id: string;
   export let placeholder: string = 'placeholder';
@@ -10,22 +16,42 @@
   let input: HTMLInputElement;
   let className: string = random(12);
 
+  const dispatch = createEventDispatcher();
+
+  function customAddFunction(tagValue: string) {
+    dispatch('add', {
+      tagValue
+    });
+  }
+
+  function customRemoveFunction(tagValue: string) {
+    dispatch('remove', {
+      tagValue
+    });
+  }
+
   onMount(() => {
-    let tagify = new Tagify(input);
+    tagifyInstance = new Tagify(input);
 
-    let tagifyInstance = <HTMLElement>document.querySelector(`.tagify.${className}`);
-    tagifyInstance.setAttribute('id', id);
+    let tagifyInputBar = <HTMLElement>document.querySelector(`.tagify.${className}`);
+    tagifyInputBar.id = id;
 
-    let tagifiedInput = <HTMLElement>document.querySelector(`.tagify.${className} .tagify__input`);
+    tagifyInput = <HTMLElement>document.querySelector(`.tagify.${className} .tagify__input`);
 
-    tagify.on('add', (e) => {
-      tagifiedInput.removeAttribute('data-placeholder');
+    tagifyInstance.on('add', (e: any) => {
+      tagifyInput.setAttribute('data-placeholder', ' ');
+      // run custom function if any
+      const tagValue = e.detail.data!.value;
+      customAddFunction(tagValue);
     });
 
-    tagify.on('remove', () => {
-      if (tagify.getCleanValue().length === 1) {
-        tagifiedInput.setAttribute('data-placeholder', 'Add a class');
+    tagifyInstance.on('remove', (e: any) => {
+      if (tagifyInstance.getCleanValue().length <= 1) {
+        tagifyInput.setAttribute('data-placeholder', 'Add a class');
       }
+      // run custom function if any
+      const tagValue = e.detail.data!.value;
+      customRemoveFunction(tagValue);
     });
   });
 </script>
@@ -33,7 +59,7 @@
 <input
   bind:this={input}
   class={className +
-    ' w-full text-[11px] bg-[#404040] font-sans font-semibold placeholder-[#b8b6b6a1] text-[#b8b6b6] border-[2px] border-[#505050] rounded-[5px] px-[10px] py-[7px] outline-none'}
+    ' w-full text-[11px] bg-[#404040] font-sans font-semibold placeholder-[#b8b6b6a1] text-[#b8b6b6] border-[2px] border-[#505050] rounded-[5px] outline-none'}
   {placeholder}
   spellcheck="false"
 />
@@ -81,5 +107,9 @@
 
   :global(.tagify__tag > div > [contenteditable]) {
     text-overflow: clip;
+  }
+
+  :global(.tagify__input::before) {
+    white-space: pre;
   }
 </style>
