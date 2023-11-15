@@ -1,21 +1,12 @@
 <script lang="ts">
-  import { tick } from 'svelte';
-
-  export let ItemsArray = ['Apple', 'Mango'];
+  export let Items = ['Apple', 'Mango'];
   export let IdArray = ['apple_id', 'mango_id'];
-  export let customFunction: ((...args: any[]) => any) | null = null;
-  let activeId: string = IdArray[0];
+  export let activeElementId: string = IdArray[0];
 
-  // change color of the active button in the button group
-  async function changeColor(e: Event) {
-    let clickedItem = e.target as HTMLElement;
-    if (IdArray.includes(clickedItem.id)) {
-      activeId = clickedItem.id;
-      // if a custom function is passed then execute it after the DOM is in sync
-      await tick();
-      if (customFunction) {
-        customFunction(e);
-      }
+  function changeColor(e: Event) {
+    let currentClickedItemId = (e.target as HTMLElement).id;
+    if (IdArray.includes(currentClickedItemId)) {
+      activeElementId = currentClickedItemId;
     }
   }
 </script>
@@ -25,9 +16,10 @@
   on:click={(e) => {
     changeColor(e);
   }}
+  on:click
 >
-  {#each ItemsArray as item, i}
-    {#if activeId === IdArray[i]}
+  {#each Items as item, i}
+    {#if activeElementId === IdArray[i]}
       <button
         type="button"
         id={IdArray[i]}

@@ -37,12 +37,10 @@
 <div
   id="elementsPanel"
   class={$showPanel
-    ? 'flex flex-col ml-[42px] py-[20px] px-[26px] h-full bg-[#2e2f31] absolute z-10'
+    ? 'flex flex-col ml-[44px] py-[20px] px-[26px] h-full bg-[#2e2f31] absolute z-10'
     : 'absolute invisible'}
 >
-  <div class="font-sans text-[10px] mb-[4px] font-semibold tracking-wider text-[#ded9d9]">
-    ELEMENTS
-  </div>
+  <div class="font-sans text-[10px] mb-[4px] font-semibold tracking-wider text-[#ded9d9]">ELEMENTS</div>
 
   <div class="grid grid-cols-2 gap-[20px] pt-[12px]">
     {#each Object.entries(PanelElements) as [key]}
@@ -51,13 +49,7 @@
         draggable="true"
         data-tagname={key}
       >
-        <img
-          src={PanelElements[key].icon}
-          alt=""
-          class="pointer-events-none"
-          width="70"
-          height="70"
-        />
+        <img src={PanelElements[key].icon} alt="" class="pointer-events-none" width="70" height="70" />
       </div>
     {/each}
   </div>

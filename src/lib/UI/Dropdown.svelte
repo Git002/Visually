@@ -46,7 +46,7 @@
     }}
   >
     {#each ItemsArray as item (item)}
-      <div class="px-[16px] py-[10px] hover:bg-[#0070e7] hover:text-white">
+      <div class="px-[16px] py-[10px] hover:bg-[#d46525] hover:text-white">
         {item}
       </div>
     {/each}

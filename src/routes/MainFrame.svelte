@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { clickedElement, showPanel } from '../Stores';
-  import { calculateRect, ghostImageHandler } from '../lib/Modules/helperFunctions';
+  import { clickedElement, showPanel, iFrameDocument } from '../Stores';
+  import { calculateRect, ghostImageHandler, processStyles } from '../lib/Modules/helperFunctions';
   import { PanelElements } from './Panel.svelte';
 
   // types for insertAdjacentHTML on the drop() event
@@ -68,22 +68,34 @@
     iFrame.addEventListener('load', () => {
       let iFrameDoc = iFrame.contentDocument!;
 
+      iFrameDocument.update(() => iFrameDoc);
+
+      let prevClickedElement: HTMLElement;
+      let currentClickedElement: HTMLElement;
+
       iFrameDoc.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
 
-        // hide NotSelected.svelte
-        let NotSelected = <HTMLDivElement>document.getElementById('not_selected');
-        NotSelected.style.visibility = 'hidden';
+        currentClickedElement = e.target as HTMLElement;
+
+        clickedElement.update(() => currentClickedElement);
+        processStyles($clickedElement);
 
         // hide Panel.svelte
         showPanel.update(() => false);
 
-        clickedElement.update(() => e.target as HTMLElement);
+        if (prevClickedElement !== currentClickedElement) {
+          // hide NotSelected.svelte
+          let NotSelected = <HTMLDivElement>document.getElementById('not_selected');
+          NotSelected.style.visibility = 'hidden';
 
-        calculateRect(e.target as HTMLElement, click_selector);
+          calculateRect(currentClickedElement, click_selector);
 
-        click_selector.style.display = 'block';
+          click_selector.style.display = 'block';
+        }
+
+        prevClickedElement = currentClickedElement;
       });
 
       iFrameDoc.addEventListener('mouseover', (e) => {
@@ -162,14 +174,11 @@
         // reset the ghost's position on drop
         ghostImageHandler(60, 75, 'none');
 
-        // add the copied element to the dom
-        let elem = e.target as HTMLElement;
-        elem.insertAdjacentHTML(position, htmlCode);
+        // then add the copied element to the DOM
+        (e.target as HTMLElement).insertAdjacentHTML(position, htmlCode);
 
-        // then delete the original to create an illusion of elements being moved
-        if (draggedElement) {
-          draggedElement.remove();
-        }
+        // then delete the original element to create an illusion of elements being moved on drag
+        draggedElement?.remove();
 
         indicator.style.display = 'none';
 
@@ -201,12 +210,7 @@
 
 <!-- iframe -->
 <div id="frame_container" class="relative w-full h-full overflow-hidden">
-  <iframe
-    frameborder="0"
-    title="Project"
-    id="frame"
-    style="color-scheme: dark; width: 100%; height: 100%;"
-  />
+  <iframe frameborder="0" title="Project" id="frame" style="color-scheme: dark; width: 100%; height: 100%;" />
 
   <div
     id="click-selector"

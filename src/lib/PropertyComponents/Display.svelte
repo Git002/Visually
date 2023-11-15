@@ -1,23 +1,24 @@
 <script lang="ts">
   import ButtonGroup from '../UI/ButtonGroup.svelte';
+  import { clickedElement, clickedElementStyle } from '../../Stores';
+  import { CSSUtility } from '$lib/Modules/helperFunctions';
 
-  let DisplayArr = [
+  // for images
+  let displayIconsArr = [
     "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/block.svg' />",
     "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/flex.svg' />",
     "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/grid.svg' />",
     "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/inline-block.svg' />",
     "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/inline.svg' />"
   ];
-
-  let FlexAlignArr = [
+  let flexAlignIconsArr = [
     "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Align/start.svg' />",
     "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Align/center.svg' />",
     "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Align/end.svg' />",
     "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Align/stretch.svg' />",
     "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Align/baseline.svg' />"
   ];
-
-  let FlexJustifyArr = [
+  let flexJustifyIconsArr = [
     "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Justify/start.svg' />",
     "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Justify/center.svg' />",
     "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Justify/end.svg' />",
@@ -25,44 +26,93 @@
     "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Justify/evenly.svg' />"
   ];
 
+  // Element IDs with their CSS values
+  const displayValues: { [key: string]: string } = {
+    'display-block': 'block',
+    'display-flex': 'flex',
+    'display-grid': 'grid',
+    'display-inline-block': 'inline-block',
+    'display-inline': 'inline'
+  } as const;
+
+  const alignItemsValues: { [key: string]: string } = {
+    'align-items-flex-start': 'flex-start',
+    'align-items-center': 'center',
+    'align-items-flex-end': 'flex-end',
+    'align-items-stretch': 'stretch',
+    'align-items-baseline': 'baseline'
+  } as const;
+
+  const justifyContentValues: { [key: string]: string } = {
+    'justify-content-flex-start': 'flex-start',
+    'justify-content-center': 'center',
+    'justify-content-flex-end': 'flex-end',
+    'justify-content-space-between': 'space-between',
+    'justify-content-space-evenly': 'space-evenly'
+  } as const;
+
+  let displayButtonId: string = 'display-block';
+  let alignItemsButtonId: string = 'align-items-stretch';
+  let justifyContentButtonId: string = 'justify-content-flex-start';
+
+  let cssUtility = new CSSUtility();
+
+  function setCSS(e: Event) {
+    if ((e.target as HTMLElement).tagName !== 'BUTTON') return;
+
+    let clickedButton = e.target as HTMLButtonElement;
+
+    // if button is already active then avoid re-execution of the function
+    if ([displayButtonId, alignItemsButtonId, justifyContentButtonId].includes(clickedButton.id)) return;
+
+    if (Object.keys(displayValues).includes(clickedButton.id)) {
+      cssUtility.writeCSS('display', displayValues[clickedButton.id]);
+    } else if (Object.keys(alignItemsValues).includes(clickedButton.id)) {
+      cssUtility.writeCSS('align-items', alignItemsValues[clickedButton.id]);
+    } else if (Object.keys(justifyContentValues).includes(clickedButton.id)) {
+      cssUtility.writeCSS('justify-content', justifyContentValues[clickedButton.id]);
+    }
+  }
+
   let showFlexGroup = false;
   let showGridGroup = false;
 
-  function displayBarHandler(e: Event) {
-    let clickedItem = e.target as HTMLButtonElement;
-    showFlexGroup = clickedItem.id === 'flex';
-    showGridGroup = clickedItem.id === 'grid';
+  // updates the display bar on click inside iFrame
+  $: {
+    if ($clickedElement) {
+      if (Object.values(displayValues).includes($clickedElementStyle?.display)) {
+        displayButtonId = 'display-' + $clickedElementStyle?.display;
+        // show or hide the flex/grid bar
+        showFlexGroup = displayButtonId === 'display-flex';
+        showGridGroup = displayButtonId === 'display-grid';
+      }
+      if (Object.values(alignItemsValues).includes($clickedElementStyle?.alignItems)) {
+        alignItemsButtonId = 'align-items-' + $clickedElementStyle?.alignItems;
+      }
+      if (Object.values(justifyContentValues).includes($clickedElementStyle?.justifyContent)) {
+        justifyContentButtonId = 'justify-content-' + $clickedElementStyle?.justifyContent;
+      }
+    }
   }
 </script>
 
-<div class="flex flex-col gap-[12px]">
-  <!-- Button groups -->
+<div class="flex flex-col gap-[12px]" on:click={setCSS}>
   <ButtonGroup
-    ItemsArray={DisplayArr}
-    IdArray={['block', 'flex', 'grid', 'inline-block', 'inline']}
-    customFunction={displayBarHandler}
+    Items={displayIconsArr}
+    IdArray={Object.keys(displayValues)}
+    bind:activeElementId={displayButtonId}
   />
 
   <div class={showFlexGroup ? 'flex flex-col gap-[12px] visible' : 'hidden'}>
     <ButtonGroup
-      ItemsArray={FlexAlignArr}
-      IdArray={[
-        'flex-align-start',
-        'flex-align-center',
-        'flex-align-end',
-        'flex-align-stretch',
-        'flex-align-baseline'
-      ]}
+      Items={flexAlignIconsArr}
+      IdArray={Object.keys(alignItemsValues)}
+      bind:activeElementId={alignItemsButtonId}
     />
     <ButtonGroup
-      ItemsArray={FlexJustifyArr}
-      IdArray={[
-        'flex-justify-start',
-        'flex-justify-center',
-        'flex-justify-end',
-        'flex-justify-between',
-        'flex-justify-evenly'
-      ]}
+      Items={flexJustifyIconsArr}
+      IdArray={Object.keys(justifyContentValues)}
+      bind:activeElementId={justifyContentButtonId}
     />
   </div>
 

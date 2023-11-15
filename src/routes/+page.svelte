@@ -24,11 +24,11 @@
   <div class="flex flex-col w-full">
     <Header />
 
-    <div class="flex flex-row w-full flex-1">
+    <div class="flex flex-row flex-1">
       <Sidebar />
       <Panel />
 
-      <div class="flex flex-col px-[10px] w-full flex-1 bg-[#202123]">
+      <div class="flex flex-col px-[10px] flex-1 bg-[#202123]">
         <MainFrame />
       </div>
 

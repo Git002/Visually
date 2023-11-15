@@ -100,6 +100,10 @@
     overflow: hidden;
   }
 
+  :global(.tagify__tag > div::before) {
+    animation: 0;
+  }
+
   :global(.tagify__tag > div > *) {
     max-width: 100%;
     white-space: nowrap;
