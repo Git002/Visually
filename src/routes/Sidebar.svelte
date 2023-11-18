@@ -13,7 +13,7 @@
   <div class="flex flex-col h-full bg-[#2e2f31] py-[14px] px-[8px] gap-[30px] items-center">
     <button
       id="addNew"
-      class="bg-[#ebe9e9] rounded-lg px-[8px] py-[7px]"
+      class="bg-[#ebe9e9] rounded-full px-[8px] py-[8px]"
       on:click={() => showPanel.update(() => !$showPanel)}
     >
       <object data="./Icons/add.svg" title="" style="pointer-events: none;" /></button
