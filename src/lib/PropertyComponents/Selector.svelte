@@ -57,7 +57,7 @@
   <div class="flex justify-between gap-[8px]">
     <ButtonGroup
       Items={['Class', 'ID']}
-      IdArray={['selector-class-btn', 'selector-id-btn']}
+      ButtonIds={['selector-class-btn', 'selector-id-btn']}
       on:click={toggleClassIdButton}
     />
 

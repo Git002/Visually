@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg version="1.1" id="Icons" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="30" width="30" viewBox="0 0 32 32" xml:space="preserve">
+
+<style type="text/css">
+	.st0{fill:none;stroke:#B7B4B4;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+</style>
+
+<circle class="st0" cx="6" cy="6" r="3"/>
+<circle class="st0" cx="26" cy="6" r="3"/>
+<circle class="st0" cx="6" cy="26" r="3"/>
+<circle class="st0" cx="26" cy="26" r="3"/>
+<line class="st0" x1="6" y1="9" x2="6" y2="23"/>
+<line class="st0" x1="26" y1="9" x2="26" y2="23"/>
+<line class="st0" x1="9" y1="26" x2="23" y2="26"/>
+<line class="st0" x1="9" y1="6" x2="23" y2="6"/>
+
+</svg>

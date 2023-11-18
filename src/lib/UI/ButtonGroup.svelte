@@ -1,12 +1,13 @@
 <script lang="ts">
-  export let Items = ['Apple', 'Mango'];
-  export let IdArray = ['apple_id', 'mango_id'];
-  export let activeElementId: string = IdArray[0];
+  export let Items: string[] = ['Apple', 'Mango'];
+  export let ButtonIds: string[] = ['apple_id', 'mango_id'];
+  export let activeButtonId: string = ButtonIds[0];
+  export let deactiveButtonIds: string[] = [''];
 
   function changeColor(e: Event) {
     let currentClickedItemId = (e.target as HTMLElement).id;
-    if (IdArray.includes(currentClickedItemId)) {
-      activeElementId = currentClickedItemId;
+    if (ButtonIds.includes(currentClickedItemId)) {
+      activeButtonId = currentClickedItemId;
     }
   }
 </script>
@@ -19,18 +20,26 @@
   on:click
 >
   {#each Items as item, i}
-    {#if activeElementId === IdArray[i]}
+    {#if activeButtonId === ButtonIds[i]}
       <button
         type="button"
-        id={IdArray[i]}
+        id={ButtonIds[i]}
         class="py-[6px] px-[10px] rounded-[5px] bg-[#2e2f31] text-[#b8b6b6]"
+      >
+        {@html item}
+      </button>
+    {:else if deactiveButtonIds.includes(ButtonIds[i])}
+      <button
+        type="button"
+        id={ButtonIds[i]}
+        class="py-[6px] px-[10px] rounded-[5px] bg-[#404040] text-[#b8b6b6] pointer-events-none opacity-40"
       >
         {@html item}
       </button>
     {:else}
       <button
         type="button"
-        id={IdArray[i]}
+        id={ButtonIds[i]}
         class="py-[6px] px-[10px] rounded-[5px] bg-[#404040] text-[#b8b6b6]"
       >
         {@html item}

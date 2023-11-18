@@ -99,26 +99,26 @@
 <div class="flex flex-col gap-[12px]" on:click={setCSS}>
   <ButtonGroup
     Items={displayIconsArr}
-    IdArray={Object.keys(displayValues)}
-    bind:activeElementId={displayButtonId}
+    ButtonIds={Object.keys(displayValues)}
+    bind:activeButtonId={displayButtonId}
   />
 
   <div class={showFlexGroup ? 'flex flex-col gap-[12px] visible' : 'hidden'}>
     <ButtonGroup
       Items={flexAlignIconsArr}
-      IdArray={Object.keys(alignItemsValues)}
-      bind:activeElementId={alignItemsButtonId}
+      ButtonIds={Object.keys(alignItemsValues)}
+      bind:activeButtonId={alignItemsButtonId}
     />
     <ButtonGroup
       Items={flexJustifyIconsArr}
-      IdArray={Object.keys(justifyContentValues)}
-      bind:activeElementId={justifyContentButtonId}
+      ButtonIds={Object.keys(justifyContentValues)}
+      bind:activeButtonId={justifyContentButtonId}
     />
   </div>
 
   <div
     class={showGridGroup
-      ? 'visible flex justify-center items-center rounded-[6px] bg-[#404040] border-2 border-[#505050] text-[12px] font-sans font-bold text-[#b8b6b6] text-center h-[34px]'
+      ? 'visible flex justify-center items-center rounded-[6px] bg-[#404040] border-2 border-[#505050] text-[11px] font-sans font-bold text-[#b8b6b6] text-center h-[34px]'
       : 'hidden'}
   >
     Grid is still under development
