@@ -1,6 +1,6 @@
 # Visually
 
-![Static Badge](https://img.shields.io/badge/Framework%20-%20Svelte%20-%20%23F73C00) ![Static Badge](https://img.shields.io/badge/Language%20-%20TypeScript%20-%20%231082C3) ![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/m/git002/visually) ![GitHub last commit (by committer)](https://img.shields.io/github/last-commit/git002/visually)
+![Framework](https://img.shields.io/badge/Tool%20-%20SvelteKit%20-%20%23F73C00) [![Language](https://img.shields.io/badge/Chaos%20control%20-%20TypeScript%20-%20%231082C3)](https://img.shields.io/badge/Chaos%20control%20-%20TypeScript%20-%20%233178C6) ![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/m/git002/visually?color=%23F13371) ![GitHub last commit (by committer)](https://img.shields.io/github/last-commit/git002/visually)
 
 A drag and drop website builder built in Svelte that generates clean code and is easier to use, giving everyone the freedom to host their project anywhere. The project is still in its very early developmental stage.
 
