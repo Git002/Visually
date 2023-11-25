@@ -50,7 +50,7 @@
       <div class="px-[6px] py-[3px]">
         {#if item === DropdownBtnText}
           <button
-            class="inline-flex w-full justify-between bg-[#107be7] text-[#ebebeb] px-[12px] py-[6px] rounded-[6px] cursor-default"
+            class="inline-flex w-full justify-between bg-[#cf672b] text-[#ebebeb] px-[12px] py-[6px] rounded-[6px] cursor-default"
           >
             {item}
             <img src="Icons/selected.svg" alt="" width="16" height="16" style="pointer-events: none;" />
