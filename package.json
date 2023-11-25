@@ -29,7 +29,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@lottiefiles/lottie-player": "^1.6.3",
+		"@lottiefiles/lottie-player": "^1.7.1",
 		"@popperjs/core": "^2.11.8",
 		"@yaireo/tagify": "^4.17.9",
 		"classnames": "^2.3.2",

@@ -15,7 +15,7 @@
 </script>
 
 <input
-  class={'w-[32px] bg-[#404040] rounded-[2px] focus:outline-none focus:ring-2 focus:ring-[#505050] text-center ' +
+  class={'w-[32px] bg-[#404040] rounded-[2px] focus:outline-none focus:ring-2 focus:ring-[#505050] text-center tracking-wide ' +
     Class}
   {value}
   autocomplete="off"

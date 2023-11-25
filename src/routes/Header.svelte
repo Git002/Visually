@@ -14,7 +14,7 @@
       PREVIEW
     </button>
     <button
-      class="font-sans text-[12px] font-semibold tracking-wide text-center text-[#ffffff] bg-[#d46525] rounded-md px-[10px] hover:bg-[#d46925] inline-flex items-center gap-[6px]"
+      class="font-sans text-[12px] font-semibold tracking-wide text-center text-[#ebebeb] bg-[#cf672b] rounded-md px-[10px] hover:bg-[#d46a2c] inline-flex items-center gap-[6px]"
     >
       <object data="../Icons/export.svg" title="" style="pointer-events: none;" /> Export
     </button>

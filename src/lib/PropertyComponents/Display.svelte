@@ -1,7 +1,7 @@
 <script lang="ts">
   import ButtonGroup from '../UI/ButtonGroup.svelte';
   import { clickedElement, clickedElementStyle } from '../../Stores';
-  import { CSSUtility } from '$lib/Modules/helperFunctions';
+  import { CSSUtility } from '$lib/Modules/cssFunctions';
 
   // for images
   let displayIconsArr = [

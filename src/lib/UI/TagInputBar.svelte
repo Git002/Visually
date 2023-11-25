@@ -59,15 +59,15 @@
 <input
   bind:this={input}
   class={className +
-    ' w-full text-[11px] bg-[#404040] font-sans font-semibold placeholder-[#b8b6b6a1] text-[#b8b6b6] border-[2px] border-[#505050] rounded-[5px] outline-none'}
+    ' w-full text-[11px] bg-[#404040] font-sans font-semibold tracking-wide placeholder-[#b8b6b6a1] text-[#b8b6b6] border-[2px] border-[#505050] rounded-[5px] outline-none'}
   {placeholder}
   spellcheck="false"
 />
 
 <style>
   :global(.tagify) {
-    --tag-bg: #0070e7;
-    --tag-hover: #0070e7c1;
+    --tag-bg: #107be7;
+    --tag-hover: #107be7c1;
     --tags-hover-border-color: #0070e7c1;
     --tags-focus-border-color: #0070e7c1;
     --tag-text-color: #ebe9e9;

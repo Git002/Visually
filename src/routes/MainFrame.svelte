@@ -1,12 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { clickedElement, showPanel, iFrameDocument } from '../Stores';
-  import { calculateRect, ghostImageHandler, processStyles } from '../lib/Modules/helperFunctions';
+  import { processStyles } from '../lib/Modules/cssFunctions';
+  import { calculateRect, ghostImageHandler } from '../lib/Modules/MainFrameFunctions';
   import { PanelElements } from './Panel.svelte';
-
-  // types for insertAdjacentHTML on the drop() event
-  type InsertPosition = 'beforebegin' | 'afterbegin' | 'beforeend' | 'afterend';
-  let position: InsertPosition;
 
   let hoveredElement: HTMLElement;
   let draggedElement: HTMLElement | null = null;
@@ -14,13 +11,13 @@
   onMount(() => {
     const iFrame = <HTMLIFrameElement>document.getElementById('frame');
     const ghost_img = <HTMLDivElement>document.getElementById('ghost_img');
-    let htmlCode: string;
 
     // helper selectors for drag n drop
     const click_selector = <HTMLDivElement>document.getElementById('click-selector');
     const hover_selector = <HTMLDivElement>document.getElementById('hover-selector');
     const indicator = <HTMLDivElement>document.getElementById('indicator');
 
+    let htmlCode: string;
     // drag and drop operations for document ---------->
     document.addEventListener('dragstart', (e) => {
       const blank = document.createElement('div');
@@ -66,7 +63,11 @@
     iFrame.src = 'userFiles/index.html';
 
     iFrame.addEventListener('load', () => {
-      let iFrameDoc = iFrame.contentDocument!;
+      // types for insertAdjacentHTML on the drop() event
+      type InsertPosition = 'beforebegin' | 'afterbegin' | 'beforeend' | 'afterend';
+      let position: InsertPosition;
+
+      let iFrameDoc = <Document>iFrame.contentDocument;
 
       iFrameDocument.update(() => iFrameDoc);
 

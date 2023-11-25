@@ -14,7 +14,7 @@
     setTimeout(() => {
       const loader: HTMLDivElement = <HTMLDivElement>document.getElementById('loader');
       loader.style.visibility = 'hidden';
-    }, 1500);
+    }, 2000);
   });
 </script>
 

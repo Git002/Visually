@@ -61,7 +61,7 @@
       on:click={toggleClassIdButton}
     />
 
-    <Dropdown DropdownBtnText={'Set State'} ItemsArray={['Default', 'On Hover', 'On Press', 'On Focus']} />
+    <Dropdown DropdownBtnText={'Default'} ItemsArray={['Default', 'On Hover', 'On Press', 'On Focus']} />
   </div>
 
   <TagInputBar on:add={addClass} on:remove={removeClass} placeholder={'Add a class'} id={'class-input'} />

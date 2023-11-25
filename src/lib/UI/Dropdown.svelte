@@ -7,7 +7,8 @@
   let dropdownOpen = false;
 
   async function onItemClick(e: Event) {
-    const clickedItem = e.target as HTMLButtonElement;
+    const clickedItem = e.target as HTMLElement;
+    if (clickedItem.tagName !== 'BUTTON') return;
     DropdownBtnText = clickedItem.innerText;
     // if a custom function is passed then execute it after the DOM is in sync
     await tick();
@@ -39,15 +40,28 @@
 
   <div
     class={dropdownOpen
-      ? 'absolute w-full bg-[#484848] rounded-[6px] mt-[10px] font-semibold text-[#b8b6b6] overflow-hidden drop-shadow-2xl z-10'
+      ? 'absolute w-full bg-[#494949] rounded-[6px] mt-[9px] font-semibold text-[#b8b6b6] overflow-hidden z-10 py-[4px] shadow-[0px_70px_50px_40px_#00000024]'
       : 'hidden'}
     on:click={(e) => {
       onItemClick(e);
     }}
   >
     {#each ItemsArray as item (item)}
-      <div class="px-[16px] py-[10px] hover:bg-[#d46525] hover:text-white">
-        {item}
+      <div class="px-[6px] py-[3px]">
+        {#if item === DropdownBtnText}
+          <button
+            class="inline-flex w-full justify-between bg-[#107be7] text-[#ebebeb] px-[12px] py-[6px] rounded-[6px] cursor-default"
+          >
+            {item}
+            <img src="Icons/selected.svg" alt="" width="16" height="16" style="pointer-events: none;" />
+          </button>
+        {:else}
+          <button
+            class="inline-flex w-full justify-between hover:text-[#ebebeb] hover:bg-[#606060] px-[12px] py-[6px] rounded-[6px] cursor-default"
+          >
+            {item}
+          </button>
+        {/if}
       </div>
     {/each}
   </div>
