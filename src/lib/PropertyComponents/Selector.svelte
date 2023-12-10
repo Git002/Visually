@@ -8,37 +8,35 @@
   // update the values of each input on click
   $: {
     if ($clickedElement) {
-      // for tagged class input
+      // for class input --->
       if (tagifyInstance) {
         let clickedElementClassArray = Array.from($clickedElement.classList);
 
         tagifyInstance.removeAllTags();
         tagifyInstance.addTags(clickedElementClassArray);
 
-        // if all the tags have been removed & there's no class to add, then set a placeholder
         if (tagifyInstance.getCleanValue().length === 0) {
           tagifyInput.setAttribute('data-placeholder', 'Add a class');
         }
       }
 
-      // for ID input
+      // for ID input --->
       let idInput = <HTMLInputElement>document.getElementById('id-input');
       if (idInput) idInput.value = $clickedElement.id;
     }
   }
 
-  function addClass(e: any) {
+  function addClass(e: CustomEvent) {
+    if ($clickedElement?.classList.contains(e.detail.tagValue)) return;
     $clickedElement?.classList.add(e.detail.tagValue);
-    $clickedElement?.click();
   }
 
-  function removeClass(e: any) {
+  function removeClass(e: CustomEvent) {
     $clickedElement?.classList.remove(e.detail.tagValue);
-    $clickedElement?.click();
   }
 
-  function addId() {
-    const idInput = <HTMLInputElement>document.getElementById('id-input');
+  function addId(e: CustomEvent) {
+    const idInput = <HTMLInputElement>e.detail.target;
     if ($clickedElement) $clickedElement.id = idInput.value;
   }
 
@@ -53,8 +51,8 @@
   }
 </script>
 
-<div class="flex flex-col px-[14px] py-[12px] gap-[10px]">
-  <div class="flex justify-between gap-[8px]">
+<div class="flex flex-col px-[12px] py-[12px] gap-[10px]">
+  <div class="flex justify-between gap-[10px]">
     <ButtonGroup
       Items={['Class', 'ID']}
       ButtonIds={['selector-class-btn', 'selector-id-btn']}
@@ -66,5 +64,5 @@
 
   <TagInputBar on:add={addClass} on:remove={removeClass} placeholder={'Add a class'} id={'class-input'} />
 
-  <InputBar customFunction={addId} id={'id-input'} placeholder={'Add an ID'} Class={'hidden'} />
+  <InputBar on:blur={addId} id={'id-input'} placeholder={'Add an ID'} Class={'hidden'} />
 </div>

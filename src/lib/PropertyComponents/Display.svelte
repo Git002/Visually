@@ -82,7 +82,7 @@
     if ($clickedElement) {
       if (Object.values(displayValues).includes($clickedElementStyle?.display)) {
         displayButtonId = 'display-' + $clickedElementStyle?.display;
-        // show or hide the flex/grid bar
+
         showFlexGroup = displayButtonId === 'display-flex';
         showGridGroup = displayButtonId === 'display-grid';
       }

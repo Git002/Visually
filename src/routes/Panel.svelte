@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-  import { showPanel } from '../Stores';
+  import { showPanelComponent } from '../Stores';
 
   export const PanelElements: any = {
     Heading: {
@@ -36,7 +36,7 @@
 
 <div
   id="elementsPanel"
-  class={$showPanel
+  class={$showPanelComponent
     ? 'flex flex-col ml-[44px] py-[20px] px-[26px] h-full bg-[#2e2f31] absolute z-10'
     : 'absolute invisible'}
 >

@@ -1,10 +1,10 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { showPanel } from '../Stores';
+  import { showPanelComponent } from '../Stores';
 
   onMount(() => {
     document.addEventListener('dragover', () => {
-      showPanel.update(() => false);
+      showPanelComponent.update(() => false);
     });
   });
 </script>
@@ -14,7 +14,7 @@
     <button
       id="addNew"
       class="bg-[#ebe9e9] rounded-full px-[8px] py-[8px]"
-      on:click={() => showPanel.update(() => !$showPanel)}
+      on:click={() => showPanelComponent.update(() => !$showPanelComponent)}
     >
       <object data="./Icons/add.svg" title="" style="pointer-events: none;" /></button
     >

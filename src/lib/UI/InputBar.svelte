@@ -1,9 +1,18 @@
 <script lang="ts">
+  import { createEventDispatcher } from 'svelte';
+
   export let id: string = '';
   export let Class: string = '';
   export let show: boolean = true;
   export let placeholder: string = 'placeholder';
-  export let customFunction: ((...args: any[]) => any) | null = null;
+
+  const dispatch = createEventDispatcher();
+
+  function customFunction(e: Event) {
+    dispatch('blur', {
+      target: e.target
+    });
+  }
 </script>
 
 <input
@@ -14,8 +23,8 @@
     : 'hidden'}
   {placeholder}
   spellcheck="false"
-  on:blur={customFunction}
+  on:blur={(e) => customFunction(e)}
   on:keydown|stopPropagation={(e) => {
-    if (customFunction && e.key === 'Enter') customFunction();
+    if (customFunction && e.key === 'Enter') customFunction(e);
   }}
 />

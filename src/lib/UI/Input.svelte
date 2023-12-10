@@ -1,23 +1,48 @@
 <script lang="ts">
+  import { createEventDispatcher } from 'svelte';
+
   export let value: string = '10';
   export let Class: string = '';
+  export let id: string = '';
 
-  function incrementDecrementValue(e: KeyboardEvent) {
-    const input = <HTMLInputElement>e.target;
-    const inputValue = parseInt(input.value);
+  const dispatch = createEventDispatcher();
 
-    if (e.key === 'ArrowUp') {
-      input.value = String(inputValue + 1);
-    } else if (e.key === 'ArrowDown') {
-      input.value = String(inputValue - 1);
-    }
+  interface CustomInputElement extends HTMLInputElement {
+    oldValue?: string;
+  }
+
+  function customFunction(e: Event) {
+    let inputElement: CustomInputElement = e.target as HTMLInputElement;
+    inputElement.oldValue = value;
+
+    dispatch('blur', {
+      target: inputElement
+    });
+  }
+
+  function arrowUpDown(e: KeyboardEvent) {
+    let inputElement: CustomInputElement = e.target as HTMLInputElement;
+
+    dispatch('arrowUpDown', {
+      target: inputElement,
+      key: e.key
+    });
   }
 </script>
 
 <input
-  class={'w-[32px] bg-[#404040] rounded-[2px] focus:outline-none focus:ring-2 focus:ring-[#505050] text-center tracking-wide ' +
+  {id}
+  class={'w-[32px] bg-[#404040] rounded-[2px] focus:outline-none focus:ring-2 focus:ring-[#505050] tracking-wide ' +
     Class}
   {value}
   autocomplete="off"
-  on:keydown={incrementDecrementValue}
+  placeholder="--"
+  on:blur={customFunction}
+  on:keydown|stopPropagation={(e) => {
+    if (['ArrowUp', 'ArrowDown'].includes(e.key)) {
+      arrowUpDown(e);
+      customFunction(e);
+    }
+    if (e.key === 'Enter') customFunction(e);
+  }}
 />

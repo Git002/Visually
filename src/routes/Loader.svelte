@@ -10,7 +10,7 @@
     src="./loading.json"
     background="transparent"
     speed="1"
-    style="width: 625px; height: 625px;"
+    style="width: 600px; height: 600px;"
     loop
     autoplay
   />

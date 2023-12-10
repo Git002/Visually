@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { clickedElement, showPanel, iFrameDocument } from '../Stores';
+  import { clickedElement, showPanelComponent, iFrameDocument } from '../Stores';
   import { processStyles } from '../lib/Modules/cssFunctions';
   import { calculateRect, ghostImageHandler } from '../lib/Modules/MainFrameFunctions';
   import { PanelElements } from './Panel.svelte';
@@ -18,7 +18,8 @@
     const indicator = <HTMLDivElement>document.getElementById('indicator');
 
     let htmlCode: string;
-    // drag and drop operations for document ---------->
+
+    // drag and drop operations for document --->
     document.addEventListener('dragstart', (e) => {
       const blank = document.createElement('div');
       e.dataTransfer!.setDragImage(blank, 0, 0);
@@ -59,11 +60,9 @@
       draggedElement = null;
     });
 
-    // make the iframe reload for changes
     iFrame.src = 'userFiles/index.html';
 
     iFrame.addEventListener('load', () => {
-      // types for insertAdjacentHTML on the drop() event
       type InsertPosition = 'beforebegin' | 'afterbegin' | 'beforeend' | 'afterend';
       let position: InsertPosition;
 
@@ -74,28 +73,36 @@
       let prevClickedElement: HTMLElement;
       let currentClickedElement: HTMLElement;
 
+      let currentElementObserver: MutationObserver;
+
       iFrameDoc.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
 
         currentClickedElement = e.target as HTMLElement;
 
+        calculateRect(currentClickedElement, click_selector);
+        click_selector.style.display = 'block';
+
         clickedElement.update(() => currentClickedElement);
         processStyles($clickedElement);
 
-        // hide Panel.svelte
-        showPanel.update(() => false);
+        showPanelComponent.update(() => false);
 
         if (prevClickedElement !== currentClickedElement) {
-          // hide NotSelected.svelte
-          let NotSelected = <HTMLDivElement>document.getElementById('not_selected');
-          NotSelected.style.visibility = 'hidden';
+          if (currentClickedElement) {
+            currentElementObserver?.disconnect();
 
-          calculateRect(currentClickedElement, click_selector);
+            currentElementObserver = new MutationObserver(() => {
+              currentClickedElement.click();
+            });
 
-          click_selector.style.display = 'block';
+            currentElementObserver.observe(currentClickedElement, {
+              attributes: true,
+              attributeFilter: ['class']
+            });
+          }
         }
-
         prevClickedElement = currentClickedElement;
       });
 
@@ -131,7 +138,6 @@
         e.preventDefault();
         e.stopPropagation();
 
-        // update the ghost's position when inside the iFrame
         ghostImageHandler(e.clientY + 60, e.clientX + 75);
 
         let elem = e.target as HTMLElement;
@@ -141,7 +147,6 @@
         hover_selector.style.display = 'none';
         click_selector.style.display = 'none';
 
-        // change the rect() of indicator on dragover
         calculateRect(elem, indicator);
 
         if (elem.tagName === 'BODY') {
@@ -172,13 +177,10 @@
         e.preventDefault();
         e.stopPropagation();
 
-        // reset the ghost's position on drop
         ghostImageHandler(60, 75, 'none');
 
-        // then add the copied element to the DOM
         (e.target as HTMLElement).insertAdjacentHTML(position, htmlCode);
 
-        // then delete the original element to create an illusion of elements being moved on drag
         draggedElement?.remove();
 
         indicator.style.display = 'none';
@@ -192,15 +194,15 @@
         indicator.style.display = 'none';
       });
 
-      // recalculate selector styles on scroll for smooth experience
       iFrameDoc.addEventListener('scroll', () => {
         if ($clickedElement) calculateRect($clickedElement, click_selector);
         calculateRect(hoveredElement, hover_selector);
       });
+
+      iFrameDoc.getElementsByTagName('body')[0].click();
     });
 
     window.addEventListener('resize', () => {
-      // updating selector styles on resize
       if ($clickedElement) {
         calculateRect($clickedElement, click_selector);
         hover_selector.style.display = 'none';
@@ -217,7 +219,7 @@
     id="click-selector"
     style="
     box-sizing: border-box;
-    display: none;
+    display: block;
     pointer-events: none;
     border: 1px solid rgb(76, 120, 255);
     position: absolute;

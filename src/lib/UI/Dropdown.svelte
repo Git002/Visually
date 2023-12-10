@@ -10,7 +10,7 @@
     const clickedItem = e.target as HTMLElement;
     if (clickedItem.tagName !== 'BUTTON') return;
     DropdownBtnText = clickedItem.innerText;
-    // if a custom function is passed then execute it after the DOM is in sync
+
     await tick();
     if (customFunction) {
       customFunction();
@@ -25,7 +25,7 @@
 
 <div class="relative text-[12px] w-full">
   <button
-    class="flex justify-between flex-row rounded-[6px] bg-[#404040] py-[6px] px-[12px] border-2 border-[#505050] items-center text-center font-semibold text-[#b8b6b6] h-[34px] w-full focus:outline-0"
+    class="flex justify-between flex-row rounded-[6px] bg-[#404040] py-[6px] px-[12px] border-2 border-[#505050] items-center text-center font-semibold tracking-wide text-[#b8b6b6] h-[34px] w-full focus:outline-0"
     on:click|stopPropagation={() => {
       dropdownOpen = !dropdownOpen;
       document.body.addEventListener('click', dropdownClose);
@@ -40,7 +40,7 @@
 
   <div
     class={dropdownOpen
-      ? 'absolute w-full bg-[#494949] rounded-[6px] mt-[9px] font-semibold text-[#b8b6b6] overflow-hidden z-10 py-[4px] shadow-[0px_70px_50px_40px_#00000024]'
+      ? 'absolute w-full bg-[#494949] rounded-[6px] mt-[9px] font-semibold text-[#b8b6b6] tracking-wide overflow-hidden z-10 py-[4px] shadow-[0px_70px_50px_10px_#00000024]'
       : 'hidden'}
     on:click={(e) => {
       onItemClick(e);

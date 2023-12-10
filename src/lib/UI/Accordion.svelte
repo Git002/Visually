@@ -1,11 +1,7 @@
 <script lang="ts">
   import type { ComponentType, SvelteComponent } from 'svelte';
 
-  type AccordianComponentTyped = {
-    [title: string]: ComponentType<SvelteComponent>;
-  };
-
-  export let componentsArray: AccordianComponentTyped;
+  export let componentsArray: { [title: string]: ComponentType<SvelteComponent> };
 
   function accordianToggle(e: Event) {
     if ((e.target as HTMLElement).hasAttribute('data-accordian-header') === false) return;
@@ -23,16 +19,17 @@
   }
 </script>
 
-<div on:click={accordianToggle}>
+<div>
   {#each Object.entries(componentsArray) as [key]}
     <div
       data-accordian-header
-      class="flex justify-between px-[14px] pt-[12px] text-[#d2d2d2] cursor-pointer w-full text-[13px] font-bold text-center tracking-wide pb-[14px]"
+      class="flex justify-between px-[12px] pt-[12px] text-[#d2d2d2] cursor-pointer w-full text-[13px] font-bold text-center tracking-wide pb-[14px]"
+      on:click={accordianToggle}
     >
       {key}
       <object data="Icons/caret-down.svg" title="" style="pointer-events: none;" />
     </div>
-    <div class="flex flex-col gap-[12px] pb-[14px] px-[14px]" style="display: flex;">
+    <div class="flex flex-col gap-[12px] px-[12px] pb-[14px]" style="display: flex;">
       <svelte:component this={componentsArray[key]} />
     </div>
 

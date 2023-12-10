@@ -40,23 +40,20 @@
 
     tagifyInstance.on('add', (e: any) => {
       tagifyInput.setAttribute('data-placeholder', ' ');
-      // run custom function if any
-      const tagValue = e.detail.data!.value;
-      customAddFunction(tagValue);
+      customAddFunction(e.detail.data!.value);
     });
 
     tagifyInstance.on('remove', (e: any) => {
       if (tagifyInstance.getCleanValue().length <= 1) {
         tagifyInput.setAttribute('data-placeholder', 'Add a class');
       }
-      // run custom function if any
-      const tagValue = e.detail.data!.value;
-      customRemoveFunction(tagValue);
+      customRemoveFunction(e.detail.data!.value);
     });
   });
 </script>
 
 <input
+  id={id + '-' + className}
   bind:this={input}
   class={className +
     ' w-full text-[11px] bg-[#404040] font-sans font-semibold tracking-wide placeholder-[#b8b6b6a1] text-[#b8b6b6] border-[2px] border-[#505050] rounded-[5px] outline-none'}

@@ -4,7 +4,6 @@
   import Header from '../routes/Header.svelte';
   import Sidebar from '../routes/Sidebar.svelte';
   import MainFrame from './MainFrame.svelte';
-  import NotSelected from './NotSelected.svelte';
   import Panel from './Panel.svelte';
   import Properties from './Properties.svelte';
   import { onMount } from 'svelte';
@@ -33,8 +32,6 @@
       </div>
 
       <div class="flex flex-col bg-[#2e2f31] w-[250px] shrink-0 relative">
-        <NotSelected />
-
         <Properties />
         <!-- screen when no element selected -->
       </div>
