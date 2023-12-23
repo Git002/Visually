@@ -6,7 +6,7 @@ export function calculateRect(element: HTMLElement, selector: HTMLDivElement) {
   selector.style.left = rect.left + 'px';
 }
 
-export function ghostImageHandler(top: number, left: number, display?: 'block' | 'none') {
+export function ghostImageHandler(left: number, top: number, display?: 'block' | 'none') {
   const ghost_img = <HTMLDivElement>document.getElementById('ghost_img');
   if (display) ghost_img.style.display = display;
   ghost_img.style.top = top + 'px';

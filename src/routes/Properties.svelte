@@ -4,8 +4,6 @@
   import Display from '$lib/PropertyComponents/Display.svelte';
   import Spacing from '$lib/PropertyComponents/Spacing.svelte';
   import Sizing from '$lib/PropertyComponents/Sizing.svelte';
-
-  let arr = { Display, Spacing, Sizing };
 </script>
 
 <div class="flex flex-col select-none max-h-[94vh]">
@@ -21,9 +19,16 @@
   >
     PROPERTIES
   </div>
-
   <div id="properties-panel" class="overflow-auto">
-    <Accordion componentsArray={arr} />
+    <Accordion ItemName="Display">
+      <Display />
+    </Accordion>
+    <Accordion ItemName="Spacing">
+      <Spacing />
+    </Accordion>
+    <Accordion ItemName="Sizing">
+      <Sizing />
+    </Accordion>
   </div>
 </div>
 

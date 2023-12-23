@@ -3,10 +3,17 @@
   import { clickedElement, showPanelComponent, iFrameDocument } from '../Stores';
   import { processStyles } from '../lib/Modules/cssFunctions';
   import { calculateRect, ghostImageHandler } from '../lib/Modules/MainFrameFunctions';
-  import { PanelElements } from './Panel.svelte';
+  import { PanelElements } from '../lib/PanelComponents/ElementsPanel.svelte';
 
   let hoveredElement: HTMLElement;
   let draggedElement: HTMLElement | null = null;
+  let dropTarget: HTMLElement | null;
+
+  let position: 'beforebegin' | 'afterbegin' | 'beforeend' | 'afterend';
+  const INSIDE_AT_START = 'afterbegin';
+  const INSIDE_AT_BOTTOM = 'beforeend';
+  const ABOVE = 'beforebegin';
+  const BELOW = 'afterend';
 
   onMount(() => {
     const iFrame = <HTMLIFrameElement>document.getElementById('frame');
@@ -20,7 +27,7 @@
     let htmlCode: string;
 
     // drag and drop operations for document --->
-    document.addEventListener('dragstart', (e) => {
+    document.addEventListener('dragstart', (e: DragEvent) => {
       const blank = document.createElement('div');
       e.dataTransfer!.setDragImage(blank, 0, 0);
 
@@ -31,7 +38,7 @@
       htmlCode = PanelElements[ghostText].code;
     });
 
-    document.addEventListener('dragover', (e) => {
+    document.addEventListener('dragover', (e: DragEvent) => {
       e.preventDefault();
 
       ghost_img.style.top = e.clientY + 15 + 'px';
@@ -40,20 +47,20 @@
       indicator.style.display = 'none';
     });
 
-    document.addEventListener('drop', (e) => {
+    document.addEventListener('drop', (e: DragEvent) => {
       e.preventDefault();
 
-      ghostImageHandler(60, 75, 'none');
+      ghostImageHandler(75, 60, 'none');
 
       indicator.style.display = 'none';
 
       draggedElement = null;
     });
 
-    document.addEventListener('dragend', (e) => {
+    document.addEventListener('dragend', (e: DragEvent) => {
       e.preventDefault();
 
-      ghostImageHandler(60, 75, 'none');
+      ghostImageHandler(75, 60, 'none');
 
       indicator.style.display = 'none';
 
@@ -63,31 +70,26 @@
     iFrame.src = 'userFiles/index.html';
 
     iFrame.addEventListener('load', () => {
-      type InsertPosition = 'beforebegin' | 'afterbegin' | 'beforeend' | 'afterend';
-      let position: InsertPosition;
-
       let iFrameDoc = <Document>iFrame.contentDocument;
-
-      iFrameDocument.update(() => iFrameDoc);
+      $iFrameDocument = iFrameDoc;
 
       let prevClickedElement: HTMLElement;
       let currentClickedElement: HTMLElement;
-
       let currentElementObserver: MutationObserver;
 
-      iFrameDoc.addEventListener('click', (e) => {
+      iFrameDoc.addEventListener('click', (e: Event) => {
         e.preventDefault();
         e.stopPropagation();
+
+        $showPanelComponent = false;
 
         currentClickedElement = e.target as HTMLElement;
 
         calculateRect(currentClickedElement, click_selector);
         click_selector.style.display = 'block';
 
-        clickedElement.update(() => currentClickedElement);
+        $clickedElement = currentClickedElement;
         processStyles($clickedElement);
-
-        showPanelComponent.update(() => false);
 
         if (prevClickedElement !== currentClickedElement) {
           if (currentClickedElement) {
@@ -106,7 +108,7 @@
         prevClickedElement = currentClickedElement;
       });
 
-      iFrameDoc.addEventListener('mouseover', (e) => {
+      iFrameDoc.addEventListener('mouseover', (e: Event) => {
         hoveredElement = e.target as HTMLElement;
         if (hoveredElement.tagName !== 'BODY') hoveredElement.draggable = true;
 
@@ -115,14 +117,14 @@
         hover_selector.style.display = 'block';
       });
 
-      iFrameDoc.addEventListener('mouseout', (e) => {
+      iFrameDoc.addEventListener('mouseout', (e: Event) => {
         const mouseoutElem = e.target as HTMLElement;
         mouseoutElem.removeAttribute('draggable');
 
         hover_selector.style.display = 'none';
       });
 
-      iFrameDoc.addEventListener('dragstart', (e) => {
+      iFrameDoc.addEventListener('dragstart', (e: DragEvent) => {
         e.stopPropagation();
 
         const blank = iFrameDoc.createElement('div');
@@ -134,14 +136,18 @@
         ghost_img.style.display = 'none';
       });
 
-      iFrameDoc.addEventListener('dragover', (e) => {
+      iFrameDoc.addEventListener('dragover', (e: DragEvent) => {
         e.preventDefault();
         e.stopPropagation();
 
-        ghostImageHandler(e.clientY + 60, e.clientX + 75);
+        ghostImageHandler(e.clientX + 75, e.clientY + 60);
 
         let elem = e.target as HTMLElement;
-        let rect = elem.getBoundingClientRect();
+        let parentElem = elem.parentElement as HTMLElement;
+        let elemRect = elem.getBoundingClientRect();
+        let parentRect = parentElem.getBoundingClientRect();
+
+        let cursorPos = (e as MouseEvent).pageY - elemRect.top;
 
         indicator.style.display = 'block';
         hover_selector.style.display = 'none';
@@ -149,46 +155,75 @@
 
         calculateRect(elem, indicator);
 
-        if (elem.tagName === 'BODY') {
-          indicator.style.display = 'none';
-          indicator.style.borderTop = '';
-          indicator.style.borderBottom = '';
+        dropTarget = null;
 
-          position = 'beforeend';
+        if (!elem.previousElementSibling && parentElem.tagName !== 'BODY') {
+          if (elemRect.top - parentRect.top < 3) {
+            if (cursorPos < 3) {
+              dropTarget = parentElem;
+              calculateRect(dropTarget, indicator);
+              indicator.style.borderWidth = '3px 0px 0px 0px';
+              position = ABOVE;
+            } else if (cursorPos <= elemRect.height / 2) {
+              indicator.style.borderWidth = '3px 0px 0px 0px';
+              position = ABOVE;
+            } else if (cursorPos >= elemRect.height / 2 && cursorPos < elemRect.height - 3) {
+              indicator.style.borderWidth = '0px 0px 3px 0px';
+              position = BELOW;
+            } else {
+              dropTarget = parentElem;
+              calculateRect(dropTarget, indicator);
+              indicator.style.borderWidth = '0px 0px 3px 0px';
+              position = BELOW;
+            }
+          }
+        } else if (elem.tagName === 'BODY') {
+          indicator.style.borderWidth = '3px 3px 3px 3px';
+          position = INSIDE_AT_BOTTOM;
+        } else if (elem.tagName === 'DIV') {
+          if (cursorPos <= elemRect.height / 10) {
+            indicator.style.borderWidth = '3px 0px 0px 0px';
+            position = ABOVE;
+          } else if (
+            cursorPos > elemRect.height / 10 &&
+            cursorPos <= elemRect.height - elemRect.height / 10
+          ) {
+            indicator.style.borderWidth = '3px 3px 3px 3px';
+            position = INSIDE_AT_BOTTOM;
+          } else if (cursorPos >= elemRect.height - elemRect.height / 10) {
+            indicator.style.borderWidth = '0px 0px 3px 0px';
+            position = BELOW;
+          }
+        } else if (cursorPos <= elemRect.height / 2) {
+          indicator.style.borderWidth = '3px 0px 0px 0px';
+          position = ABOVE;
         } else {
-          // insert above the the element
-          if (Math.abs((e as MouseEvent).pageY - rect.top) <= rect.height / 2) {
-            indicator.style.borderTop = '3px solid #007bfb';
-            indicator.style.borderBottom = '';
-
-            position = 'beforebegin';
-          }
-          // insert below the element
-          else {
-            indicator.style.borderTop = '';
-            indicator.style.borderBottom = '3px solid #007bfb';
-
-            position = 'afterend';
-          }
+          indicator.style.borderWidth = '0px 0px 3px 0px';
+          position = BELOW;
         }
       });
 
-      iFrameDoc.addEventListener('drop', (e) => {
+      iFrameDoc.addEventListener('drop', (e: DragEvent) => {
         e.preventDefault();
         e.stopPropagation();
 
-        ghostImageHandler(60, 75, 'none');
+        ghostImageHandler(75, 60, 'none');
 
-        (e.target as HTMLElement).insertAdjacentHTML(position, htmlCode);
+        dropTarget
+          ? dropTarget.insertAdjacentHTML(position, htmlCode)
+          : (e.target as HTMLElement).insertAdjacentHTML(position, htmlCode);
 
         draggedElement?.remove();
 
         indicator.style.display = 'none';
 
+        $iFrameDocument = iFrameDoc; // trigger Navigator.svelte to re-render the tree
+
         draggedElement = null;
+        dropTarget = null;
       });
 
-      iFrameDoc.addEventListener('dragend', (e) => {
+      iFrameDoc.addEventListener('dragend', (e: DragEvent) => {
         e.stopPropagation();
 
         indicator.style.display = 'none';
@@ -199,7 +234,31 @@
         calculateRect(hoveredElement, hover_selector);
       });
 
-      iFrameDoc.getElementsByTagName('body')[0].click();
+      iFrameDoc.addEventListener('keydown', (e: KeyboardEvent) => {
+        if (e.key === 'Backspace' && currentClickedElement.tagName !== 'BODY') {
+          // the element to be clicked when the current element gets deleted
+          let remainingElement: HTMLElement;
+
+          let prevElement = <HTMLElement>currentClickedElement.previousElementSibling;
+          let nextElement = <HTMLElement>currentClickedElement.nextElementSibling;
+          let parentElement = <HTMLElement>currentClickedElement.parentElement;
+
+          parentElement.childNodes.forEach((node: ChildNode) => {
+            if (node.nodeName === '#text') node.remove();
+          });
+
+          remainingElement = nextElement || prevElement || parentElement;
+
+          currentClickedElement.remove();
+          remainingElement.click();
+
+          calculateRect(hoveredElement, hover_selector);
+
+          $iFrameDocument = iFrameDoc; // trigger Navigator.svelte to re-render the tree
+        }
+      });
+
+      iFrameDoc.body.click();
     });
 
     window.addEventListener('resize', () => {
@@ -249,6 +308,8 @@
     pointer-events: none;
     position: absolute;
     border-radius: 0px;
+    border-style: solid;
+    border-color: #007bfb;
     background-color: transparent;
   "
   />

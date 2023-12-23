@@ -74,8 +74,12 @@ function removePxUnit(text: string) {
   return text.endsWith('px') ? text.replace('px', '') : text;
 }
 
+interface CustomCSSStyleDeclaration extends CSSStyleDeclaration {
+  [key: string]: any;
+}
+
 export function processStyles(element: HTMLElement) {
-  let style: CSSStyleDeclaration = { ...element.style };
+  let style: CustomCSSStyleDeclaration = { ...element.style };
   let computedStyle = getComputedStyle(element);
   let userSetStyles = getUserSetStyles(element, [
     'width',
@@ -102,11 +106,13 @@ export function processStyles(element: HTMLElement) {
   if (!style.alignItems) {
     if (computedStyle.getPropertyValue('align-items') === 'normal') style.alignItems = 'stretch';
     else style.alignItems = computedStyle.getPropertyValue('align-items');
+    style['align-items'] = style.alignItems;
   }
 
   if (!style.justifyContent) {
     if (computedStyle.getPropertyValue('justify-content') === 'normal') style.justifyContent = 'flex-start';
     else style.justifyContent = computedStyle.getPropertyValue('justify-content');
+    style['justify-content'] = style.justifyContent;
   }
 
   // Sizing properties ------->
@@ -123,62 +129,74 @@ export function processStyles(element: HTMLElement) {
   if (!style.maxWidth) {
     if (userSetStyles['max-width']) style.maxWidth = removePxUnit(userSetStyles['max-width']);
     else style.maxWidth = 'None';
+    style['max-width'] = style.maxWidth;
   }
 
   if (!style.maxHeight) {
     if (userSetStyles['max-height']) style.maxHeight = removePxUnit(userSetStyles['max-height']);
     else style.maxHeight = 'None';
+    style['max-height'] = style.maxHeight;
   }
 
   if (!style.minWidth) {
     if (userSetStyles['min-width']) style.minWidth = removePxUnit(userSetStyles['min-width']);
     else style.minWidth = '0';
+    style['min-width'] = style.minWidth;
   }
 
   if (!style.minHeight) {
     if (userSetStyles['min-height']) style.minHeight = removePxUnit(userSetStyles['min-height']);
     else style.minHeight = '0';
+    style['min-height'] = style.minHeight;
   }
 
   // Spacing properties
   if (!style.marginTop) {
     if (userSetStyles['margin-top']) style.marginTop = removePxUnit(userSetStyles['margin-top']);
     else style.marginTop = '0';
+    style['margin-top'] = style.marginTop;
   }
 
   if (!style.marginLeft) {
     if (userSetStyles['margin-left']) style.marginLeft = removePxUnit(userSetStyles['margin-left']);
     else style.marginLeft = '0';
+    style['margin-left'] = style.marginLeft;
   }
 
   if (!style.marginRight) {
     if (userSetStyles['margin-right']) style.marginRight = removePxUnit(userSetStyles['margin-right']);
     else style.marginRight = '0';
+    style['margin-right'] = style.marginRight;
   }
 
   if (!style.marginBottom) {
     if (userSetStyles['margin-bottom']) style.marginBottom = removePxUnit(userSetStyles['margin-bottom']);
     else style.marginBottom = '0';
+    style['margin-bottom'] = style.marginBottom;
   }
 
   if (!style.paddingTop) {
     if (userSetStyles['padding-top']) style.paddingTop = removePxUnit(userSetStyles['padding-top']);
     else style.paddingTop = '0';
+    style['padding-top'] = style.paddingTop;
   }
 
   if (!style.paddingLeft) {
     if (userSetStyles['padding-left']) style.paddingLeft = removePxUnit(userSetStyles['padding-left']);
     else style.paddingLeft = '0';
+    style['padding-left'] = style.paddingLeft;
   }
 
   if (!style.paddingRight) {
     if (userSetStyles['padding-right']) style.paddingRight = removePxUnit(userSetStyles['padding-right']);
     else style.paddingRight = '0';
+    style['padding-right'] = style.paddingRight;
   }
 
   if (!style.paddingBottom) {
     if (userSetStyles['padding-bottom']) style.paddingBottom = removePxUnit(userSetStyles['padding-bottom']);
     else style.paddingBottom = '0';
+    style['padding-bottom'] = style.paddingBottom;
   }
 
   clickedElementStyle.update(() => style);
@@ -216,6 +234,7 @@ export class CSSUtility {
     else if (this.element.tagName === 'BUTTON') className = 'button';
     else if (this.element.tagName === 'IMG') className = 'image';
     else if (this.element.tagName === 'P') className = 'paragraph';
+    else if (this.element.tagName === 'DIV') className = 'div';
     else className = random(6);
 
     if (this.iFrameDoc.getElementsByClassName(className).length === 0) return className;

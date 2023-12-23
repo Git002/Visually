@@ -1,41 +1,68 @@
 <script lang="ts">
-  import type { ComponentType, SvelteComponent } from 'svelte';
-
-  export let componentsArray: { [title: string]: ComponentType<SvelteComponent> };
+  export let ItemName: string;
+  export let Icon: string = '';
+  export let Expand: boolean = true;
+  export let Align: 'start' | 'end' = 'end';
+  export let Border: boolean = true;
+  export let Class: string | null = null;
+  export let style: string = '';
 
   function accordianToggle(e: Event) {
-    if ((e.target as HTMLElement).hasAttribute('data-accordian-header') === false) return;
-
-    let panel = (e.target as HTMLElement).nextElementSibling as HTMLElement;
     let arrowDownBtn = (e.target as HTMLElement).children[0] as HTMLObjectElement;
+    Expand = !Expand;
 
-    if (panel.style.display && panel.style.display !== 'none') {
-      arrowDownBtn.style.transform = 'rotate(-90deg)';
-      panel.style.display = 'none';
-    } else {
-      arrowDownBtn.style.transform = 'rotate(360deg)';
-      panel.style.display = 'flex';
-    }
+    if (Expand) arrowDownBtn.style.transform = 'rotate(360deg)';
+    else arrowDownBtn.style.transform = 'rotate(-90deg)';
   }
 </script>
 
-<div>
-  {#each Object.entries(componentsArray) as [key]}
-    <div
-      data-accordian-header
-      class="flex justify-between px-[12px] pt-[12px] text-[#d2d2d2] cursor-pointer w-full text-[13px] font-bold text-center tracking-wide pb-[14px]"
-      on:click={accordianToggle}
-    >
-      {key}
-      <object data="Icons/caret-down.svg" title="" style="pointer-events: none;" />
+{#if Align === 'end'}
+  <div
+    class={Class
+      ? Class
+      : 'flex justify-between px-[12px] pt-[12px] gap-[6px] text-[#d2d2d2] text-[13px] cursor-pointer w-full font-bold text-center tracking-wide'}
+    {style}
+    on:click={accordianToggle}
+  >
+    <div class="flex gap-[8px]">
+      {#if Icon}
+        <img src={Icon} alt="" style="pointer-events: none; width: 14px" />
+      {/if}
+      {ItemName}
     </div>
-    <div class="flex flex-col gap-[12px] px-[12px] pb-[14px]" style="display: flex;">
-      <svelte:component this={componentsArray[key]} />
-    </div>
+    <img
+      src="Icons/caret-down.svg"
+      alt=""
+      style={Expand ? 'pointer-events: none;' : 'pointer-events: none; transform: rotate(-90deg);'}
+    />
+  </div>
+{:else}
+  <div
+    class={Class
+      ? Class
+      : 'flex px-[12px] pt-[12px] gap-[6px] text-[#d2d2d2] text-[13px] cursor-pointer w-full font-bold text-center tracking-wide'}
+    {style}
+    on:click={accordianToggle}
+  >
+    <img
+      src="Icons/caret-down.svg"
+      alt=""
+      style={Expand ? 'pointer-events: none;' : 'pointer-events: none; transform: rotate(-90deg);'}
+    />
 
-    <div class="border-t border-[#252527] w-full" />
-  {/each}
+    <div class="flex gap-[8px]">
+      {#if Icon}
+        <img src={Icon} alt="" style="pointer-events: none; width:15px" />
+      {/if}
+      {ItemName}
+    </div>
+  </div>
+{/if}
+
+<div class={Expand ? 'flex flex-col' : 'hidden'}>
+  <slot />
 </div>
 
-<style>
-</style>
+{#if Border}
+  <div class="border-t border-[#252527] mt-[14px] w-full" />
+{/if}

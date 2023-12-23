@@ -4,7 +4,6 @@
   import Header from '../routes/Header.svelte';
   import Sidebar from '../routes/Sidebar.svelte';
   import MainFrame from './MainFrame.svelte';
-  import Panel from './Panel.svelte';
   import Properties from './Properties.svelte';
   import { onMount } from 'svelte';
 
@@ -13,7 +12,7 @@
     setTimeout(() => {
       const loader: HTMLDivElement = <HTMLDivElement>document.getElementById('loader');
       loader.style.visibility = 'hidden';
-    }, 2000);
+    }, 1500);
   });
 </script>
 
@@ -25,7 +24,6 @@
 
     <div class="flex flex-row flex-1">
       <Sidebar />
-      <Panel />
 
       <div class="flex flex-col px-[10px] flex-1 bg-[#202123]">
         <MainFrame />
