@@ -2,6 +2,9 @@
   import { showPanelComponent } from '../Stores';
   import ElementsPanel from '$lib/PanelComponents/ElementsPanel.svelte';
   import NavigatorPanel from '$lib/PanelComponents/NavigatorPanel.svelte';
+  import ComponentsPanel from '$lib/PanelComponents/ComponentsPanel.svelte';
+  import PagesPanel from '$lib/PanelComponents/PagesPanel.svelte';
+  import UploadsPanel from '$lib/PanelComponents/UploadsPanel.svelte';
 
   let buttonIdsWithIcons: { [key: string]: string } = {
     'navigator-panel-btn': './Icons/Sidebar/navigator.svg',
@@ -54,10 +57,22 @@
     ? 'flex flex-col ml-[45px] w-[240px] h-full bg-[#2e2f31] border-l-[1px] border-[#202124] absolute z-10 select-none'
     : 'hidden'}
 >
-  <div id="elements-panel" class={activeBtnId === 'elements-panel-btn' ? 'py-[20px] px-[20px]' : 'hidden'}>
+  <div
+    id="elements-panel"
+    class={activeBtnId === 'elements-panel-btn' ? 'py-[20px] px-[20px] h-full' : 'hidden'}
+  >
     <ElementsPanel />
   </div>
-  <div id="navigator" class={activeBtnId === 'navigator-panel-btn' ? 'py-[20px]' : 'hidden'}>
+  <div id="navigator-panel" class={activeBtnId === 'navigator-panel-btn' ? 'py-[20px] h-full' : 'hidden'}>
     <NavigatorPanel />
+  </div>
+  <div id="components-panel" class={activeBtnId === 'components-panel-btn' ? 'py-[20px] h-full' : 'hidden'}>
+    <ComponentsPanel />
+  </div>
+  <div id="pages-panel" class={activeBtnId === 'pages-panel-btn' ? 'py-[20px] h-full' : 'hidden'}>
+    <PagesPanel />
+  </div>
+  <div id="uploads-panel" class={activeBtnId === 'uploads-panel-btn' ? 'py-[20px] h-full' : 'hidden'}>
+    <UploadsPanel />
   </div>
 </div>
