@@ -26,7 +26,7 @@
   >
     <div class="flex gap-[8px]">
       {#if Icon}
-        <img src={Icon} alt="" style="pointer-events: none; width: 14px" />
+        <img src={Icon} alt="" style="pointer-events: none;" width="15" />
       {/if}
       {ItemName}
     </div>
@@ -34,6 +34,8 @@
       src="Icons/caret-down.svg"
       alt=""
       style={Expand ? 'pointer-events: none;' : 'pointer-events: none; transform: rotate(-90deg);'}
+      width="10"
+      height="10"
     />
   </div>
 {:else}
@@ -48,11 +50,13 @@
       src="Icons/caret-down.svg"
       alt=""
       style={Expand ? 'pointer-events: none;' : 'pointer-events: none; transform: rotate(-90deg);'}
+      width="10"
+      height="10"
     />
 
     <div class="flex gap-[8px]">
       {#if Icon}
-        <img src={Icon} alt="" style="pointer-events: none; width:15px" />
+        <img src={Icon} alt="" style="pointer-events: none;" width="15" />
       {/if}
       {ItemName}
     </div>

@@ -7,14 +7,14 @@
   export let leafNodePaddingLeft: number = 0;
   export let Expand: boolean = false;
 
-  let depth: number = 0;
-
   let tagToIcon: { [key: string]: { name: string; path: string } } = {
     BODY: { name: 'Body', path: './Icons/NavigatorPanel/window.svg' },
     DIV: { name: 'Div', path: './Icons/NavigatorPanel/square.svg' },
     H1: { name: 'Heading', path: './Icons/NavigatorPanel/heading.svg' },
     P: { name: 'Pragraph', path: './Icons/NavigatorPanel/paragraph.svg' },
-    IMG: { name: 'Image', path: './Icons/NavigatorPanel/image.svg' }
+    IMG: { name: 'Image', path: './Icons/NavigatorPanel/image.svg' },
+    BUTTON: { name: 'Button', path: './Icons/NavigatorPanel/button.svg' },
+    INPUT: { name: 'Input', path: './Icons/NavigatorPanel/input.svg' }
   };
 </script>
 
@@ -47,7 +47,7 @@
   </div>
 {:else}
   <div
-    class="flex gap-[9px] py-[6px] mb-[2px] text-[#B8B6B6] text-[12px] text-start cursor-pointer w-full font-bold tracking-wide hover:bg-[#353638] capitalize"
+    class="flex gap-[8px] py-[6px] mb-[2px] text-[#B8B6B6] text-[12px] text-start cursor-pointer w-full font-bold tracking-wide hover:bg-[#353638] capitalize"
     style="padding-left: {basePaddingLeft + leafNodePaddingLeft}px;"
   >
     <img src={tagToIcon[element.tagName].path} alt="" style="pointer-events: none; width:14px" />

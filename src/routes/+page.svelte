@@ -25,7 +25,7 @@
     <div class="flex flex-row flex-1">
       <Sidebar />
 
-      <div class="flex flex-col px-[10px] flex-1 bg-[#202123]">
+      <div class="flex flex-col px-[8px] flex-1 bg-[#202123]">
         <MainFrame />
       </div>
 

@@ -42,7 +42,7 @@
           ? 'px-[12px] py-[12px] bg-[#343638]'
           : 'px-[12px] py-[12px] hover:bg-[#343638]'}
       >
-        <img src={buttonIdsWithIcons[buttonId]} alt="" style="pointer-events: none;" />
+        <object data={buttonIdsWithIcons[buttonId]} title="" style="pointer-events: none;" />
       </button>
     {/each}
   </div>
