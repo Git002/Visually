@@ -9,10 +9,13 @@
   export let draggable: boolean = false;
 
   function accordianToggle(e: Event) {
-    Expand = !Expand;
+    let arrowDownBtn: HTMLImageElement;
+    let clickedElem = e.target as HTMLElement;
 
-    let arrowDownBtn = (e.target as HTMLElement).children[0] as HTMLObjectElement;
-    if (arrowDownBtn.hasAttribute('data-icon')) return;
+    if (Align === 'end') arrowDownBtn = clickedElem.children[1] as HTMLImageElement;
+    else arrowDownBtn = clickedElem.children[0] as HTMLImageElement;
+
+    Expand = !Expand;
 
     if (Expand) arrowDownBtn.style.transform = 'rotate(360deg)';
     else arrowDownBtn.style.transform = 'rotate(-90deg)';
@@ -28,7 +31,7 @@
     {draggable}
     on:click={accordianToggle}
   >
-    <div class="flex gap-[8px]">
+    <div class="flex gap-[8px] pointer-events-none">
       {#if Icon}
         <img src={Icon} alt="" style="pointer-events: none;" width="15" />
       {/if}
@@ -58,9 +61,9 @@
       height="10"
     />
 
-    <div class="flex gap-[8px]">
+    <div class="flex gap-[8px] pointer-events-none">
       {#if Icon}
-        <img src={Icon} alt="" style="pointer-events: none;" width="15" data-icon />
+        <img src={Icon} alt="" style="pointer-events: none;" width="15" />
       {/if}
       {ItemName}
     </div>
