@@ -6,10 +6,13 @@
   export let Border: boolean = true;
   export let Class: string | null = null;
   export let style: string = '';
+  export let draggable: boolean = false;
 
   function accordianToggle(e: Event) {
-    let arrowDownBtn = (e.target as HTMLElement).children[0] as HTMLObjectElement;
     Expand = !Expand;
+
+    let arrowDownBtn = (e.target as HTMLElement).children[0] as HTMLObjectElement;
+    if (arrowDownBtn.hasAttribute('data-icon')) return;
 
     if (Expand) arrowDownBtn.style.transform = 'rotate(360deg)';
     else arrowDownBtn.style.transform = 'rotate(-90deg)';
@@ -22,6 +25,7 @@
       ? Class
       : 'flex justify-between px-[12px] pt-[12px] gap-[6px] text-[#d2d2d2] text-[13px] cursor-pointer w-full font-bold text-center tracking-wide'}
     {style}
+    {draggable}
     on:click={accordianToggle}
   >
     <div class="flex gap-[8px]">
@@ -56,7 +60,7 @@
 
     <div class="flex gap-[8px]">
       {#if Icon}
-        <img src={Icon} alt="" style="pointer-events: none;" width="15" />
+        <img src={Icon} alt="" style="pointer-events: none;" width="15" data-icon />
       {/if}
       {ItemName}
     </div>

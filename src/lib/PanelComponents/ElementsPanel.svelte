@@ -38,9 +38,7 @@
 
   onMount(() => {
     let panel = <HTMLDivElement>document.getElementById('elements-panel');
-    panel.addEventListener('dragover', () => {
-      $showPanelComponent = false;
-    });
+    panel.addEventListener('dragover', () => ($showPanelComponent = false));
   });
 </script>
 

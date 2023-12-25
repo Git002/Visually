@@ -24,14 +24,17 @@
     const hover_selector = <HTMLDivElement>document.getElementById('hover-selector');
     const indicator = <HTMLDivElement>document.getElementById('indicator');
 
-    let htmlCode: string;
+    let htmlCode: string | null;
 
     // drag and drop operations for document --->
     document.addEventListener('dragstart', (e: DragEvent) => {
+      const grabbedElem = e.target as HTMLDivElement;
+      if (!grabbedElem.closest('#elements-panel')) return;
+
       const blank = document.createElement('div');
       e.dataTransfer!.setDragImage(blank, 0, 0);
 
-      const ghostText = (e.target as HTMLDivElement).getAttribute('data-tagname')!;
+      const ghostText = grabbedElem.getAttribute('data-tagname')!;
       ghost_img.innerText = ghostText;
       ghost_img.style.display = 'block';
 
@@ -55,6 +58,7 @@
       indicator.style.display = 'none';
 
       draggedElement = null;
+      htmlCode = null;
     });
 
     document.addEventListener('dragend', (e: DragEvent) => {
@@ -158,6 +162,7 @@
         dropTarget = null;
 
         if (!elem.previousElementSibling && parentElem.tagName !== 'BODY') {
+          // if the spacing between the current element and its direct parent is too low
           if (elemRect.top - parentRect.top < 3) {
             if (cursorPos < 3) {
               dropTarget = parentElem;
@@ -209,11 +214,13 @@
 
         ghostImageHandler(75, 60, 'none');
 
-        dropTarget
-          ? dropTarget.insertAdjacentHTML(position, htmlCode)
-          : (e.target as HTMLElement).insertAdjacentHTML(position, htmlCode);
+        if (htmlCode) {
+          dropTarget
+            ? dropTarget.insertAdjacentHTML(position, htmlCode)
+            : (e.target as HTMLElement).insertAdjacentHTML(position, htmlCode);
 
-        draggedElement?.remove();
+          draggedElement?.remove();
+        }
 
         indicator.style.display = 'none';
 
@@ -221,6 +228,7 @@
 
         draggedElement = null;
         dropTarget = null;
+        htmlCode = null;
       });
 
       iFrameDoc.addEventListener('dragend', (e: DragEvent) => {
