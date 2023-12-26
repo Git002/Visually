@@ -51,6 +51,7 @@
       ? Class
       : 'flex px-[12px] pt-[12px] gap-[6px] text-[#d2d2d2] text-[13px] cursor-pointer w-full font-bold text-center tracking-wide'}
     {style}
+    {draggable}
     on:click={accordianToggle}
   >
     <img
@@ -70,9 +71,9 @@
   </div>
 {/if}
 
-<div class={Expand ? 'flex flex-col' : 'hidden'}>
+{#if Expand}
   <slot />
-</div>
+{/if}
 
 {#if Border}
   <div class="border-t border-[#252527] mt-[14px] w-full" />

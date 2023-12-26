@@ -69,6 +69,7 @@
       indicator.style.display = 'none';
 
       draggedElement = null;
+      htmlCode = null;
     });
 
     iFrame.src = 'userFiles/index.html';
