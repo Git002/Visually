@@ -86,7 +86,7 @@
         e.preventDefault();
         e.stopPropagation();
 
-        $showPanelComponent = false;
+        if (e.isTrusted) $showPanelComponent = false;
 
         currentClickedElement = e.target as HTMLElement;
 

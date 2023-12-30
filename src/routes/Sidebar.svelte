@@ -29,7 +29,7 @@
   }
 </script>
 
-<div class="flex flex-row">
+<div class="flex flex-row select-none">
   <div
     class="flex flex-col h-full bg-[#2e2f31] py-[14px] gap-[4px] items-center"
     on:click={triggerPanelComponent}

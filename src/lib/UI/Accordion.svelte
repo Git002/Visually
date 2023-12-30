@@ -9,11 +9,10 @@
   export let draggable: boolean = false;
 
   function accordianToggle(e: Event) {
-    let arrowDownBtn: HTMLImageElement;
     let clickedElem = e.target as HTMLElement;
 
-    if (Align === 'end') arrowDownBtn = clickedElem.children[1] as HTMLImageElement;
-    else arrowDownBtn = clickedElem.children[0] as HTMLImageElement;
+    let arrowDownBtn: HTMLImageElement;
+    arrowDownBtn = clickedElem.children[0] as HTMLImageElement;
 
     Expand = !Expand;
 
@@ -24,43 +23,48 @@
 
 {#if Align === 'end'}
   <div
+    data-header
     class={Class
       ? Class
-      : 'flex justify-between px-[12px] pt-[12px] gap-[6px] text-[#d2d2d2] text-[13px] cursor-pointer w-full font-bold text-center tracking-wide'}
+      : 'flex justify-between px-[12px] pt-[12px] gap-[6px] text-[#d2d2d2] text-[13px] w-full font-bold text-center tracking-wide'}
     {style}
     {draggable}
-    on:click={accordianToggle}
   >
-    <div class="flex gap-[8px] pointer-events-none">
+    <div class="flex gap-[8px]">
       {#if Icon}
         <img src={Icon} alt="" style="pointer-events: none;" width="15" />
       {/if}
       {ItemName}
     </div>
-    <img
-      src="Icons/caret-down.svg"
-      alt=""
-      style={Expand ? 'pointer-events: none;' : 'pointer-events: none; transform: rotate(-90deg);'}
-      width="10"
-      height="10"
-    />
+
+    <div class="flex cursor-pointer" on:click={accordianToggle}>
+      <img
+        src="Icons/caret-down.svg"
+        alt=""
+        style={Expand ? 'pointer-events: none;' : 'pointer-events: none; transform: rotate(-90deg);'}
+        width="10"
+        height="10"
+      />
+    </div>
   </div>
 {:else}
   <div
+    data-header
     class={Class
       ? Class
-      : 'flex px-[12px] pt-[12px] gap-[6px] text-[#d2d2d2] text-[13px] cursor-pointer w-full font-bold text-center tracking-wide'}
+      : 'flex px-[12px] pt-[12px] gap-[6px] text-[#d2d2d2] text-[13px] w-full font-bold text-center tracking-wide'}
     {style}
     {draggable}
-    on:click={accordianToggle}
   >
-    <img
-      src="Icons/caret-down.svg"
-      alt=""
-      style={Expand ? 'pointer-events: none;' : 'pointer-events: none; transform: rotate(-90deg);'}
-      width="10"
-      height="10"
-    />
+    <div class="flex" on:click={accordianToggle}>
+      <img
+        src="Icons/caret-down.svg"
+        alt=""
+        style={Expand ? 'pointer-events: none;' : 'pointer-events: none; transform: rotate(-90deg);'}
+        width="10"
+        height="10"
+      />
+    </div>
 
     <div class="flex gap-[8px] pointer-events-none">
       {#if Icon}

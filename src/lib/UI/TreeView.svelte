@@ -4,16 +4,7 @@
   export let element: HTMLElement;
   export let basePaddingLeft: number = 0;
   export let Expand: boolean = false;
-
-  let tagInfo: { [key: string]: { name: string; icon: string } } = {
-    BODY: { name: 'Body', icon: './Icons/NavigatorPanel/window.svg' },
-    DIV: { name: 'Div', icon: './Icons/NavigatorPanel/square.svg' },
-    H1: { name: 'Heading', icon: './Icons/NavigatorPanel/heading.svg' },
-    P: { name: 'Pragraph', icon: './Icons/NavigatorPanel/paragraph.svg' },
-    IMG: { name: 'Image', icon: './Icons/NavigatorPanel/image.svg' },
-    BUTTON: { name: 'Button', icon: './Icons/NavigatorPanel/button.svg' },
-    INPUT: { name: 'Input', icon: './Icons/NavigatorPanel/input.svg' }
-  };
+  export let tagInfo: { [key: string]: { name: string; icon: string } };
 </script>
 
 {#if element.children.length > 0}
@@ -28,11 +19,12 @@
     style="padding-left: {basePaddingLeft}px;"
   >
     {#each Object.entries(element.children) as [key, value] (key)}
-      <svelte:self element={value} basePaddingLeft={basePaddingLeft + 20} />
+      <svelte:self element={value} basePaddingLeft={basePaddingLeft + 20} {tagInfo} />
     {/each}
   </Accordion>
 {:else if element.tagName === 'BODY'}
   <div
+    data-header
     class="flex gap-[9px] py-[6px] text-[#B8B6B6] text-[12px] text-start cursor-pointer w-full font-bold tracking-wide border-y-2 border-[#2E2F31] hover:bg-[#353638] hover:border-[#353638] capitalize"
     style="padding-left: {basePaddingLeft}px;"
   >
@@ -41,7 +33,8 @@
   </div>
 {:else}
   <div
-    class="flex gap-[8px] py-[6px] text-[#B8B6B6] text-[12px] text-start cursor-pointer w-full font-bold tracking-wide border-y-2 border-[#2E2F31] hover:bg-[#353638] hover:border-[#353638] capitalize"
+    data-header
+    class="flex gap-[9px] py-[6px] text-[#B8B6B6] text-[12px] text-start cursor-pointer w-full font-bold tracking-wide border-y-2 border-[#2E2F31] hover:bg-[#353638] hover:border-[#353638] capitalize"
     draggable="true"
     style="padding-left: {basePaddingLeft}px;"
   >
