@@ -244,7 +244,7 @@
       });
 
       iFrameDoc.addEventListener('keydown', (e: KeyboardEvent) => {
-        if (e.key === 'Backspace' && currentClickedElement.tagName !== 'BODY') {
+        if (['Delete', 'Backspace'].includes(e.key) && currentClickedElement.tagName !== 'BODY') {
           // the element to be clicked when the current element gets deleted
           let remainingElement: HTMLElement;
 

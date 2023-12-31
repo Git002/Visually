@@ -69,7 +69,7 @@
     });
 
     navPanel.addEventListener('keydown', (e: KeyboardEvent) => {
-      if (e.key === 'Backspace' && clickedNode.tagName !== 'BODY') {
+      if (['Delete', 'Backspace'].includes(e.key) && clickedNode.tagName !== 'BODY') {
         const backspaceEvent = new KeyboardEvent('keydown', { key: 'Backspace' });
         $iFrameDocument.dispatchEvent(backspaceEvent);
       }
