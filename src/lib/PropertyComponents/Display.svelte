@@ -96,7 +96,7 @@
   }
 </script>
 
-<div class="flex flex-col gap-[12px] mt-[14px] px-[12px]" on:click={setCSS}>
+<div class="flex flex-col gap-[12px] px-[12px]" on:click={setCSS}>
   <ButtonGroup
     Items={displayIconsArr}
     ButtonIds={Object.keys(displayValues)}

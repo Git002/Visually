@@ -34,7 +34,7 @@
     class="flex flex-col h-full bg-[#2e2f31] py-[14px] gap-[4px] items-center"
     on:click={triggerPanelComponent}
   >
-    <button id="elements-panel-btn" class="bg-[#ebe9e9] rounded-full px-[7px] py-[7px] mb-[6px]">
+    <button id="elements-panel-btn" class="bg-[#ebe9e9] rounded-full px-[7px] py-[7px] mb-[6px] outline-none">
       <object data="./Icons/Sidebar/add.svg" title="" style="pointer-events: none;" />
     </button>
 
@@ -42,8 +42,8 @@
       <button
         id={buttonId}
         class={activeBtnId === buttonId && $showPanelComponent
-          ? 'px-[12px] py-[12px] bg-[#343638]'
-          : 'px-[12px] py-[12px] hover:bg-[#343638]'}
+          ? 'px-[12px] py-[12px] bg-[#343638] outline-none'
+          : 'px-[12px] py-[12px] hover:bg-[#343638] outline-none'}
       >
         <object data={buttonIdsWithIcons[buttonId]} title="" style="pointer-events: none;" />
       </button>

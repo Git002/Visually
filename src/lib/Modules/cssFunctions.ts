@@ -13,6 +13,10 @@ function getSelector(element: HTMLElement): string {
   return selector;
 }
 
+/**
+ * Retrieve any styles set by the User himself instead of getting the browser's computed property
+ * For example: getUserSetStyles(element, ['width', 'color'])
+ */
 function getUserSetStyles(element: HTMLElement, props: string[]): { [key: string]: string } {
   let styles: { [key: string]: string } = {};
   let styleSheets: StyleSheetList = get(iFrameDocument).styleSheets;

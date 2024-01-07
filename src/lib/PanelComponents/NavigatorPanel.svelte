@@ -1,9 +1,12 @@
+<script lang="ts" context="module">
+  export let draggedNode: HTMLDivElement;
+</script>
+
 <script lang="ts">
-  import TreeView from '$lib/UI/TreeView.svelte';
+  import Tree from '$lib/UI/Tree.svelte';
   import { onMount } from 'svelte';
   import { iFrameDocument } from '../../Stores';
 
-  let elementsPosition: { tagName: string; isParent: boolean; position: number[] }[] = [];
   let tagInfo: { [key: string]: { name: string; icon: string } } = {
     BODY: { name: 'Body', icon: './Icons/NavigatorPanel/window.svg' },
     DIV: { name: 'Div', icon: './Icons/NavigatorPanel/square.svg' },
@@ -14,34 +17,32 @@
     INPUT: { name: 'Input', icon: './Icons/NavigatorPanel/input.svg' }
   };
 
-  function generateElementsPosition(elem: HTMLElement, parentIndex: number[] = []) {
-    const tagName = elem.tagName;
-    if (elem.tagName === 'BODY') {
-      elementsPosition.push({ tagName, isParent: true, position: [0] });
-      Array.from(elem.children).forEach((child) => {
-        generateElementsPosition(child as HTMLElement, [0]);
-      });
-    } else {
-      const elementSiblings = Array.from((elem.parentElement as HTMLElement).children);
-      const currentPosition = [...parentIndex, elementSiblings.indexOf(elem)];
+  /**
+   * Returns the position at which the given node is at.
+   */
+  function getNodesPosition(currentNode: HTMLElement) {
+    let result = [];
 
-      if (elem.children.length > 0) {
-        elementsPosition.push({ tagName, isParent: true, position: currentPosition });
+    let parentNode: HTMLElement;
+    let currentNodeIndex: number;
 
-        Array.from(elem.children).forEach((child) => {
-          generateElementsPosition(child as HTMLElement, currentPosition);
-        });
-      } else {
-        elementsPosition.push({ tagName, isParent: false, position: currentPosition });
-      }
+    while (currentNode.textContent?.trim() !== 'body') {
+      parentNode = currentNode.parentElement as HTMLElement;
+      currentNodeIndex = Array.from(parentNode.children)
+        .filter((element) => element.hasAttribute('data-header'))
+        .indexOf(currentNode);
+      result.push(currentNodeIndex);
+      currentNode = parentNode.previousElementSibling as HTMLElement;
     }
+
+    result.push(0);
+    return result.reverse();
   }
 
-  $: if ($iFrameDocument) {
-    elementsPosition = [];
-    generateElementsPosition($iFrameDocument.body);
-  }
-
+  /**
+   * Fetch the original element from iFrame based on the position provided.
+   * For example giving position=[0] will return <body>
+   */
   function getElementByPosition(position: number[]): HTMLElement {
     let node = $iFrameDocument.body as HTMLElement;
     if (position.length > 1) {
@@ -54,69 +55,94 @@
 
   onMount(() => {
     let navPanel = <HTMLDivElement>document.getElementById('navigator-tree-view');
-    let clickedNode: HTMLElement;
-    let draggedNode: HTMLElement;
-    let currentNodeIndex: number;
+    let clickedElement: HTMLElement;
 
     navPanel.addEventListener('click', (e: Event) => {
-      if (!(e.target as HTMLElement).hasAttribute('data-header')) return;
+      let clickedNode = e.target as HTMLElement;
+      if (!clickedNode.hasAttribute('data-header')) return;
 
-      currentNodeIndex = Array.from(navPanel.children).indexOf(e.target as HTMLElement);
-
-      clickedNode = getElementByPosition(elementsPosition[currentNodeIndex].position);
-      clickedNode.click();
-      navPanel.focus();
+      clickedElement = getElementByPosition(getNodesPosition(clickedNode));
+      clickedElement.click();
     });
 
     navPanel.addEventListener('keydown', (e: KeyboardEvent) => {
-      if (['Delete', 'Backspace'].includes(e.key) && clickedNode.tagName !== 'BODY') {
+      if (['Delete', 'Backspace'].includes(e.key) && clickedElement.tagName !== 'BODY') {
         const backspaceEvent = new KeyboardEvent('keydown', { key: 'Backspace' });
         $iFrameDocument.dispatchEvent(backspaceEvent);
       }
     });
 
+    let draggedElement: HTMLElement;
+
+    let insertPosition: 'beforebegin' | 'afterbegin' | 'beforeend' | 'afterend';
+    const INSIDE_AT_START = 'afterbegin';
+    const INSIDE_AT_BOTTOM = 'beforeend';
+    const ABOVE = 'beforebegin';
+    const BELOW = 'afterend';
+
     navPanel.addEventListener('dragstart', (e: DragEvent) => {
-      draggedNode = e.target as HTMLElement;
-      currentNodeIndex = Array.from(navPanel.children).indexOf(draggedNode);
+      draggedNode = e.target as HTMLDivElement;
+      draggedNode.style.opacity = '50%';
+
+      draggedElement = getElementByPosition(getNodesPosition(draggedNode));
 
       const blank = document.createElement('div');
       e.dataTransfer!.setDragImage(blank, 0, 0);
     });
 
     navPanel.addEventListener('dragover', (e: DragEvent) => {
-      let elem = e.target as HTMLElement;
+      let elem = e.target as HTMLDivElement;
       let elemRect = elem.getBoundingClientRect();
 
-      let defaultBorderStyle: string;
+      if (elem.textContent?.trim() === 'body') return;
 
-      if (elem === draggedNode) {
-        defaultBorderStyle = '2px solid #353638';
-      } else {
-        defaultBorderStyle = '2px solid #2E2F31';
-      }
+      /* The draggedNode will be having a bg-color of #353638 as it's on hovered state while rest of the nodes will be #2E2F31. That's why border styles needs to be set depending upon the state of the nodes */
+      let defaultBorderStyle: string;
+      if (elem === draggedNode) defaultBorderStyle = '2px solid #353638'; //lighter
+      else defaultBorderStyle = '2px solid #2E2F31'; //darker
 
       let cursorPos = (e as MouseEvent).pageY - elemRect.top;
+
+      if (elem.hasAttribute('data-caret-down')) elem = elem.parentElement as HTMLDivElement;
 
       if (cursorPos < elemRect.height / 2) {
         elem.style.borderTop = '2px solid #007bfb';
         elem.style.borderBottom = defaultBorderStyle;
+        insertPosition = ABOVE;
       } else {
         elem.style.borderTop = defaultBorderStyle;
         elem.style.borderBottom = '2px solid #007bfb';
+        insertPosition = BELOW;
       }
     });
 
     navPanel.addEventListener('dragleave', (e: DragEvent) => {
-      let elem = e.target as HTMLElement;
+      let elem = e.target as HTMLDivElement;
       elem.style.borderTop = '';
       elem.style.borderBottom = '';
     });
 
     navPanel.addEventListener('drop', (e: DragEvent) => {
-      let elem = e.target as HTMLElement;
-      elem.style.borderTop = '';
-      elem.style.borderBottom = '';
+      let targetNode = e.target as HTMLDivElement;
+
+      if (targetNode.textContent?.trim() === 'body') return;
+
+      if (targetNode.hasAttribute('data-caret-down')) targetNode = targetNode.parentElement as HTMLDivElement;
+
+      targetNode.style.borderTop = '';
+      targetNode.style.borderBottom = '';
+
+      let targetElement = getElementByPosition(getNodesPosition(targetNode));
+      targetElement.insertAdjacentHTML(insertPosition, draggedElement.outerHTML);
+
+      draggedElement.remove();
+
+      // passing event so that it would trigger a re-render of this component [will fix this way later]
+      const dropEvent = new DragEvent('drop');
+      $iFrameDocument.dispatchEvent(dropEvent);
     });
+
+    navPanel.addEventListener('dragend', () => (draggedNode.style.opacity = ''));
   });
 </script>
 
@@ -124,8 +150,14 @@
   NAVIGATOR
 </div>
 
-<div id="navigator-tree-view" class="focus:outline-none" tabindex="-1">
+<div
+  id="navigator-tree-view"
+  class="flex-col text-[#B8B6B6] text-[12px] cursor-pointer w-full font-bold text-center tracking-wide focus:outline-none"
+  tabindex="-1"
+>
   {#if $iFrameDocument}
-    <TreeView element={$iFrameDocument?.body} Expand={true} basePaddingLeft={20} {tagInfo} />
+    <div class="flex-col w-full">
+      <Tree element={$iFrameDocument?.body} Expand={true} basePaddingLeft={20} {tagInfo} />
+    </div>
   {/if}
 </div>

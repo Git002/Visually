@@ -55,7 +55,7 @@
   }
 </script>
 
-<div class="flex flex-col gap-[10px] text-[10px] mt-[14px] px-[12px] tracking-wide text-[#b8b6b6]">
+<div class="flex flex-col gap-[10px] text-[10px] px-[12px] tracking-wide text-[#b8b6b6]">
   <div class="grid grid-cols-2 gap-[10px]">
     {#each inputFields as { id, FieldName, value }}
       <MiniInputBar {id} {FieldName} {value} on:blur={handleBlur} on:arrowUpDown={incrementDecrementValue} />

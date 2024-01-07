@@ -30,7 +30,7 @@
   }
 </script>
 
-<div class="mt-[14px] px-[12px]">
+<div class="px-[12px]">
   <div
     class="grid grid-cols-4 rounded-[6px] bg-[#404040] text-[12px] px-[8px] py-[8px] border-2 border-[#505050] text-[#b8b6b6] text-center items-center w-full gap-[8px] relative"
   >

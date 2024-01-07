@@ -1,44 +1,60 @@
 <script lang="ts">
-  import Accordion from '$lib/UI/Accordion.svelte';
+  import { slide } from 'svelte/transition';
+  import { linear } from 'svelte/easing';
+  import { draggedNode } from '$lib/PanelComponents/NavigatorPanel.svelte';
 
-  export let element: HTMLElement;
-  export let basePaddingLeft: number = 0;
   export let Expand: boolean = false;
-  export let tagInfo: { [key: string]: { name: string; icon: string } };
+  export let style: string | null;
+  export let Icon: string | null;
+  export let ItemName: string;
+  export let draggable: boolean = false;
+
+  function treeToggle(e: Event) {
+    let arrowDownBtn = e.target as HTMLImageElement;
+    if (!arrowDownBtn.hasAttribute('data-caret-down')) return;
+
+    Expand = !Expand;
+
+    if (Expand) arrowDownBtn.style.transform = 'rotate(360deg)';
+    else arrowDownBtn.style.transform = 'rotate(-90deg)';
+  }
+
+  function ExpandContent(e: DragEvent) {
+    let elem = e.target as HTMLElement;
+    if (elem !== draggedNode && elem.parentElement !== draggedNode && elem.hasAttribute('data-caret-down')) {
+      Expand = true;
+    }
+  }
 </script>
 
-{#if element.children.length > 0}
-  <Accordion
-    ItemName={element.tagName.toLowerCase()}
-    Icon={tagInfo[element.tagName].icon}
-    Align="start"
-    Border={false}
-    {Expand}
-    draggable={true}
-    Class={'flex py-[6px] gap-[10px] text-[#B8B6B6] text-[12px] cursor-pointer w-full font-bold text-center tracking-wide border-y-2 border-[#2E2F31] hover:bg-[#353638] hover:border-[#353638] capitalize'}
-    style="padding-left: {basePaddingLeft}px;"
-  >
-    {#each Object.entries(element.children) as [key, value] (key)}
-      <svelte:self element={value} basePaddingLeft={basePaddingLeft + 20} {tagInfo} />
-    {/each}
-  </Accordion>
-{:else if element.tagName === 'BODY'}
-  <div
-    data-header
-    class="flex gap-[9px] py-[6px] text-[#B8B6B6] text-[12px] text-start cursor-pointer w-full font-bold tracking-wide border-y-2 border-[#2E2F31] hover:bg-[#353638] hover:border-[#353638] capitalize"
-    style="padding-left: {basePaddingLeft}px;"
-  >
-    <img src={tagInfo[element.tagName].icon} alt="" style="pointer-events: none;" width="14" />
-    {tagInfo[element.tagName].name}
-  </div>
-{:else}
-  <div
-    data-header
-    class="flex gap-[9px] py-[6px] text-[#B8B6B6] text-[12px] text-start cursor-pointer w-full font-bold tracking-wide border-y-2 border-[#2E2F31] hover:bg-[#353638] hover:border-[#353638] capitalize"
-    draggable="true"
-    style="padding-left: {basePaddingLeft}px;"
-  >
-    <img src={tagInfo[element.tagName].icon} alt="" style="pointer-events: none; width:14px" />
-    {tagInfo[element.tagName].name}
+<div
+  data-header
+  class="flex py-[6px] gap-[10px] border-y-2 border-[#2E2F31] hover:bg-[#353638] hover:border-[#353638] capitalize"
+  {style}
+  {draggable}
+  on:click={treeToggle}
+  on:drag={() => (Expand = false)}
+  on:dragover={ExpandContent}
+>
+  <img
+    data-caret-down
+    src="Icons/caret-down.svg"
+    alt=""
+    style={Expand
+      ? 'transition: transform 0.2s ease;'
+      : 'transition: transform 0.2s ease; transform: rotate(-90deg);'}
+    width="10"
+    height="10"
+  />
+
+  {#if Icon}
+    <img src={Icon} alt="" style="pointer-events: none;" width="15" />
+  {/if}
+  {ItemName}
+</div>
+
+{#if Expand}
+  <div data-children class="w-full" transition:slide={{ duration: 300, easing: linear }}>
+    <slot />
   </div>
 {/if}

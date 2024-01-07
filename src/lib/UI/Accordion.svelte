@@ -1,18 +1,15 @@
 <script lang="ts">
+  import { slide } from 'svelte/transition';
+  import { linear } from 'svelte/easing';
+
   export let ItemName: string;
   export let Icon: string = '';
   export let Expand: boolean = true;
-  export let Align: 'start' | 'end' = 'end';
   export let Border: boolean = true;
-  export let Class: string | null = null;
-  export let style: string = '';
-  export let draggable: boolean = false;
 
   function accordianToggle(e: Event) {
-    let clickedElem = e.target as HTMLElement;
-
-    let arrowDownBtn: HTMLImageElement;
-    arrowDownBtn = clickedElem.children[0] as HTMLImageElement;
+    let arrowDownBtn = e.target as HTMLImageElement;
+    if (!arrowDownBtn.hasAttribute('data-caret-down')) return;
 
     Expand = !Expand;
 
@@ -21,62 +18,34 @@
   }
 </script>
 
-{#if Align === 'end'}
-  <div
-    data-header
-    class={Class
-      ? Class
-      : 'flex justify-between px-[12px] pt-[12px] gap-[6px] text-[#d2d2d2] text-[13px] w-full font-bold text-center tracking-wide'}
-    {style}
-    {draggable}
-  >
-    <div class="flex gap-[8px]">
-      {#if Icon}
-        <img src={Icon} alt="" style="pointer-events: none;" width="15" />
-      {/if}
-      {ItemName}
-    </div>
-
-    <div class="flex cursor-pointer" on:click={accordianToggle}>
-      <img
-        src="Icons/caret-down.svg"
-        alt=""
-        style={Expand ? 'pointer-events: none;' : 'pointer-events: none; transform: rotate(-90deg);'}
-        width="10"
-        height="10"
-      />
-    </div>
+<div
+  data-header
+  class="flex justify-between px-[12px] pt-[12px] gap-[6px] text-[#d2d2d2] text-[13px] w-full font-bold text-center tracking-wide"
+  on:click={accordianToggle}
+>
+  <div class="flex gap-[8px]">
+    {#if Icon}
+      <img src={Icon} alt="" style="cursor: pointer; pointer-events: none;" width="15" />
+    {/if}
+    {ItemName}
   </div>
-{:else}
-  <div
-    data-header
-    class={Class
-      ? Class
-      : 'flex px-[12px] pt-[12px] gap-[6px] text-[#d2d2d2] text-[13px] w-full font-bold text-center tracking-wide'}
-    {style}
-    {draggable}
-  >
-    <div class="flex" on:click={accordianToggle}>
-      <img
-        src="Icons/caret-down.svg"
-        alt=""
-        style={Expand ? 'pointer-events: none;' : 'pointer-events: none; transform: rotate(-90deg);'}
-        width="10"
-        height="10"
-      />
-    </div>
 
-    <div class="flex gap-[8px] pointer-events-none">
-      {#if Icon}
-        <img src={Icon} alt="" style="pointer-events: none;" width="15" />
-      {/if}
-      {ItemName}
-    </div>
-  </div>
-{/if}
+  <img
+    data-caret-down
+    src="Icons/caret-down.svg"
+    alt=""
+    style={Expand
+      ? 'transition: transform 0.2s ease;'
+      : 'transform: rotate(-90deg); transition: transform 0.2s ease;'}
+    width="10"
+    height="10"
+  />
+</div>
 
 {#if Expand}
-  <slot />
+  <div class="pt-[14px]" transition:slide={{ duration: 400, easing: linear }}>
+    <slot />
+  </div>
 {/if}
 
 {#if Border}

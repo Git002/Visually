@@ -96,6 +96,7 @@
         $clickedElement = currentClickedElement;
         processStyles($clickedElement);
 
+        // attach a mutation observer to a new element to detect if there are any changes to classes. If yes, then re-click on the element
         if (prevClickedElement !== currentClickedElement) {
           if (currentClickedElement) {
             currentElementObserver?.disconnect();
@@ -212,6 +213,11 @@
       iFrameDoc.addEventListener('drop', (e: DragEvent) => {
         e.preventDefault();
         e.stopPropagation();
+
+        if (!e.isTrusted) {
+          $iFrameDocument = iFrameDoc; // trigger Navigator.svelte to re-render the tree
+          return;
+        }
 
         ghostImageHandler(75, 60, 'none');
 
