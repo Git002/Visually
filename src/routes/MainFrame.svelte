@@ -36,7 +36,6 @@
 
       const ghostText = grabbedElem.getAttribute('data-tagname')!;
       ghost_img.innerText = ghostText;
-      ghost_img.style.display = 'block';
 
       htmlCode = PanelElements[ghostText].code;
     });
@@ -44,8 +43,14 @@
     document.addEventListener('dragover', (e: DragEvent) => {
       e.preventDefault();
 
+      if (!(e.target as HTMLElement).closest('#elements-panel')) {
+        ghost_img.style.display = 'none';
+        return;
+      }
+
       ghost_img.style.top = e.clientY + 15 + 'px';
       ghost_img.style.left = e.clientX + 25 + 'px';
+      ghost_img.style.display = 'block';
 
       indicator.style.display = 'none';
     });
@@ -94,9 +99,9 @@
         click_selector.style.display = 'block';
 
         $clickedElement = currentClickedElement;
-        processStyles($clickedElement);
+        processStyles(currentClickedElement);
 
-        // attach a mutation observer to a new element to detect if there are any changes to classes. If yes, then re-click on the element
+        // Attach a Mutation Observer to the element to detect if there are any changes to class attribute. If yes, then re-click on the element so that other components could display the updated styles too
         if (prevClickedElement !== currentClickedElement) {
           if (currentClickedElement) {
             currentElementObserver?.disconnect();
@@ -149,8 +154,9 @@
         ghostImageHandler(e.clientX + 75, e.clientY + 60);
 
         let elem = e.target as HTMLElement;
-        let parentElem = elem.parentElement as HTMLElement;
         let elemRect = elem.getBoundingClientRect();
+
+        let parentElem = elem.parentElement as HTMLElement;
         let parentRect = parentElem.getBoundingClientRect();
 
         let cursorPos = (e as MouseEvent).pageY - elemRect.top;
@@ -163,6 +169,7 @@
 
         dropTarget = null;
 
+        // logic for placing the indicator
         if (!elem.previousElementSibling && parentElem.tagName !== 'BODY') {
           // if the spacing between the current element and its direct parent is too low
           if (elemRect.top - parentRect.top < 3) {
@@ -214,24 +221,28 @@
         e.preventDefault();
         e.stopPropagation();
 
-        if (!e.isTrusted) {
-          $iFrameDocument = iFrameDoc; // trigger Navigator.svelte to re-render the tree
-          return;
-        }
-
         ghostImageHandler(75, 60, 'none');
 
         if (htmlCode) {
-          dropTarget
-            ? dropTarget.insertAdjacentHTML(position, htmlCode)
-            : (e.target as HTMLElement).insertAdjacentHTML(position, htmlCode);
+          dropTarget ? dropTarget : (dropTarget = e.target as HTMLElement);
+          dropTarget.insertAdjacentHTML(position, htmlCode);
 
           draggedElement?.remove();
+
+          if (position === ABOVE) (dropTarget?.previousElementSibling as HTMLElement).click();
+          else if (position === BELOW) (dropTarget?.nextElementSibling as HTMLElement).click();
+          else if (position === INSIDE_AT_BOTTOM) {
+            (dropTarget?.lastElementChild as HTMLElement).click();
+            (dropTarget?.lastElementChild as HTMLElement).addEventListener('load', (e) => {
+              (e.target as HTMLElement).click();
+            });
+          } else if (position === INSIDE_AT_START) (dropTarget?.firstElementChild as HTMLElement).click();
         }
 
         indicator.style.display = 'none';
 
-        $iFrameDocument = iFrameDoc; // trigger Navigator.svelte to re-render the tree
+        // trigger Navigator.svelte to re-render the tree
+        $iFrameDocument = iFrameDoc;
 
         draggedElement = null;
         dropTarget = null;
@@ -240,8 +251,11 @@
 
       iFrameDoc.addEventListener('dragend', (e: DragEvent) => {
         e.stopPropagation();
-
         indicator.style.display = 'none';
+
+        draggedElement = null;
+        dropTarget = null;
+        htmlCode = null;
       });
 
       iFrameDoc.addEventListener('scroll', () => {

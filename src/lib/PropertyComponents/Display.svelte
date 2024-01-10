@@ -3,36 +3,26 @@
   import { clickedElement, clickedElementStyle } from '../../Stores';
   import { CSSUtility } from '$lib/Modules/cssFunctions';
 
-  // for images
-  let displayIconsArr = [
-    "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/block.svg' />",
-    "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/flex.svg' />",
-    "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/grid.svg' />",
-    "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/inline-block.svg' />",
-    "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/inline.svg' />"
-  ];
-  let flexAlignIconsArr = [
-    "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Align/start.svg' />",
-    "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Align/center.svg' />",
-    "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Align/end.svg' />",
-    "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Align/stretch.svg' />",
-    "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Align/baseline.svg' />"
-  ];
-  let flexJustifyIconsArr = [
-    "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Justify/start.svg' />",
-    "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Justify/center.svg' />",
-    "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Justify/end.svg' />",
-    "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Justify/between.svg' />",
-    "<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Justify/evenly.svg' />"
-  ];
+  const displayIconsArr = ['block', 'flex', 'grid', 'inline-block', 'inline', 'none'].map(
+    (value) => `<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/${value}.svg' />`
+  );
+  const flexAlignIconsArr = ['start', 'center', 'end', 'stretch', 'baseline'].map(
+    (value) =>
+      `<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Align/${value}.svg' />`
+  );
+  const flexJustifyIconsArr = ['start', 'center', 'end', 'between', 'evenly'].map(
+    (value) =>
+      `<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Justify/${value}.svg' />`
+  );
 
-  // Element IDs with their CSS values
+  // ButtonGroup IDs with their CSS values
   const displayValues: { [key: string]: string } = {
     'display-block': 'block',
     'display-flex': 'flex',
     'display-grid': 'grid',
     'display-inline-block': 'inline-block',
-    'display-inline': 'inline'
+    'display-inline': 'inline',
+    'display-none': 'none'
   } as const;
 
   const alignItemsValues: { [key: string]: string } = {
@@ -51,6 +41,7 @@
     'justify-content-space-evenly': 'space-evenly'
   } as const;
 
+  // default styles for each button group
   let displayButtonId: string = 'display-block';
   let alignItemsButtonId: string = 'align-items-stretch';
   let justifyContentButtonId: string = 'justify-content-flex-start';
@@ -77,7 +68,7 @@
   let showFlexGroup = false;
   let showGridGroup = false;
 
-  // updates the display bar on click inside iFrame
+  // updates the display bar when clicked on an element inside iFrame
   $: {
     if ($clickedElement) {
       if (Object.values(displayValues).includes($clickedElementStyle?.display)) {

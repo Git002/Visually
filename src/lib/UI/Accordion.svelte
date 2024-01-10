@@ -1,7 +1,4 @@
 <script lang="ts">
-  import { slide } from 'svelte/transition';
-  import { linear } from 'svelte/easing';
-
   export let ItemName: string;
   export let Icon: string = '';
   export let Expand: boolean = true;
@@ -10,11 +7,7 @@
   function accordianToggle(e: Event) {
     let arrowDownBtn = e.target as HTMLImageElement;
     if (!arrowDownBtn.hasAttribute('data-caret-down')) return;
-
     Expand = !Expand;
-
-    if (Expand) arrowDownBtn.style.transform = 'rotate(360deg)';
-    else arrowDownBtn.style.transform = 'rotate(-90deg)';
   }
 </script>
 
@@ -34,16 +27,14 @@
     data-caret-down
     src="Icons/caret-down.svg"
     alt=""
-    style={Expand
-      ? 'transition: transform 0.2s ease;'
-      : 'transform: rotate(-90deg); transition: transform 0.2s ease;'}
+    style={Expand ? 'transform: rotate(360deg);' : 'transform: rotate(-90deg);'}
     width="10"
     height="10"
   />
 </div>
 
 {#if Expand}
-  <div class="pt-[14px]" transition:slide={{ duration: 400, easing: linear }}>
+  <div class="pt-[14px]">
     <slot />
   </div>
 {/if}

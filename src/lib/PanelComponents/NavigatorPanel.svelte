@@ -4,8 +4,8 @@
 
 <script lang="ts">
   import Tree from '$lib/UI/Tree.svelte';
-  import { onMount } from 'svelte';
-  import { iFrameDocument } from '../../Stores';
+  import { onMount, tick } from 'svelte';
+  import { clickedElement, iFrameDocument } from '../../Stores';
 
   let tagInfo: { [key: string]: { name: string; icon: string } } = {
     BODY: { name: 'Body', icon: './Icons/NavigatorPanel/window.svg' },
@@ -18,11 +18,10 @@
   };
 
   /**
-   * Returns the position at which the given node is at.
+   * Returns the position at which the given node is at in the nav-tree.
    */
-  function getNodesPosition(currentNode: HTMLElement) {
+  function getNodesPosition(currentNode: HTMLElement): number[] {
     let result = [];
-
     let parentNode: HTMLElement;
     let currentNodeIndex: number;
 
@@ -33,6 +32,22 @@
         .indexOf(currentNode);
       result.push(currentNodeIndex);
       currentNode = parentNode.previousElementSibling as HTMLElement;
+    }
+
+    result.push(0);
+    return result.reverse();
+  }
+
+  function getElementsPosition(element: HTMLElement): number[] {
+    let result = [];
+    let parentElement: HTMLElement;
+    let elementIndex: number;
+
+    while (element.tagName !== 'BODY') {
+      parentElement = element.parentElement as HTMLElement;
+      elementIndex = Array.from(parentElement.children).indexOf(element);
+      result.push(elementIndex);
+      element = parentElement;
     }
 
     result.push(0);
@@ -51,6 +66,40 @@
       });
     }
     return node;
+  }
+
+  async function getNodeByPosition(position: number[]): Promise<HTMLElement> {
+    await tick();
+    let node = (document.getElementById('navigator-tree-view') as HTMLElement)
+      .firstElementChild as HTMLElement;
+
+    if (position.length > 1) {
+      for (const index of position.slice(1)) {
+        let childContainer = node.nextElementSibling as HTMLElement;
+        if (childContainer.getAttribute('data-expanded') === 'false') {
+          (node.firstElementChild as HTMLImageElement).click();
+        }
+        node = Array.from(childContainer.children)
+          .filter((elem) => elem.hasAttribute('data-header'))
+          .at(index) as HTMLElement;
+      }
+    }
+    return node;
+  }
+
+  let prevActiveNode: HTMLElement;
+  let activeNode: HTMLElement;
+
+  async function changeActiveNode() {
+    activeNode = await getNodeByPosition(getElementsPosition($clickedElement));
+    if (prevActiveNode) prevActiveNode.classList.remove('active-node');
+    activeNode.classList.add('active-node');
+
+    prevActiveNode = activeNode;
+  }
+
+  $: if ($clickedElement) {
+    changeActiveNode();
   }
 
   onMount(() => {
@@ -73,8 +122,7 @@
     });
 
     let draggedElement: HTMLElement;
-
-    let insertPosition: 'beforebegin' | 'afterbegin' | 'beforeend' | 'afterend';
+    let position: 'beforebegin' | 'afterbegin' | 'beforeend' | 'afterend';
     const INSIDE_AT_START = 'afterbegin';
     const INSIDE_AT_BOTTOM = 'beforeend';
     const ABOVE = 'beforebegin';
@@ -94,9 +142,9 @@
       let elem = e.target as HTMLDivElement;
       let elemRect = elem.getBoundingClientRect();
 
-      if (elem.textContent?.trim() === 'body') return;
+      if (elem.textContent?.trim() === 'body' || elem.parentElement?.textContent?.trim() === 'body') return;
 
-      /* The draggedNode will be having a bg-color of #353638 as it's on hovered state while rest of the nodes will be #2E2F31. That's why border styles needs to be set depending upon the state of the nodes */
+      /* The draggedNode might be having a bg-color of #353638 as it's on hovered state while rest of the nodes will be #2E2F31. That's why border styles needs to be reset after the drop event */
       let defaultBorderStyle: string;
       if (elem === draggedNode) defaultBorderStyle = '2px solid #353638'; //lighter
       else defaultBorderStyle = '2px solid #2E2F31'; //darker
@@ -108,11 +156,11 @@
       if (cursorPos < elemRect.height / 2) {
         elem.style.borderTop = '2px solid #007bfb';
         elem.style.borderBottom = defaultBorderStyle;
-        insertPosition = ABOVE;
+        position = ABOVE;
       } else {
         elem.style.borderTop = defaultBorderStyle;
         elem.style.borderBottom = '2px solid #007bfb';
-        insertPosition = BELOW;
+        position = BELOW;
       }
     });
 
@@ -133,11 +181,17 @@
       targetNode.style.borderBottom = '';
 
       let targetElement = getElementByPosition(getNodesPosition(targetNode));
-      targetElement.insertAdjacentHTML(insertPosition, draggedElement.outerHTML);
+      targetElement.insertAdjacentHTML(position, draggedElement.outerHTML);
 
       draggedElement.remove();
 
-      // passing event so that it would trigger a re-render of this component [will fix this way later]
+      // find the inserted element and click on it to update the active node
+      if (position === ABOVE) (targetElement?.previousElementSibling as HTMLElement)?.click();
+      else if (position === BELOW) (targetElement?.nextElementSibling as HTMLElement)?.click();
+      else if (position === INSIDE_AT_BOTTOM) (targetElement?.lastElementChild as HTMLElement)?.click();
+      else if (position === INSIDE_AT_START) (targetElement?.firstElementChild as HTMLElement)?.click();
+
+      // passing event so that it would trigger a re-render
       const dropEvent = new DragEvent('drop');
       $iFrameDocument.dispatchEvent(dropEvent);
     });
@@ -156,8 +210,24 @@
   tabindex="-1"
 >
   {#if $iFrameDocument}
-    <div class="flex-col w-full">
-      <Tree element={$iFrameDocument?.body} Expand={true} basePaddingLeft={20} {tagInfo} />
-    </div>
+    <Tree element={$iFrameDocument?.body} basePaddingLeft={20} {tagInfo} />
   {/if}
 </div>
+
+<style>
+  :global(.active-node) {
+    background-color: #cf672b;
+    color: #ebebeb;
+    border-color: #cf672b;
+  }
+
+  :global(.active-node img) {
+    filter: brightness(2.5);
+  }
+
+  :global(.active-node:hover) {
+    background-color: #cf672b;
+    color: #ebebeb;
+    border-color: #cf672b;
+  }
+</style>

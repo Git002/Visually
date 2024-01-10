@@ -15,7 +15,7 @@
 
   let activeBtnId: string = '';
 
-  function triggerPanelComponent(e: Event) {
+  function togglePanelComponent(e: Event) {
     let clickedBtn = <HTMLButtonElement>e.target;
     if (clickedBtn.tagName !== 'BUTTON') return;
 
@@ -32,7 +32,7 @@
 <div class="flex flex-row select-none">
   <div
     class="flex flex-col h-full bg-[#2e2f31] py-[14px] gap-[4px] items-center"
-    on:click={triggerPanelComponent}
+    on:click={togglePanelComponent}
   >
     <button id="elements-panel-btn" class="bg-[#ebe9e9] rounded-full px-[7px] py-[7px] mb-[6px] outline-none">
       <object data="./Icons/Sidebar/add.svg" title="" style="pointer-events: none;" />
@@ -54,7 +54,7 @@
 <div
   id="panel"
   class={$showPanelComponent
-    ? 'flex flex-col ml-[45px] w-[240px] h-full bg-[#2e2f31] border-l-[1px] border-[#202124] absolute z-10 select-none'
+    ? 'flex flex-col left-[45px] w-[250px] h-full bg-[#2e2f31] border-l-[1px] border-[#202124] absolute z-10 select-none'
     : 'hidden'}
 >
   <div

@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { slide } from 'svelte/transition';
-  import { linear } from 'svelte/easing';
   import { draggedNode } from '$lib/PanelComponents/NavigatorPanel.svelte';
 
   export let Expand: boolean = false;
@@ -12,11 +10,7 @@
   function treeToggle(e: Event) {
     let arrowDownBtn = e.target as HTMLImageElement;
     if (!arrowDownBtn.hasAttribute('data-caret-down')) return;
-
     Expand = !Expand;
-
-    if (Expand) arrowDownBtn.style.transform = 'rotate(360deg)';
-    else arrowDownBtn.style.transform = 'rotate(-90deg)';
   }
 
   function ExpandContent(e: DragEvent) {
@@ -29,7 +23,7 @@
 
 <div
   data-header
-  class="flex py-[6px] gap-[10px] border-y-2 border-[#2E2F31] hover:bg-[#353638] hover:border-[#353638] capitalize"
+  class="flex py-[5px] gap-[10px] border-y-2 border-[#2E2F31] hover:bg-[#353638] hover:border-[#353638] capitalize"
   {style}
   {draggable}
   on:click={treeToggle}
@@ -40,9 +34,7 @@
     data-caret-down
     src="Icons/caret-down.svg"
     alt=""
-    style={Expand
-      ? 'transition: transform 0.2s ease;'
-      : 'transition: transform 0.2s ease; transform: rotate(-90deg);'}
+    style={Expand ? 'transform: rotate(360deg);' : 'transform: rotate(-90deg);'}
     width="10"
     height="10"
   />
@@ -53,8 +45,6 @@
   {ItemName}
 </div>
 
-{#if Expand}
-  <div data-children class="w-full" transition:slide={{ duration: 300, easing: linear }}>
-    <slot />
-  </div>
-{/if}
+<div data-children class={Expand ? 'w-full' : 'hidden'} data-expanded={Expand}>
+  <slot />
+</div>

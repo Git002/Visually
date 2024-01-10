@@ -48,4 +48,8 @@
   :global(.hidden) {
     display: none;
   }
+
+  * {
+    box-sizing: border-box;
+  }
 </style>
