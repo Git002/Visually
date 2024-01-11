@@ -92,6 +92,7 @@
         e.stopPropagation();
 
         if (e.isTrusted) $showPanelComponent = false;
+        else iFrame.contentWindow?.focus();
 
         currentClickedElement = e.target as HTMLElement;
 
@@ -229,14 +230,20 @@
 
           draggedElement?.remove();
 
-          if (position === ABOVE) (dropTarget?.previousElementSibling as HTMLElement).click();
-          else if (position === BELOW) (dropTarget?.nextElementSibling as HTMLElement).click();
-          else if (position === INSIDE_AT_BOTTOM) {
-            (dropTarget?.lastElementChild as HTMLElement).click();
-            (dropTarget?.lastElementChild as HTMLElement).addEventListener('load', (e) => {
-              (e.target as HTMLElement).click();
-            });
-          } else if (position === INSIDE_AT_START) (dropTarget?.firstElementChild as HTMLElement).click();
+          let dropElement: HTMLElement | undefined = undefined;
+
+          if (position === ABOVE) dropElement = dropTarget?.previousElementSibling as HTMLElement;
+          else if (position === BELOW) dropElement = dropTarget?.nextElementSibling as HTMLElement;
+          else if (position === INSIDE_AT_BOTTOM) dropElement = dropTarget?.lastElementChild as HTMLElement;
+          else if (position === INSIDE_AT_START) dropElement = dropTarget?.firstElementChild as HTMLElement;
+
+          if (!dropElement) throw new Error('dropElement is empty');
+
+          if (dropElement.tagName === 'IMG') {
+            dropElement.addEventListener('load', (e) => (e.target as HTMLElement).click());
+          }
+
+          dropElement.click();
         }
 
         indicator.style.display = 'none';

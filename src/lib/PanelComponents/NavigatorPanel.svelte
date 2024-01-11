@@ -90,8 +90,9 @@
   let prevActiveNode: HTMLElement;
   let activeNode: HTMLElement;
 
-  async function changeActiveNode() {
+  async function toggleActiveNode() {
     activeNode = await getNodeByPosition(getElementsPosition($clickedElement));
+
     if (prevActiveNode) prevActiveNode.classList.remove('active-node');
     activeNode.classList.add('active-node');
 
@@ -99,7 +100,7 @@
   }
 
   $: if ($clickedElement) {
-    changeActiveNode();
+    toggleActiveNode();
   }
 
   onMount(() => {
