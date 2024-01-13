@@ -7,12 +7,12 @@
   let cssUtility = new CSSUtility();
 
   let inputFields: { id: string; FieldName: string; value: any }[] = [
-    { id: 'width', FieldName: 'width', value: $clickedElementStyle?.width },
-    { id: 'height', FieldName: 'height', value: $clickedElementStyle?.height },
-    { id: 'min-width', FieldName: 'min w', value: $clickedElementStyle?.minWidth },
-    { id: 'min-height', FieldName: 'min h', value: $clickedElementStyle?.minHeight },
-    { id: 'max-width', FieldName: 'max w', value: $clickedElementStyle?.maxWidth },
-    { id: 'max-height', FieldName: 'max h', value: $clickedElementStyle?.maxHeight }
+    { id: 'width', FieldName: 'width', value: $clickedElementStyle?.['width'] },
+    { id: 'height', FieldName: 'height', value: $clickedElementStyle?.['height'] },
+    { id: 'min-width', FieldName: 'min w', value: $clickedElementStyle?.['min-width'] },
+    { id: 'min-height', FieldName: 'min h', value: $clickedElementStyle?.['min-height'] },
+    { id: 'max-width', FieldName: 'max w', value: $clickedElementStyle?.['max-width'] },
+    { id: 'max-height', FieldName: 'max h', value: $clickedElementStyle?.['max-height'] }
   ];
 
   $: {
@@ -41,7 +41,7 @@
     }
   }
 
-  function handleBlur(e: any) {
+  function applyCSS(e: any) {
     let targetInput = e.detail.target;
     if (targetInput.value === targetInput.oldValue) return;
 
@@ -58,7 +58,7 @@
 <div class="flex flex-col gap-[10px] text-[10px] px-[12px] tracking-wide text-[#b8b6b6]">
   <div class="grid grid-cols-2 gap-[10px]">
     {#each inputFields as { id, FieldName, value }}
-      <MiniInputBar {id} {FieldName} {value} on:blur={handleBlur} on:arrowUpDown={incrementDecrementValue} />
+      <MiniInputBar {id} {FieldName} {value} on:blur={applyCSS} on:arrowUpDown={incrementDecrementValue} />
     {/each}
   </div>
 

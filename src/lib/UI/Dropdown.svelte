@@ -1,10 +1,18 @@
 <script lang="ts">
   import { tick } from 'svelte';
+  import { createEventDispatcher } from 'svelte';
 
   export let DropdownBtnText: string = 'Select';
   export let ItemsArray: string[] = ['Apple', 'Mango', 'Orange', 'Strawberry'];
-  export let customFunction: (() => any) | null = null;
   let dropdownOpen = false;
+
+  const dispatch = createEventDispatcher();
+
+  function customFunction(e: Event) {
+    dispatch('click', {
+      target: e.target
+    });
+  }
 
   async function onItemClick(e: Event) {
     const clickedItem = e.target as HTMLElement;
@@ -12,9 +20,7 @@
     DropdownBtnText = clickedItem.innerText;
 
     await tick();
-    if (customFunction) {
-      customFunction();
-    }
+    customFunction(e);
   }
 
   function dropdownClose() {
@@ -24,6 +30,7 @@
 </script>
 
 <div class="relative text-[12px] w-full">
+  <!-- Dropdown Button -->
   <button
     class="flex justify-between flex-row rounded-[6px] bg-[#404040] py-[6px] px-[12px] border-2 border-[#505050] items-center text-center font-semibold tracking-wide text-[#b8b6b6] h-[34px] w-full focus:outline-0"
     on:click|stopPropagation={() => {
@@ -38,13 +45,13 @@
     <object data="Icons/dropdown.svg" title="" style="pointer-events: none;" />
   </button>
 
+  <!-- Dropdown Menu -->
+
   <div
     class={dropdownOpen
       ? 'absolute w-full bg-[#494949] rounded-[6px] mt-[9px] font-semibold text-[#b8b6b6] tracking-wide overflow-hidden z-10 py-[4px] shadow-[0px_70px_50px_10px_#00000024]'
       : 'hidden'}
-    on:click={(e) => {
-      onItemClick(e);
-    }}
+    on:click={(e) => onItemClick(e)}
   >
     {#each ItemsArray as item (item)}
       <div class="px-[6px] py-[3px]">

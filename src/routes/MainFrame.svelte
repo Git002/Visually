@@ -92,7 +92,6 @@
         e.stopPropagation();
 
         if (e.isTrusted) $showPanelComponent = false;
-        else iFrame.contentWindow?.focus();
 
         currentClickedElement = e.target as HTMLElement;
 

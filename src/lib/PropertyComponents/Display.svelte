@@ -3,20 +3,32 @@
   import { clickedElement, clickedElementStyle } from '../../Stores';
   import { CSSUtility } from '$lib/Modules/cssFunctions';
 
-  const displayIconsArr = ['block', 'flex', 'grid', 'inline-block', 'inline', 'none'].map(
-    (value) => `<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/${value}.svg' />`
-  );
-  const flexAlignIconsArr = ['start', 'center', 'end', 'stretch', 'baseline'].map(
-    (value) =>
-      `<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Align/${value}.svg' />`
-  );
-  const flexJustifyIconsArr = ['start', 'center', 'end', 'between', 'evenly'].map(
-    (value) =>
-      `<img width=15 height=15 style='pointer-events: none;' src='Icons/Display/Justify/${value}.svg' />`
-  );
+  // creating an array of image tags to be passed to button group
+  const displayIconsArr = [
+    { text: '', iconPath: 'Icons/Display/block.svg' },
+    { text: '', iconPath: 'Icons/Display/flex.svg' },
+    { text: '', iconPath: 'Icons/Display/grid.svg' },
+    { text: '', iconPath: 'Icons/Display/inline-block.svg' },
+    { text: '', iconPath: 'Icons/Display/inline.svg' },
+    { text: '', iconPath: 'Icons/Display/none.svg' }
+  ];
+  const flexAlignIconsArr = [
+    { text: '', iconPath: 'Icons/Display/Align/start.svg' },
+    { text: '', iconPath: 'Icons/Display/Align/center.svg' },
+    { text: '', iconPath: 'Icons/Display/Align/end.svg' },
+    { text: '', iconPath: 'Icons/Display/Align/stretch.svg' },
+    { text: '', iconPath: 'Icons/Display/Align/baseline.svg' }
+  ];
+  const flexJustifyIconsArr = [
+    { text: '', iconPath: 'Icons/Display/Justify/start.svg' },
+    { text: '', iconPath: 'Icons/Display/Justify/center.svg' },
+    { text: '', iconPath: 'Icons/Display/Justify/end.svg' },
+    { text: '', iconPath: 'Icons/Display/Justify/between.svg' },
+    { text: '', iconPath: 'Icons/Display/Justify/evenly.svg' }
+  ];
 
   // ButtonGroup IDs with their CSS values
-  const displayValues: { [key: string]: string } = {
+  const displayIdWithValues: { [key: string]: string } = {
     'display-block': 'block',
     'display-flex': 'flex',
     'display-grid': 'grid',
@@ -25,7 +37,7 @@
     'display-none': 'none'
   } as const;
 
-  const alignItemsValues: { [key: string]: string } = {
+  const alignItemsIdWithValues: { [key: string]: string } = {
     'align-items-flex-start': 'flex-start',
     'align-items-center': 'center',
     'align-items-flex-end': 'flex-end',
@@ -33,7 +45,7 @@
     'align-items-baseline': 'baseline'
   } as const;
 
-  const justifyContentValues: { [key: string]: string } = {
+  const justifyContentIdWithValues: { [key: string]: string } = {
     'justify-content-flex-start': 'flex-start',
     'justify-content-center': 'center',
     'justify-content-flex-end': 'flex-end',
@@ -56,12 +68,12 @@
     // if button is already active then avoid re-execution of the function
     if ([displayButtonId, alignItemsButtonId, justifyContentButtonId].includes(clickedButton.id)) return;
 
-    if (Object.keys(displayValues).includes(clickedButton.id)) {
-      cssUtility.writeCSS('display', displayValues[clickedButton.id]);
-    } else if (Object.keys(alignItemsValues).includes(clickedButton.id)) {
-      cssUtility.writeCSS('align-items', alignItemsValues[clickedButton.id]);
-    } else if (Object.keys(justifyContentValues).includes(clickedButton.id)) {
-      cssUtility.writeCSS('justify-content', justifyContentValues[clickedButton.id]);
+    if (Object.keys(displayIdWithValues).includes(clickedButton.id)) {
+      cssUtility.writeCSS('display', displayIdWithValues[clickedButton.id]);
+    } else if (Object.keys(alignItemsIdWithValues).includes(clickedButton.id)) {
+      cssUtility.writeCSS('align-items', alignItemsIdWithValues[clickedButton.id]);
+    } else if (Object.keys(justifyContentIdWithValues).includes(clickedButton.id)) {
+      cssUtility.writeCSS('justify-content', justifyContentIdWithValues[clickedButton.id]);
     }
   }
 
@@ -71,17 +83,17 @@
   // updates the display bar when clicked on an element inside iFrame
   $: {
     if ($clickedElement) {
-      if (Object.values(displayValues).includes($clickedElementStyle?.display)) {
-        displayButtonId = 'display-' + $clickedElementStyle?.display;
-
+      // if the value of $clickedElementStyle matches with the values of display, align or justify...
+      if (Object.values(displayIdWithValues).includes($clickedElementStyle['display'])) {
+        displayButtonId = 'display-' + $clickedElementStyle?.['display'];
         showFlexGroup = displayButtonId === 'display-flex';
         showGridGroup = displayButtonId === 'display-grid';
       }
-      if (Object.values(alignItemsValues).includes($clickedElementStyle?.alignItems)) {
-        alignItemsButtonId = 'align-items-' + $clickedElementStyle?.alignItems;
+      if (Object.values(alignItemsIdWithValues).includes($clickedElementStyle['align-items'])) {
+        alignItemsButtonId = 'align-items-' + $clickedElementStyle?.['align-items'];
       }
-      if (Object.values(justifyContentValues).includes($clickedElementStyle?.justifyContent)) {
-        justifyContentButtonId = 'justify-content-' + $clickedElementStyle?.justifyContent;
+      if (Object.values(justifyContentIdWithValues).includes($clickedElementStyle['justify-content'])) {
+        justifyContentButtonId = 'justify-content-' + $clickedElementStyle?.['justify-content'];
       }
     }
   }
@@ -90,19 +102,19 @@
 <div class="flex flex-col gap-[12px] px-[12px]" on:click={setCSS}>
   <ButtonGroup
     Items={displayIconsArr}
-    ButtonIds={Object.keys(displayValues)}
+    ButtonIds={Object.keys(displayIdWithValues)}
     bind:activeButtonId={displayButtonId}
   />
 
   <div class={showFlexGroup ? 'flex flex-col gap-[12px] visible' : 'hidden'}>
     <ButtonGroup
       Items={flexAlignIconsArr}
-      ButtonIds={Object.keys(alignItemsValues)}
+      ButtonIds={Object.keys(alignItemsIdWithValues)}
       bind:activeButtonId={alignItemsButtonId}
     />
     <ButtonGroup
       Items={flexJustifyIconsArr}
-      ButtonIds={Object.keys(justifyContentValues)}
+      ButtonIds={Object.keys(justifyContentIdWithValues)}
       bind:activeButtonId={justifyContentButtonId}
     />
   </div>

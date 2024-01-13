@@ -113,6 +113,8 @@
 
       clickedElement = getElementByPosition(getNodesPosition(clickedNode));
       clickedElement.click();
+
+      (<HTMLIFrameElement>document.getElementById('frame')).contentWindow?.focus();
     });
 
     navPanel.addEventListener('keydown', (e: KeyboardEvent) => {

@@ -1,43 +1,21 @@
-import { clickedElement, clickedElementStyle, iFrameDocument } from '../../Stores';
+import { clickedElement, clickedElementStyle, iFrameDocument, currentCSSPseudoClass } from '../../Stores';
 import { get } from 'svelte/store';
 import { random } from './helperFunctions';
 import { calculate, compare } from 'specificity';
 
-function getSelector(element: HTMLElement): string {
-  let selector: string = '';
-
-  if (element.id) selector += '#' + element.id;
-  if (element.classList.length !== 0) {
-    selector += '.' + element.classList.toString().replaceAll(' ', '.');
-  }
-  return selector;
-}
-
 /**
- * Retrieve any styles set by the User himself instead of getting the browser's computed property
+ * Retrieve any styles set by the user instead of getting the browser's computed property.
  * For example: getUserSetStyles(element, ['width', 'color'])
  */
 function getUserSetStyles(element: HTMLElement, props: string[]): { [key: string]: string } {
   let styles: { [key: string]: string } = {};
   let styleSheets: StyleSheetList = get(iFrameDocument).styleSheets;
-  let computedStyle = getComputedStyle(element);
 
-  for (let sheetIndex in styleSheets) {
-    if (isNaN(Number(sheetIndex))) continue;
-
-    let rules = (styleSheets[sheetIndex] as CSSStyleSheet).cssRules;
+  for (let sheet of styleSheets) {
+    let rules = (sheet as CSSStyleSheet).cssRules;
 
     for (let prop of props) {
-      if (['0px', 'none'].includes(String(computedStyle[prop as keyof CSSStyleDeclaration]))) {
-        if (['max-width', 'max-height'].includes(prop)) {
-          styles[prop] = 'None';
-        } else {
-          styles[prop] = '0px';
-        }
-        continue;
-      }
-
-      let propSelectorsWithValues: { [key: string]: string } = {};
+      let selectorsWithValues: { [key: string]: string } = {};
 
       for (let r in rules) {
         let selector = (rules[r] as CSSStyleRule).selectorText;
@@ -46,15 +24,15 @@ function getUserSetStyles(element: HTMLElement, props: string[]): { [key: string
           let propValue = (rules[r] as CSSStyleRule).style[prop as any];
           if (propValue) {
             selector.split(',').forEach((selectorUnit) => {
-              if (element.matches(selectorUnit)) propSelectorsWithValues[selectorUnit] = propValue;
+              if (element.matches(selectorUnit)) selectorsWithValues[selectorUnit] = propValue;
             });
           }
         }
       }
 
       // figure out the specificty --->
-      if (Object.keys(propSelectorsWithValues).length > 1) {
-        const specificityResults = Object.keys(propSelectorsWithValues).map((selector) => {
+      if (Object.keys(selectorsWithValues).length > 1) {
+        const specificityResults = Object.keys(selectorsWithValues).map((selector) => {
           const selectorSpecificity = calculate(selector);
           return { selector, selectorSpecificity };
         });
@@ -65,17 +43,13 @@ function getUserSetStyles(element: HTMLElement, props: string[]): { [key: string
 
         let highestSpecificitySelector: string = sortedResults.at(-1).selector;
 
-        styles[prop] = propSelectorsWithValues[highestSpecificitySelector];
-      } else if (Object.keys(propSelectorsWithValues).length === 1) {
-        styles[prop] = Object.values(propSelectorsWithValues)[0];
+        styles[prop] = selectorsWithValues[highestSpecificitySelector];
+      } else if (Object.keys(selectorsWithValues).length === 1) {
+        styles[prop] = Object.values(selectorsWithValues)[0];
       }
     }
   }
   return styles;
-}
-
-function removePxUnit(text: string) {
-  return text.endsWith('px') ? text.replace('px', '') : text;
 }
 
 interface CustomCSSStyleDeclaration extends CSSStyleDeclaration {
@@ -104,115 +78,114 @@ export function processStyles(element: HTMLElement) {
 
   // Display properties ------->
   if (!style.display) {
-    style.display = computedStyle.getPropertyValue('display');
+    style['display'] = computedStyle.getPropertyValue('display');
   }
 
   if (!style.alignItems) {
-    if (computedStyle.getPropertyValue('align-items') === 'normal') style.alignItems = 'stretch';
-    else style.alignItems = computedStyle.getPropertyValue('align-items');
-    style['align-items'] = style.alignItems;
+    let alignItemsValue = computedStyle.getPropertyValue('align-items');
+    style['align-items'] = alignItemsValue === 'normal' ? 'stretch' : alignItemsValue;
   }
 
   if (!style.justifyContent) {
-    if (computedStyle.getPropertyValue('justify-content') === 'normal') style.justifyContent = 'flex-start';
-    else style.justifyContent = computedStyle.getPropertyValue('justify-content');
-    style['justify-content'] = style.justifyContent;
+    let justifyContent = computedStyle.getPropertyValue('justify-content');
+    style['justify-content'] = justifyContent === 'normal' ? 'flex-start' : justifyContent;
+  }
+
+  /**
+   * Retrieve values from userSetStyles and remove its px value and set it to style.
+   * If value is not returned then set the deafault value.
+   * For example: setStyleForUnitProperty('width', 'Auto')
+   * @param property
+   * @param defaultValue
+   */
+  function setStyleForUnitProperty(property: string, defaultValue: string) {
+    let CSSValue: string = userSetStyles[property];
+    if (CSSValue) CSSValue = CSSValue.endsWith('px') ? CSSValue.replace('px', '') : CSSValue;
+    else CSSValue = defaultValue;
+
+    style[property] = CSSValue;
   }
 
   // Sizing properties ------->
   if (!style.width) {
-    if (userSetStyles['width']) style.width = removePxUnit(userSetStyles['width']);
-    else style.width = 'Auto';
+    setStyleForUnitProperty('width', 'Auto');
   }
 
   if (!style.height) {
-    if (userSetStyles['height']) style.height = removePxUnit(userSetStyles['height']);
-    else style.height = 'Auto';
+    setStyleForUnitProperty('height', 'Auto');
   }
 
   if (!style.maxWidth) {
-    if (userSetStyles['max-width']) style.maxWidth = removePxUnit(userSetStyles['max-width']);
-    else style.maxWidth = 'None';
-    style['max-width'] = style.maxWidth;
+    setStyleForUnitProperty('max-width', 'None');
   }
 
   if (!style.maxHeight) {
-    if (userSetStyles['max-height']) style.maxHeight = removePxUnit(userSetStyles['max-height']);
-    else style.maxHeight = 'None';
-    style['max-height'] = style.maxHeight;
+    setStyleForUnitProperty('max-height', 'None');
   }
 
   if (!style.minWidth) {
-    if (userSetStyles['min-width']) style.minWidth = removePxUnit(userSetStyles['min-width']);
-    else style.minWidth = '0';
-    style['min-width'] = style.minWidth;
+    setStyleForUnitProperty('min-width', '0');
   }
 
   if (!style.minHeight) {
-    if (userSetStyles['min-height']) style.minHeight = removePxUnit(userSetStyles['min-height']);
-    else style.minHeight = '0';
-    style['min-height'] = style.minHeight;
+    setStyleForUnitProperty('min-height', '0');
   }
 
-  // Spacing properties
+  // Spacing properties ------->
   if (!style.marginTop) {
-    if (userSetStyles['margin-top']) style.marginTop = removePxUnit(userSetStyles['margin-top']);
-    else style.marginTop = '0';
-    style['margin-top'] = style.marginTop;
+    setStyleForUnitProperty('margin-top', '0');
   }
 
   if (!style.marginLeft) {
-    if (userSetStyles['margin-left']) style.marginLeft = removePxUnit(userSetStyles['margin-left']);
-    else style.marginLeft = '0';
-    style['margin-left'] = style.marginLeft;
+    setStyleForUnitProperty('margin-left', '0');
   }
 
   if (!style.marginRight) {
-    if (userSetStyles['margin-right']) style.marginRight = removePxUnit(userSetStyles['margin-right']);
-    else style.marginRight = '0';
-    style['margin-right'] = style.marginRight;
+    setStyleForUnitProperty('margin-right', '0');
   }
 
   if (!style.marginBottom) {
-    if (userSetStyles['margin-bottom']) style.marginBottom = removePxUnit(userSetStyles['margin-bottom']);
-    else style.marginBottom = '0';
-    style['margin-bottom'] = style.marginBottom;
+    setStyleForUnitProperty('margin-bottom', '0');
   }
 
   if (!style.paddingTop) {
-    if (userSetStyles['padding-top']) style.paddingTop = removePxUnit(userSetStyles['padding-top']);
-    else style.paddingTop = '0';
-    style['padding-top'] = style.paddingTop;
+    setStyleForUnitProperty('padding-top', '0');
   }
 
   if (!style.paddingLeft) {
-    if (userSetStyles['padding-left']) style.paddingLeft = removePxUnit(userSetStyles['padding-left']);
-    else style.paddingLeft = '0';
-    style['padding-left'] = style.paddingLeft;
+    setStyleForUnitProperty('padding-left', '0');
   }
 
   if (!style.paddingRight) {
-    if (userSetStyles['padding-right']) style.paddingRight = removePxUnit(userSetStyles['padding-right']);
-    else style.paddingRight = '0';
-    style['padding-right'] = style.paddingRight;
+    setStyleForUnitProperty('padding-right', '0');
   }
 
   if (!style.paddingBottom) {
-    if (userSetStyles['padding-bottom']) style.paddingBottom = removePxUnit(userSetStyles['padding-bottom']);
-    else style.paddingBottom = '0';
-    style['padding-bottom'] = style.paddingBottom;
+    setStyleForUnitProperty('padding-bottom', '0');
   }
 
   clickedElementStyle.update(() => style);
 }
 
+function getSelector(element: HTMLElement): string {
+  let selector: string = '';
+
+  if (element.id) selector += '#' + element.id;
+  if (element.classList.length !== 0) {
+    selector += '.' + element.classList.toString().replaceAll(' ', '.');
+  }
+  return selector;
+}
+
 export class CSSUtility {
   private element: HTMLElement = get(clickedElement);
   private iFrameDoc: Document = get(iFrameDocument);
+  private CSSPseudoClass: string = get(currentCSSPseudoClass);
 
   constructor() {
     clickedElement.subscribe((value: HTMLElement) => (this.element = value));
     iFrameDocument.subscribe((value: Document) => (this.iFrameDoc = value));
+    currentCSSPseudoClass.subscribe((value: string) => (this.CSSPseudoClass = value));
   }
 
   writeCSS(property: string, value: string) {
@@ -225,7 +198,9 @@ export class CSSUtility {
     }
 
     this.iFrameDoc.getElementById('visually-default-stylesheet')!.innerHTML +=
-      selectorText + `{${property}: ${value}}`;
+      selectorText +
+      (this.CSSPseudoClass ? ':' + this.CSSPseudoClass : this.CSSPseudoClass) +
+      `{${property}: ${value}}`;
 
     get(clickedElement).click();
   }
