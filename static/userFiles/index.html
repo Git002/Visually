@@ -6,20 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <style id="visually-default-stylesheet">
-      h1,
-      p {
-        font-weight: 400;
-      }
       * {
         box-sizing: border-box !important;
         cursor: default;
       }
-      :focus {
+      *:focus {
         outline: 0 !important;
       }
       html {
         scroll-behavior: smooth !important;
         color-scheme: dark;
+      }
+      body {
+        padding: 10px;
+        min-height: 100vh;
+        user-select: none;
+        background-color: #fff;
+        color: #696969;
       }
       blockquote,
       body,
@@ -42,6 +45,10 @@
         margin-bottom: 10px;
         width: auto;
         line-height: 44px;
+      }
+      h1,
+      p {
+        font-weight: 400;
       }
       button,
       p {
@@ -67,13 +74,6 @@
         border: 2px solid #d0d5db;
         caret-color: #3d5565;
         color: #3d5565;
-      }
-      body {
-        padding: 10px;
-        min-height: 100vh;
-        user-select: none;
-        background-color: #fff;
-        color: #696969;
       }
       div:empty {
         height: 80px;

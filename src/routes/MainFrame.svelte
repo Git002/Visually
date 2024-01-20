@@ -101,7 +101,7 @@
         $clickedElement = currentClickedElement;
         processStyles(currentClickedElement);
 
-        // Attach a Mutation Observer to the element to detect if there are any changes to class attribute. If yes, then re-click on the element so that other components could display the updated styles too
+        // Detect through Mutation Observer if there are any changes to class attribute. If yes, then re-click on the element so that other components could recieve the updated styles too
         if (prevClickedElement !== currentClickedElement) {
           if (currentClickedElement) {
             currentElementObserver?.disconnect();
@@ -123,6 +123,7 @@
         hoveredElement = e.target as HTMLElement;
         if (hoveredElement.tagName !== 'BODY') hoveredElement.draggable = true;
 
+        calculateRect(currentClickedElement, click_selector);
         calculateRect(hoveredElement, hover_selector);
 
         hover_selector.style.display = 'block';
@@ -246,6 +247,8 @@
         }
 
         indicator.style.display = 'none';
+
+        iFrame.contentWindow?.focus();
 
         // trigger Navigator.svelte to re-render the tree
         $iFrameDocument = iFrameDoc;

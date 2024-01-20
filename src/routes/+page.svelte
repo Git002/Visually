@@ -11,7 +11,7 @@
     // show the loading screen and hide it after 1.5 seconds when the page is done loading
     setTimeout(() => {
       const loader: HTMLDivElement = <HTMLDivElement>document.getElementById('loader');
-      loader.style.visibility = 'hidden';
+      loader.remove();
     }, 1500);
   });
 </script>
@@ -29,7 +29,7 @@
         <MainFrame />
       </div>
 
-      <div class="flex flex-col bg-[#2e2f31] w-[250px] shrink-0 relative">
+      <div class="flex flex-col bg-[#2e2f31] w-[250px] shrink-0">
         <Properties />
         <!-- screen when no element selected -->
       </div>

@@ -1,63 +1,58 @@
-import { clickedElement, clickedElementStyle, iFrameDocument, currentCSSPseudoClass } from '../../Stores';
+import { clickedElement, clickedElementStyle, iFrameDocument, currentCSSActionClass } from '../../Stores';
 import { get } from 'svelte/store';
 import { random } from './helperFunctions';
 import { calculate, compare } from 'specificity';
 
+function findHighestSpecificity(obj: Object) {
+  const specificityResults = Object.keys(obj).map((selector) => {
+    const selectorSpecificity = calculate(selector);
+    return { selector, selectorSpecificity };
+  });
+  const sortedResults: any = specificityResults.sort((a, b) => {
+    return compare(a.selectorSpecificity, b.selectorSpecificity);
+  });
+  // return the highest specificity selector
+  return sortedResults.at(-1)['selector'];
+}
+
 /**
  * Retrieve any styles set by the user instead of getting the browser's computed property.
- * For example: getUserSetStyles(element, ['width', 'color'])
+ * For example: getUserSetStyles(element, ['width', 'max-height'])
  */
 function getUserSetStyles(element: HTMLElement, props: string[]): { [key: string]: string } {
   let styles: { [key: string]: string } = {};
-  let styleSheets: StyleSheetList = get(iFrameDocument).styleSheets;
 
-  for (let sheet of styleSheets) {
-    let rules = (sheet as CSSStyleSheet).cssRules;
-
+  for (let sheet of get(iFrameDocument).styleSheets) {
     for (let prop of props) {
-      let selectorsWithValues: { [key: string]: string } = {};
+      let selectorInfo: { [key: string]: string } = {};
 
-      for (let r in rules) {
-        let selector = (rules[r] as CSSStyleRule).selectorText;
+      for (let rule of sheet.cssRules) {
+        let selector = (rule as CSSStyleRule).selectorText;
 
         if (element.matches(selector)) {
-          let propValue = (rules[r] as CSSStyleRule).style[prop as any];
+          let propValue = (rule as CSSStyleRule).style[prop as any];
           if (propValue) {
             selector.split(',').forEach((selectorUnit) => {
-              if (element.matches(selectorUnit)) selectorsWithValues[selectorUnit] = propValue;
+              if (element.matches(selectorUnit)) selectorInfo[selectorUnit] = propValue;
             });
           }
         }
-      }
 
-      // figure out the specificty --->
-      if (Object.keys(selectorsWithValues).length > 1) {
-        const specificityResults = Object.keys(selectorsWithValues).map((selector) => {
-          const selectorSpecificity = calculate(selector);
-          return { selector, selectorSpecificity };
-        });
-
-        let sortedResults: any = specificityResults.sort((a, b) => {
-          return compare(a.selectorSpecificity, b.selectorSpecificity);
-        });
-
-        let highestSpecificitySelector: string = sortedResults.at(-1).selector;
-
-        styles[prop] = selectorsWithValues[highestSpecificitySelector];
-      } else if (Object.keys(selectorsWithValues).length === 1) {
-        styles[prop] = Object.values(selectorsWithValues)[0];
+        // figure out the specificty --->
+        if (Object.keys(selectorInfo).length > 1) {
+          const highestSpecificitySelector: string = findHighestSpecificity(selectorInfo);
+          styles[prop] = selectorInfo[highestSpecificitySelector];
+        } else if (Object.keys(selectorInfo).length === 1) {
+          styles[prop] = Object.values(selectorInfo)[0];
+        }
       }
     }
   }
   return styles;
 }
 
-interface CustomCSSStyleDeclaration extends CSSStyleDeclaration {
-  [key: string]: any;
-}
-
 export function processStyles(element: HTMLElement) {
-  let style: CustomCSSStyleDeclaration = { ...element.style };
+  let style: { [key: string]: any } & CSSStyleDeclaration = { ...element.style };
   let computedStyle = getComputedStyle(element);
   let userSetStyles = getUserSetStyles(element, [
     'width',
@@ -77,29 +72,27 @@ export function processStyles(element: HTMLElement) {
   ]);
 
   // Display properties ------->
-  if (!style.display) {
-    style['display'] = computedStyle.getPropertyValue('display');
-  }
+  if (!style.display) style.display = computedStyle.display;
 
   if (!style.alignItems) {
-    let alignItemsValue = computedStyle.getPropertyValue('align-items');
+    let alignItemsValue = computedStyle.alignItems;
     style['align-items'] = alignItemsValue === 'normal' ? 'stretch' : alignItemsValue;
   }
 
   if (!style.justifyContent) {
-    let justifyContent = computedStyle.getPropertyValue('justify-content');
+    let justifyContent = computedStyle.justifyContent;
     style['justify-content'] = justifyContent === 'normal' ? 'flex-start' : justifyContent;
   }
 
   /**
-   * Retrieve values from userSetStyles and remove its px value and set it to style.
-   * If value is not returned then set the deafault value.
+   * Retrieve values from userSetStyles and remove its px value. If value is not there then set the default value.
    * For example: setStyleForUnitProperty('width', 'Auto')
    * @param property
    * @param defaultValue
    */
   function setStyleForUnitProperty(property: string, defaultValue: string) {
     let CSSValue: string = userSetStyles[property];
+
     if (CSSValue) CSSValue = CSSValue.endsWith('px') ? CSSValue.replace('px', '') : CSSValue;
     else CSSValue = defaultValue;
 
@@ -107,69 +100,42 @@ export function processStyles(element: HTMLElement) {
   }
 
   // Sizing properties ------->
-  if (!style.width) {
-    setStyleForUnitProperty('width', 'Auto');
-  }
+  if (!style.width) setStyleForUnitProperty('width', 'Auto');
 
-  if (!style.height) {
-    setStyleForUnitProperty('height', 'Auto');
-  }
+  if (!style.height) setStyleForUnitProperty('height', 'Auto');
 
-  if (!style.maxWidth) {
-    setStyleForUnitProperty('max-width', 'None');
-  }
+  if (!style.maxWidth) setStyleForUnitProperty('max-width', 'None');
 
-  if (!style.maxHeight) {
-    setStyleForUnitProperty('max-height', 'None');
-  }
+  if (!style.maxHeight) setStyleForUnitProperty('max-height', 'None');
 
-  if (!style.minWidth) {
-    setStyleForUnitProperty('min-width', '0');
-  }
+  if (!style.minWidth) setStyleForUnitProperty('min-width', '0');
 
-  if (!style.minHeight) {
-    setStyleForUnitProperty('min-height', '0');
-  }
+  if (!style.minHeight) setStyleForUnitProperty('min-height', '0');
+
+  if (!style.overflow) style.overflow = computedStyle.overflow;
 
   // Spacing properties ------->
-  if (!style.marginTop) {
-    setStyleForUnitProperty('margin-top', '0');
-  }
+  if (!style.marginTop) setStyleForUnitProperty('margin-top', '0');
 
-  if (!style.marginLeft) {
-    setStyleForUnitProperty('margin-left', '0');
-  }
+  if (!style.marginLeft) setStyleForUnitProperty('margin-left', '0');
 
-  if (!style.marginRight) {
-    setStyleForUnitProperty('margin-right', '0');
-  }
+  if (!style.marginRight) setStyleForUnitProperty('margin-right', '0');
 
-  if (!style.marginBottom) {
-    setStyleForUnitProperty('margin-bottom', '0');
-  }
+  if (!style.marginBottom) setStyleForUnitProperty('margin-bottom', '0');
 
-  if (!style.paddingTop) {
-    setStyleForUnitProperty('padding-top', '0');
-  }
+  if (!style.paddingTop) setStyleForUnitProperty('padding-top', '0');
 
-  if (!style.paddingLeft) {
-    setStyleForUnitProperty('padding-left', '0');
-  }
+  if (!style.paddingLeft) setStyleForUnitProperty('padding-left', '0');
 
-  if (!style.paddingRight) {
-    setStyleForUnitProperty('padding-right', '0');
-  }
+  if (!style.paddingRight) setStyleForUnitProperty('padding-right', '0');
 
-  if (!style.paddingBottom) {
-    setStyleForUnitProperty('padding-bottom', '0');
-  }
+  if (!style.paddingBottom) setStyleForUnitProperty('padding-bottom', '0');
 
   clickedElementStyle.update(() => style);
 }
 
 function getSelector(element: HTMLElement): string {
   let selector: string = '';
-
   if (element.id) selector += '#' + element.id;
   if (element.classList.length !== 0) {
     selector += '.' + element.classList.toString().replaceAll(' ', '.');
@@ -180,27 +146,36 @@ function getSelector(element: HTMLElement): string {
 export class CSSUtility {
   private element: HTMLElement = get(clickedElement);
   private iFrameDoc: Document = get(iFrameDocument);
-  private CSSPseudoClass: string = get(currentCSSPseudoClass);
+  private CSSActionClass: string = get(currentCSSActionClass);
 
   constructor() {
     clickedElement.subscribe((value: HTMLElement) => (this.element = value));
     iFrameDocument.subscribe((value: Document) => (this.iFrameDoc = value));
-    currentCSSPseudoClass.subscribe((value: string) => (this.CSSPseudoClass = value));
+    currentCSSActionClass.subscribe((value: string) => (this.CSSActionClass = value));
   }
 
   writeCSS(property: string, value: string) {
     let selectorText = getSelector(this.element);
 
-    if (!selectorText) {
-      let newClassName: string = this.generateNewClass();
-      this.element.classList.add(newClassName);
-      selectorText = '.' + newClassName;
+    if (
+      !selectorText ||
+      selectorText === '.hover' ||
+      selectorText === '.active' ||
+      selectorText === '.focus'
+    ) {
+      this.element.classList.add(this.generateNewClass());
     }
 
-    this.iFrameDoc.getElementById('visually-default-stylesheet')!.innerHTML +=
-      selectorText +
-      (this.CSSPseudoClass ? ':' + this.CSSPseudoClass : this.CSSPseudoClass) +
-      `{${property}: ${value}}`;
+    // have to do this in-order to put action-class position at the end
+    if (this.CSSActionClass !== '') {
+      this.element.classList.remove(this.CSSActionClass);
+      this.element.classList.add(this.CSSActionClass);
+    }
+
+    let styleTag = this.iFrameDoc.getElementById('visually-default-stylesheet') as HTMLStyleElement;
+    let styleSheet = styleTag.sheet as CSSStyleSheet;
+
+    styleSheet.insertRule(getSelector(this.element) + `{${property}: ${value}}`, styleSheet.cssRules.length);
 
     get(clickedElement).click();
   }

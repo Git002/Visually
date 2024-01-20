@@ -31,7 +31,9 @@
   }
 
   onMount(() => {
-    tagifyInstance = new Tagify(input);
+    tagifyInstance = new Tagify(input, {
+      blacklist: ['hover']
+    });
 
     let tagifyInputBar = <HTMLElement>document.querySelector(`.tagify.${className}`);
     tagifyInputBar.id = id;

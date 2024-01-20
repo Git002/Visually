@@ -3,17 +3,21 @@
   import ButtonGroup from '../UI/ButtonGroup.svelte';
   import InputBar from '../UI/InputBar.svelte';
   import TagInputBar, { tagifyInstance, tagifyInput } from '../UI/TagInputBar.svelte';
-  import { clickedElement, currentCSSPseudoClass } from '../../Stores';
+  import { clickedElement, currentCSSActionClass } from '../../Stores';
 
+  let prevElementClass: string;
   // update the values of each input on click
   $: {
     if ($clickedElement) {
       // for class input --->
       if (tagifyInstance) {
-        let clickedElementClassArray = Array.from($clickedElement.classList);
-
         tagifyInstance.removeAllTags();
-        tagifyInstance.addTags(clickedElementClassArray);
+
+        tagifyInstance.addTags(
+          Array.from($clickedElement.classList).filter((elemClass) => {
+            return elemClass.toLowerCase() !== 'hover';
+          })
+        );
 
         if (tagifyInstance.getCleanValue().length === 0) {
           tagifyInput.setAttribute('data-placeholder', 'Add a class');
@@ -50,7 +54,7 @@
     idInput.classList.toggle('hidden', clickedBtn.id === 'selector-class-btn');
   }
 
-  let allowedPseudoClasses: { [key: string]: '' | 'hover' | 'active' | 'focus' } = {
+  let allowedActionClasses: { [key: string]: '' | 'hover' | 'active' | 'focus' } = {
     default: '',
     'on hover': 'hover',
     'on click': 'active',
@@ -59,13 +63,15 @@
 
   function changeCSSPseudoClass(e: CustomEvent) {
     let clickedBtn = e.detail.target as HTMLButtonElement;
-
     if (clickedBtn.textContent === null) return;
-    let clickedBtnText = clickedBtn.textContent.toLowerCase();
 
-    if (Object.keys(allowedPseudoClasses).includes(clickedBtnText)) {
-      $currentCSSPseudoClass = allowedPseudoClasses[clickedBtnText];
-    }
+    let clickedBtnText = clickedBtn.textContent.toLowerCase();
+    if (!Object.keys(allowedActionClasses).includes(clickedBtnText)) return;
+
+    $currentCSSActionClass = allowedActionClasses[clickedBtnText];
+
+    $clickedElement?.classList.remove('hover', 'active', 'focus');
+    if (clickedBtnText !== 'default') $clickedElement?.classList.add(allowedActionClasses[clickedBtnText]);
   }
 </script>
 

@@ -3,7 +3,7 @@
   import { clickedElement, clickedElementStyle } from '../../Stores';
   import { CSSUtility } from '$lib/Modules/cssFunctions';
 
-  // creating an array of image tags to be passed to button group
+  // Icon paths to be passed to each button group
   const displayIconsArr = [
     { text: '', iconPath: 'Icons/Display/block.svg' },
     { text: '', iconPath: 'Icons/Display/flex.svg' },
@@ -27,7 +27,7 @@
     { text: '', iconPath: 'Icons/Display/Justify/evenly.svg' }
   ];
 
-  // ButtonGroup IDs with their CSS values
+  // Button IDs with their CSS values
   const displayIdWithValues: { [key: string]: string } = {
     'display-block': 'block',
     'display-flex': 'flex',
@@ -83,7 +83,6 @@
   // updates the display bar when clicked on an element inside iFrame
   $: {
     if ($clickedElement) {
-      // if the value of $clickedElementStyle matches with the values of display, align or justify...
       if (Object.values(displayIdWithValues).includes($clickedElementStyle['display'])) {
         displayButtonId = 'display-' + $clickedElementStyle?.['display'];
         showFlexGroup = displayButtonId === 'display-flex';
