@@ -1,6 +1,6 @@
 # Visually
 
-![Framework](https://img.shields.io/badge/Tool%20-%20SvelteKit%20-%20%23F73C00) [![Language](https://img.shields.io/badge/Chaos%20control%20-%20TypeScript%20-%20%231082C3)](https://img.shields.io/badge/Chaos%20control%20-%20TypeScript%20-%20%233178C6) ![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/m/git002/visually?color=%23F13371) ![GitHub last commit (by committer)](https://img.shields.io/github/last-commit/git002/visually)
+<img alt="SveltKit" src="https://img.shields.io/badge/Sveltekit-%20?style=for-the-badge&logo=svelte&color=%233C3C3C">  <img alt="Typescript" src="https://img.shields.io/badge/Typescript-%20?style=for-the-badge&logo=typescript&color=%233C3C3C">  <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/git002/Visually?style=for-the-badge&labelColor=%233C3C3C&color=%2321944b">  <a href='https://discord.gg/3B9EX33p' target="_blank"><img alt='Discord' src='https://img.shields.io/badge/Discord-100000?style=for-the-badge&logo=Discord&logoColor=white&labelColor=3C3C3C&color=5865F2'/></a>
 
 Visually is a drag and drop website builder built in Svelte that generates clean code, giving everyone the freedom to host their project anywhere and is easier to use. The project is still in its very early developmental stage.
 
