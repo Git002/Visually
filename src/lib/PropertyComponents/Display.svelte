@@ -3,118 +3,102 @@
   import { clickedElement, clickedElementStyle } from '../../Stores';
   import { CSSUtility } from '$lib/Modules/cssFunctions';
 
-  // Icon paths to be passed to each button group
-  const displayIconsArr = [
-    { text: '', iconPath: 'Icons/Display/block.svg' },
-    { text: '', iconPath: 'Icons/Display/flex.svg' },
-    { text: '', iconPath: 'Icons/Display/grid.svg' },
-    { text: '', iconPath: 'Icons/Display/inline-block.svg' },
-    { text: '', iconPath: 'Icons/Display/inline.svg' },
-    { text: '', iconPath: 'Icons/Display/none.svg' }
-  ];
-  const flexAlignIconsArr = [
-    { text: '', iconPath: 'Icons/Display/Align/start.svg' },
-    { text: '', iconPath: 'Icons/Display/Align/center.svg' },
-    { text: '', iconPath: 'Icons/Display/Align/end.svg' },
-    { text: '', iconPath: 'Icons/Display/Align/stretch.svg' },
-    { text: '', iconPath: 'Icons/Display/Align/baseline.svg' }
-  ];
-  const flexJustifyIconsArr = [
-    { text: '', iconPath: 'Icons/Display/Justify/start.svg' },
-    { text: '', iconPath: 'Icons/Display/Justify/center.svg' },
-    { text: '', iconPath: 'Icons/Display/Justify/end.svg' },
-    { text: '', iconPath: 'Icons/Display/Justify/between.svg' },
-    { text: '', iconPath: 'Icons/Display/Justify/evenly.svg' }
-  ];
-
-  // Button IDs with their CSS values
-  const displayIdWithValues: { [key: string]: string } = {
-    'display-block': 'block',
-    'display-flex': 'flex',
-    'display-grid': 'grid',
-    'display-inline-block': 'inline-block',
-    'display-inline': 'inline',
-    'display-none': 'none'
-  } as const;
-
-  const alignItemsIdWithValues: { [key: string]: string } = {
-    'align-items-flex-start': 'flex-start',
-    'align-items-center': 'center',
-    'align-items-flex-end': 'flex-end',
-    'align-items-stretch': 'stretch',
-    'align-items-baseline': 'baseline'
-  } as const;
-
-  const justifyContentIdWithValues: { [key: string]: string } = {
-    'justify-content-flex-start': 'flex-start',
-    'justify-content-center': 'center',
-    'justify-content-flex-end': 'flex-end',
-    'justify-content-space-between': 'space-between',
-    'justify-content-space-evenly': 'space-evenly'
-  } as const;
-
   // default styles for each button group
   let displayButtonId: string = 'display-block';
   let alignItemsButtonId: string = 'align-items-stretch';
   let justifyContentButtonId: string = 'justify-content-flex-start';
 
-  let cssUtility = new CSSUtility();
+  let showFlexGroup: boolean = false;
+  let showGridGroup: boolean = false;
 
-  function setCSS(e: Event) {
-    if ((e.target as HTMLElement).tagName !== 'BUTTON') return;
+  // updates the display bar when clicked on the element inside iFrame
+  $: {
+    if ($clickedElement) {
+      displayButtonId = 'display-' + $clickedElementStyle?.['display'];
+      // toggle Flex & Grid button groups based on display values
+      showFlexGroup = displayButtonId === 'display-flex';
+      showGridGroup = displayButtonId === 'display-grid';
 
-    let clickedButton = e.target as HTMLButtonElement;
-
-    // if button is already active then avoid re-execution of the function
-    if ([displayButtonId, alignItemsButtonId, justifyContentButtonId].includes(clickedButton.id)) return;
-
-    if (Object.keys(displayIdWithValues).includes(clickedButton.id)) {
-      cssUtility.writeCSS('display', displayIdWithValues[clickedButton.id]);
-    } else if (Object.keys(alignItemsIdWithValues).includes(clickedButton.id)) {
-      cssUtility.writeCSS('align-items', alignItemsIdWithValues[clickedButton.id]);
-    } else if (Object.keys(justifyContentIdWithValues).includes(clickedButton.id)) {
-      cssUtility.writeCSS('justify-content', justifyContentIdWithValues[clickedButton.id]);
+      alignItemsButtonId = 'align-items-' + $clickedElementStyle?.['align-items'];
+      justifyContentButtonId = 'justify-content-' + $clickedElementStyle?.['justify-content'];
     }
   }
 
-  let showFlexGroup = false;
-  let showGridGroup = false;
+  function setDisplayCSS(e: CustomEvent) {
+    let clickedButton = e.detail.target as HTMLButtonElement;
+    CSSUtility.writeCSS('display', clickedButton.id.replace('display-', ''));
+  }
 
-  // updates the display bar when clicked on an element inside iFrame
-  $: {
-    if ($clickedElement) {
-      if (Object.values(displayIdWithValues).includes($clickedElementStyle['display'])) {
-        displayButtonId = 'display-' + $clickedElementStyle?.['display'];
-        showFlexGroup = displayButtonId === 'display-flex';
-        showGridGroup = displayButtonId === 'display-grid';
-      }
-      if (Object.values(alignItemsIdWithValues).includes($clickedElementStyle['align-items'])) {
-        alignItemsButtonId = 'align-items-' + $clickedElementStyle?.['align-items'];
-      }
-      if (Object.values(justifyContentIdWithValues).includes($clickedElementStyle['justify-content'])) {
-        justifyContentButtonId = 'justify-content-' + $clickedElementStyle?.['justify-content'];
-      }
-    }
+  function setAlignCSS(e: CustomEvent) {
+    let clickedButton = e.detail.target as HTMLButtonElement;
+    CSSUtility.writeCSS('align-items', clickedButton.id.replace('align-items-', ''));
+  }
+
+  function setJustifyCSS(e: CustomEvent) {
+    let clickedButton = e.detail.target as HTMLButtonElement;
+    CSSUtility.writeCSS('justify-content', clickedButton.id.replace('justify-content-', ''));
   }
 </script>
 
-<div class="flex flex-col gap-[12px] px-[12px]" on:click={setCSS}>
+<div class="flex flex-col gap-[12px]">
   <ButtonGroup
-    Items={displayIconsArr}
-    ButtonIds={Object.keys(displayIdWithValues)}
+    Items={[
+      { text: '', iconPath: 'Icons/Display/block.svg' },
+      { text: '', iconPath: 'Icons/Display/flex.svg' },
+      { text: '', iconPath: 'Icons/Display/grid.svg' },
+      { text: '', iconPath: 'Icons/Display/inline-block.svg' },
+      { text: '', iconPath: 'Icons/Display/inline.svg' },
+      { text: '', iconPath: 'Icons/Display/none.svg' }
+    ]}
+    ButtonIds={[
+      'display-block',
+      'display-flex',
+      'display-grid',
+      'display-inline-block',
+      'display-inline',
+      'display-none'
+    ]}
     bind:activeButtonId={displayButtonId}
+    on:click={setDisplayCSS}
   />
 
   <div class={showFlexGroup ? 'flex flex-col gap-[12px] visible' : 'hidden'}>
     <ButtonGroup
-      Items={flexAlignIconsArr}
-      ButtonIds={Object.keys(alignItemsIdWithValues)}
+      Items={[
+        { text: '', iconPath: 'Icons/Display/Align/start.svg' },
+        { text: '', iconPath: 'Icons/Display/Align/center.svg' },
+        { text: '', iconPath: 'Icons/Display/Align/end.svg' },
+        { text: '', iconPath: 'Icons/Display/Align/stretch.svg' },
+        { text: '', iconPath: 'Icons/Display/Align/baseline.svg' }
+      ]}
+      ButtonIds={[
+        'align-items-flex-start',
+        'align-items-center',
+        'align-items-flex-end',
+        'align-items-stretch',
+        'align-items-baseline'
+      ]}
       bind:activeButtonId={alignItemsButtonId}
+      on:click={setAlignCSS}
     />
+
     <ButtonGroup
-      Items={flexJustifyIconsArr}
-      ButtonIds={Object.keys(justifyContentIdWithValues)}
+      Items={[
+        { text: '', iconPath: 'Icons/Display/Justify/start.svg' },
+        { text: '', iconPath: 'Icons/Display/Justify/center.svg' },
+        { text: '', iconPath: 'Icons/Display/Justify/end.svg' },
+        { text: '', iconPath: 'Icons/Display/Justify/between.svg' },
+        { text: '', iconPath: 'Icons/Display/Justify/evenly.svg' }
+      ]}
+      ButtonIds={[
+        'justify-content-flex-start',
+        'justify-content-center',
+        'justify-content-flex-end',
+        'justify-content-space-between',
+        'justify-content-space-evenly'
+      ]}
       bind:activeButtonId={justifyContentButtonId}
+      on:click={setJustifyCSS}
     />
   </div>
 

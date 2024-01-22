@@ -4,8 +4,6 @@
   import { clickedElement, clickedElementStyle } from '../../Stores';
   import { CSSUtility } from '$lib/Modules/cssFunctions';
 
-  let cssUtility = new CSSUtility();
-
   let inputFields: { id: any & CSSStyleDeclaration; FieldName: string; value: any & CSSStyleDeclaration }[] =
     [
       { id: 'width', FieldName: 'width', value: $clickedElementStyle?.['width'] },
@@ -50,9 +48,9 @@
     if (targetInput.value === targetInput.oldValue) return;
 
     if (Number(targetInput.value)) {
-      cssUtility.writeCSS(targetInput.id, targetInput.value + 'px');
+      CSSUtility.writeCSS(targetInput.id, targetInput.value + 'px');
     } else if (CSS.supports(targetInput.id, targetInput.value)) {
-      cssUtility.writeCSS(targetInput.id, targetInput.value);
+      CSSUtility.writeCSS(targetInput.id, targetInput.value);
     } else {
       targetInput.value = targetInput.oldValue;
     }
@@ -60,11 +58,11 @@
 
   function applyOverflowCSS(e: CustomEvent) {
     let targetButton = e.detail.target as HTMLButtonElement;
-    cssUtility.writeCSS('overflow', targetButton.textContent!);
+    CSSUtility.writeCSS('overflow', targetButton.textContent!);
   }
 </script>
 
-<div class="flex flex-col gap-[10px] text-[10px] px-[12px] tracking-wide text-[#b8b6b6]">
+<div class="flex flex-col gap-[10px] text-[10px] tracking-wide text-[#b8b6b6]">
   <div class="grid grid-cols-2 gap-[10px]">
     {#each inputFields as { id, FieldName, value }}
       <MiniInputBar

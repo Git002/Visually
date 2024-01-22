@@ -4,6 +4,7 @@
   import Display from '$lib/PropertyComponents/Display.svelte';
   import Spacing from '$lib/PropertyComponents/Spacing.svelte';
   import Sizing from '$lib/PropertyComponents/Sizing.svelte';
+  import Typography from '$lib/PropertyComponents/Typography.svelte';
 </script>
 
 <div class="flex flex-col select-none max-h-[94vh]">
@@ -28,6 +29,9 @@
     </Accordion>
     <Accordion ItemName="Sizing">
       <Sizing />
+    </Accordion>
+    <Accordion ItemName="Typography">
+      <Typography />
     </Accordion>
   </div>
 </div>

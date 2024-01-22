@@ -33,11 +33,9 @@
   />
 </div>
 
-{#if Expand}
-  <div class="pt-[14px]">
-    <slot />
-  </div>
-{/if}
+<div class={Expand ? 'pt-[14px] px-[12px]' : 'hidden'}>
+  <slot />
+</div>
 
 {#if Border}
   <div class="border-t border-[#252527] mt-[14px] w-full" />

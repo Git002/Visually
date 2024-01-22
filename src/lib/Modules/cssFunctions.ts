@@ -131,6 +131,16 @@ export function processStyles(element: HTMLElement) {
 
   if (!style.paddingBottom) setStyleForUnitProperty('padding-bottom', '0');
 
+  // Typography properties ------->
+  if (!style.fontStyle) style['font-style'] = computedStyle.fontStyle;
+
+  // Support for languages like Arabic that starts from RTL will be added later
+  if (!style.textAlign) {
+    if (computedStyle.textAlign === 'start') style['text-align'] = 'left';
+    else if (computedStyle.textAlign === 'end') style['text-align'] = 'right';
+    else style['text-align'] = computedStyle.textAlign;
+  }
+
   clickedElementStyle.update(() => style);
 }
 
@@ -143,7 +153,7 @@ function getSelector(element: HTMLElement): string {
   return selector;
 }
 
-export class CSSUtility {
+class cssUtility {
   private element: HTMLElement = get(clickedElement);
   private iFrameDoc: Document = get(iFrameDocument);
   private CSSActionClass: string = get(currentCSSActionClass);
@@ -172,10 +182,13 @@ export class CSSUtility {
       this.element.classList.add(this.CSSActionClass);
     }
 
+    // write rules to stylesheet
     let styleTag = this.iFrameDoc.getElementById('visually-default-stylesheet') as HTMLStyleElement;
     let styleSheet = styleTag.sheet as CSSStyleSheet;
 
     styleSheet.insertRule(getSelector(this.element) + `{${property}: ${value}}`, styleSheet.cssRules.length);
+
+    console.log(styleSheet.cssRules);
 
     get(clickedElement).click();
   }
@@ -203,3 +216,5 @@ export class CSSUtility {
     return newClassName;
   }
 }
+
+export const CSSUtility = new cssUtility();
