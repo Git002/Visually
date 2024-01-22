@@ -4,6 +4,8 @@
 
 Visually is a drag and drop website builder built in Svelte that generates clean code, giving everyone the freedom to host their project anywhere and is easier to use. The project is still in its very early developmental stage.
 
+> **Note:** This has only been tested with Chrome so far. It should work with Firefox too but won't be working with Safari or any other WebKit based browsers as of now. Will work on that later...
+
 ![This is how it looks](https://i.ibb.co/Lnb0BdW/Screenshot-from-2023-12-23-11-25-15.png)
 
 ### To run this project:
