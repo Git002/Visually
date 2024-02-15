@@ -14,13 +14,13 @@
   // updates the display bar when clicked on the element inside iFrame
   $: {
     if ($clickedElement) {
-      displayButtonId = 'display-' + $clickedElementStyle?.['display'];
+      displayButtonId = 'display-' + $clickedElementStyle.display;
       // toggle Flex & Grid button groups based on display values
       showFlexGroup = displayButtonId === 'display-flex';
       showGridGroup = displayButtonId === 'display-grid';
 
-      alignItemsButtonId = 'align-items-' + $clickedElementStyle?.['align-items'];
-      justifyContentButtonId = 'justify-content-' + $clickedElementStyle?.['justify-content'];
+      alignItemsButtonId = 'align-items-' + $clickedElementStyle.alignItems;
+      justifyContentButtonId = 'justify-content-' + $clickedElementStyle.justifyContent;
     }
   }
 

@@ -68,7 +68,9 @@ export function processStyles(element: HTMLElement) {
     'padding-top',
     'padding-left',
     'padding-right',
-    'padding-bottom'
+    'padding-bottom',
+    'font-size',
+    'line-height'
   ]);
 
   // Display properties ------->
@@ -76,70 +78,77 @@ export function processStyles(element: HTMLElement) {
 
   if (!style.alignItems) {
     let alignItemsValue = computedStyle.alignItems;
-    style['align-items'] = alignItemsValue === 'normal' ? 'stretch' : alignItemsValue;
+    style.alignItems = alignItemsValue === 'normal' ? 'stretch' : alignItemsValue;
   }
 
   if (!style.justifyContent) {
     let justifyContent = computedStyle.justifyContent;
-    style['justify-content'] = justifyContent === 'normal' ? 'flex-start' : justifyContent;
+    style.justifyContent = justifyContent === 'normal' ? 'flex-start' : justifyContent;
   }
 
-  /**
-   * Retrieve values from userSetStyles and remove its px value. If value is not there then set the default value.
-   * For example: setStyleForUnitProperty('width', 'Auto')
-   * @param property
-   * @param defaultValue
-   */
-  function setStyleForUnitProperty(property: string, defaultValue: string) {
+  function removePxUnit(property: string, defaultValue: string) {
     let CSSValue: string = userSetStyles[property];
 
     if (CSSValue) CSSValue = CSSValue.endsWith('px') ? CSSValue.replace('px', '') : CSSValue;
     else CSSValue = defaultValue;
 
-    style[property] = CSSValue;
+    return CSSValue;
   }
 
   // Sizing properties ------->
-  if (!style.width) setStyleForUnitProperty('width', 'Auto');
+  if (!style.width) style.width = removePxUnit('width', 'Auto');
 
-  if (!style.height) setStyleForUnitProperty('height', 'Auto');
+  if (!style.height) style.height = removePxUnit('height', 'Auto');
 
-  if (!style.maxWidth) setStyleForUnitProperty('max-width', 'None');
+  if (!style.maxWidth) style.maxWidth = removePxUnit('max-width', 'None');
 
-  if (!style.maxHeight) setStyleForUnitProperty('max-height', 'None');
+  if (!style.maxHeight) style.maxHeight = removePxUnit('max-height', 'None');
 
-  if (!style.minWidth) setStyleForUnitProperty('min-width', '0');
+  if (!style.minWidth) style.minWidth = removePxUnit('min-width', '0');
 
-  if (!style.minHeight) setStyleForUnitProperty('min-height', '0');
+  if (!style.minHeight) style.minHeight = removePxUnit('min-height', '0');
 
   if (!style.overflow) style.overflow = computedStyle.overflow;
 
   // Spacing properties ------->
-  if (!style.marginTop) setStyleForUnitProperty('margin-top', '0');
+  if (!style.marginTop) style.marginTop = removePxUnit('margin-top', '0');
 
-  if (!style.marginLeft) setStyleForUnitProperty('margin-left', '0');
+  if (!style.marginLeft) style.marginLeft = removePxUnit('margin-left', '0');
 
-  if (!style.marginRight) setStyleForUnitProperty('margin-right', '0');
+  if (!style.marginRight) style.marginRight = removePxUnit('margin-right', '0');
 
-  if (!style.marginBottom) setStyleForUnitProperty('margin-bottom', '0');
+  if (!style.marginBottom) style.marginBottom = removePxUnit('margin-bottom', '0');
 
-  if (!style.paddingTop) setStyleForUnitProperty('padding-top', '0');
+  if (!style.paddingTop) style.paddingTop = removePxUnit('padding-top', '0');
 
-  if (!style.paddingLeft) setStyleForUnitProperty('padding-left', '0');
+  if (!style.paddingLeft) style.paddingLeft = removePxUnit('padding-left', '0');
 
-  if (!style.paddingRight) setStyleForUnitProperty('padding-right', '0');
+  if (!style.paddingRight) style.paddingRight = removePxUnit('padding-right', '0');
 
-  if (!style.paddingBottom) setStyleForUnitProperty('padding-bottom', '0');
+  if (!style.paddingBottom) style.paddingBottom = removePxUnit('padding-bottom', '0');
 
   // Typography properties ------->
-  if (!style.fontStyle) style['font-style'] = computedStyle.fontStyle;
+  if (!style.fontStyle) style.fontStyle = computedStyle.fontStyle;
 
-  // Support for languages like Arabic that starts from RTL will be added later
   if (!style.textAlign) {
-    if (computedStyle.textAlign === 'start') style['text-align'] = 'left';
-    else if (computedStyle.textAlign === 'end') style['text-align'] = 'right';
-    else style['text-align'] = computedStyle.textAlign;
+    // Proper support for languages that starts from RTL will be added later
+    if (computedStyle.textAlign === 'start') style.textAlign = 'left';
+    else if (computedStyle.textAlign === 'end') style.textAlign = 'right';
+    else style.textAlign = computedStyle.textAlign;
   }
+
+  if (!style.fontSize) style.fontSize = removePxUnit('font-size', computedStyle.fontSize.replace('px', ''));
+
+  if (!style.lineHeight) style.lineHeight = removePxUnit('line-height', computedStyle.lineHeight);
+
+  if (!style.textDecoration) style.textDecoration = computedStyle.textDecoration.split(' ')[0];
+
+  style.fontWeight = computedStyle.fontWeight;
+
+  style.fontFamily = computedStyle.fontFamily.replace(/['"]/g, '').split(',')[0].trim();
+
+  // attach computedStyle too, maybe, just maybe if in case...
+  style.computedStyle = computedStyle as CSSStyleDeclaration;
 
   clickedElementStyle.update(() => style);
 }

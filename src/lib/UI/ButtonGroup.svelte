@@ -6,6 +6,7 @@
   export let ButtonIds: string[];
   export let activeButtonId: string = ButtonIds[0];
   export let deactiveButtonIds: string[] = [''];
+  export let flexGrow: boolean = false;
 
   const dispatch = createEventDispatcher();
 
@@ -26,7 +27,8 @@
 </script>
 
 <div
-  class="flex justify-between rounded-[6px] bg-[#404040] border-2 border-[#505050] text-[12px] font-sans font-bold tracking-widest h-[34px]"
+  class="flex justify-between rounded-[6px] bg-[#404040] border-2 border-[#505050] text-[12px] font-sans font-bold tracking-widest h-[34px] shrink-0"
+  style={flexGrow ? 'flex-grow: 1;' : ''}
   on:click={(e) => {
     changeButtonColor(e);
   }}

@@ -5,7 +5,6 @@
   import TagInputBar, { tagifyInstance, tagifyInput } from '../UI/TagInputBar.svelte';
   import { clickedElement, currentCSSActionClass } from '../../Stores';
 
-  let prevElementClass: string;
   // update the values of each input on click
   $: {
     if ($clickedElement) {

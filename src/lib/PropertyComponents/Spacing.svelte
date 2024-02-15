@@ -39,7 +39,7 @@
     <Input
       id="margin-top"
       Class="mt-[2px] text-center"
-      value={$clickedElementStyle?.['margin-top']}
+      value={$clickedElementStyle?.marginTop}
       on:blur={applyCSS}
       on:arrowUpDown={incrementDecrementValue}
     />
@@ -47,7 +47,7 @@
   <Input
     id="margin-left"
     Class="mt-[6px] text-center"
-    value={$clickedElementStyle?.['margin-left']}
+    value={$clickedElementStyle?.marginLeft}
     on:blur={applyCSS}
     on:arrowUpDown={incrementDecrementValue}
   />
@@ -63,7 +63,7 @@
       <Input
         id="padding-top"
         Class="mt-[6px] text-center"
-        value={$clickedElementStyle?.['padding-top']}
+        value={$clickedElementStyle?.paddingTop}
         on:blur={applyCSS}
         on:arrowUpDown={incrementDecrementValue}
       />
@@ -72,7 +72,7 @@
       <Input
         id="padding-left"
         Class="text-center"
-        value={$clickedElementStyle?.['padding-left']}
+        value={$clickedElementStyle?.paddingLeft}
         on:blur={applyCSS}
         on:arrowUpDown={incrementDecrementValue}
       />
@@ -87,7 +87,7 @@
       <Input
         id="padding-right"
         Class="text-center"
-        value={$clickedElementStyle?.['padding-right']}
+        value={$clickedElementStyle?.paddingRight}
         on:blur={applyCSS}
         on:arrowUpDown={incrementDecrementValue}
       />
@@ -96,7 +96,7 @@
       <Input
         id="padding-bottom"
         Class="text-center"
-        value={$clickedElementStyle?.['padding-bottom']}
+        value={$clickedElementStyle?.paddingBottom}
         on:blur={applyCSS}
         on:arrowUpDown={incrementDecrementValue}
       />
@@ -107,7 +107,7 @@
     <Input
       id="margin-right"
       Class="mt-[6px] text-center"
-      value={$clickedElementStyle?.['margin-right']}
+      value={$clickedElementStyle?.marginRight}
       on:blur={applyCSS}
       on:arrowUpDown={incrementDecrementValue}
     />
@@ -118,7 +118,7 @@
     <Input
       id="margin-bottom"
       Class="my-[2px] text-center"
-      value={$clickedElementStyle?.['margin-bottom']}
+      value={$clickedElementStyle?.marginBottom}
       on:blur={applyCSS}
       on:arrowUpDown={incrementDecrementValue}
     />
