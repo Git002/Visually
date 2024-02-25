@@ -6,9 +6,6 @@
 
   let dropdownOpen = false;
 
-  DropdownBtnText = DropdownBtnText.toLowerCase();
-  ItemsArray = ItemsArray.map((item) => item.toLowerCase());
-
   const dispatch = createEventDispatcher();
 
   function customFunction(e: Event) {
@@ -77,7 +74,7 @@
   >
     {#each ItemsArray as item (item)}
       <div class="px-[6px] py-[3px]">
-        {#if item === DropdownBtnText}
+        {#if item.toLowerCase() === DropdownBtnText.toLowerCase()}
           <button
             class="inline-flex w-full justify-between bg-[#cf672b] text-[#ebebeb] text-left capitalize px-[12px] py-[6px] rounded-[6px] cursor-default"
           >
