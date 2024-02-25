@@ -2,6 +2,7 @@
   import ButtonGroup from '../UI/ButtonGroup.svelte';
   import Dropdown from '$lib/UI/Dropdown.svelte';
   import MiniInputBar from '$lib/UI/MiniInputBar.svelte';
+  import InputBar from '$lib/UI/InputBar.svelte';
   import { CSSUtility } from '$lib/Modules/cssFunctions';
   import { clickedElementStyle } from '../../Stores';
 
@@ -56,6 +57,10 @@
     const clickedBtn = e.detail.target as HTMLButtonElement;
     CSSUtility.writeCSS('text-decoration', clickedBtn.id.replace('text-decoration-', ''));
   }
+
+  function setTextColor(e: CustomEvent) {
+    CSSUtility.writeCSS('color', e.detail.target.value);
+  }
 </script>
 
 <div class="flex flex-col gap-[10px] text-[#b8b6b6] text-[10px]">
@@ -80,23 +85,28 @@
   />
 
   <!-- Font weight -->
-  <div class="flex justify-between gap-[10px]">
-    <Dropdown
-      DropdownBtnText={fontWeightToValueDictionary[$clickedElementStyle?.fontWeight]}
-      ItemsArray={[
-        '100 - Thin',
-        '200 - Extra Light',
-        '300 - Light',
-        '400 - Regular',
-        '500 - Medium',
-        '600 - Semibold',
-        '700 - Bold',
-        '800 - Extra Bold',
-        '900 - Black'
-      ]}
-      on:click={setFontWeight}
-    />
-  </div>
+  <Dropdown
+    DropdownBtnText={fontWeightToValueDictionary[$clickedElementStyle?.fontWeight]}
+    ItemsArray={[
+      '100 - Thin',
+      '200 - Extra Light',
+      '300 - Light',
+      '400 - Regular',
+      '500 - Medium',
+      '600 - Semibold',
+      '700 - Bold',
+      '800 - Extra Bold',
+      '900 - Black'
+    ]}
+    on:click={setFontWeight}
+  />
+
+  <InputBar
+    value={$clickedElementStyle?.color ?? '#000000'}
+    type="color"
+    on:input={setTextColor}
+    on:blur={setTextColor}
+  />
 
   <!-- Font size + height -->
   <div class="grid grid-cols-2 gap-[10px]">
@@ -126,6 +136,7 @@
       on:click={setFontStyle}
     />
 
+    <!-- Text Decoration -->
     <ButtonGroup
       Items={[
         { text: '', iconPath: 'Icons/Typography/text-decoration-none.svg' },

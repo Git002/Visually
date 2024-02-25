@@ -5,7 +5,7 @@
   import TagInputBar, { tagifyInstance, tagifyInput } from '../UI/TagInputBar.svelte';
   import { clickedElement, currentCSSActionClass } from '../../Stores';
 
-  // update the values of each input on click
+  // update the values of tagged input on click
   $: {
     if ($clickedElement) {
       // for class input --->
@@ -22,10 +22,6 @@
           tagifyInput.setAttribute('data-placeholder', 'Add a class');
         }
       }
-
-      // for ID input --->
-      let idInput = <HTMLInputElement>document.getElementById('id-input');
-      if (idInput) idInput.value = $clickedElement.id;
     }
   }
 
@@ -43,8 +39,8 @@
     if ($clickedElement) $clickedElement.id = idInput.value;
   }
 
-  function toggleClassIdButton(e: Event) {
-    let clickedBtn = e.target as HTMLButtonElement;
+  function toggleClassIdButton(e: CustomEvent) {
+    let clickedBtn = e.detail.target as HTMLButtonElement;
 
     let tagifyClassInput = <HTMLInputElement>document.getElementById('class-input');
     let idInput = <HTMLInputElement>document.getElementById('id-input');
@@ -94,5 +90,11 @@
 
   <TagInputBar on:add={addClass} on:remove={removeClass} placeholder={'Add a class'} id={'class-input'} />
 
-  <InputBar on:blur={addId} id={'id-input'} placeholder={'Add an ID'} Class={'hidden'} />
+  <InputBar
+    id={'id-input'}
+    placeholder={'Add an ID'}
+    value={$clickedElement?.id}
+    Class={'hidden'}
+    on:blur={addId}
+  />
 </div>

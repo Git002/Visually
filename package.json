@@ -32,6 +32,7 @@
 		"@lottiefiles/lottie-player": "^1.7.1",
 		"@yaireo/tagify": "^4.17.9",
 		"classnames": "^2.3.2",
+		"rgb-hex": "^4.1.0",
 		"specificity": "^1.0.0"
 	}
 }

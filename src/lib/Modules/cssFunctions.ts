@@ -2,6 +2,7 @@ import { clickedElement, clickedElementStyle, iFrameDocument, currentCSSActionCl
 import { get } from 'svelte/store';
 import { random } from './helperFunctions';
 import { calculate, compare } from 'specificity';
+import rgbHex from 'rgb-hex';
 
 function findHighestSpecificity(obj: Object) {
   const specificityResults = Object.keys(obj).map((selector) => {
@@ -51,6 +52,7 @@ function getUserSetStyles(element: HTMLElement, props: string[]): { [key: string
   return styles;
 }
 
+// I am still thinking about doing this function and getUserSetStyles() right. Might have drastic changes in its working in future. But for now, let it be...
 export function processStyles(element: HTMLElement) {
   let style: { [key: string]: any } & CSSStyleDeclaration = { ...element.style };
   let computedStyle = getComputedStyle(element);
@@ -139,13 +141,17 @@ export function processStyles(element: HTMLElement) {
 
   if (!style.fontSize) style.fontSize = removePxUnit('font-size', computedStyle.fontSize.replace('px', ''));
 
-  if (!style.lineHeight) style.lineHeight = removePxUnit('line-height', computedStyle.lineHeight);
+  style.lineHeight = removePxUnit('line-height', computedStyle.lineHeight);
 
-  if (!style.textDecoration) style.textDecoration = computedStyle.textDecoration.split(' ')[0];
+  style.textDecoration = computedStyle.textDecoration.split(' ')[0];
 
   style.fontWeight = computedStyle.fontWeight;
 
   style.fontFamily = computedStyle.fontFamily.replace(/['"]/g, '').split(',')[0].trim();
+
+  style.color = '#' + rgbHex(computedStyle.color);
+
+  style.backgroundColor = '#' + rgbHex(computedStyle.backgroundColor);
 
   // attach computedStyle too, maybe, just maybe if in case...
   style.computedStyle = computedStyle as CSSStyleDeclaration;
@@ -197,7 +203,7 @@ class cssUtility {
 
     styleSheet.insertRule(getSelector(this.element) + `{${property}: ${value}}`, styleSheet.cssRules.length);
 
-    console.log(styleSheet.cssRules);
+    // console.log(styleSheet.cssRules);
 
     get(clickedElement).click();
   }
