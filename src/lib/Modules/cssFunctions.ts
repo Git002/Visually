@@ -52,7 +52,7 @@ function getUserSetStyles(element: HTMLElement, props: string[]): { [key: string
   return styles;
 }
 
-// I am still thinking about doing this function and getUserSetStyles() right. Might have drastic changes in its working in future. But for now, let it be...
+// I am still thinking about doing this function with getUserSetStyles() right. Might have drastic changes in its working in future. But for now, let it be...
 export function processStyles(element: HTMLElement) {
   let style: { [key: string]: any } & CSSStyleDeclaration = { ...element.style };
   let computedStyle = getComputedStyle(element);
@@ -152,6 +152,10 @@ export function processStyles(element: HTMLElement) {
   style.color = '#' + rgbHex(computedStyle.color);
 
   style.backgroundColor = '#' + rgbHex(computedStyle.backgroundColor);
+
+  style.direction = computedStyle.direction;
+
+  style.textTransform = computedStyle.textTransform;
 
   // attach computedStyle too, maybe, just maybe if in case...
   style.computedStyle = computedStyle as CSSStyleDeclaration;

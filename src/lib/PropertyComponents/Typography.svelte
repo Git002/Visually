@@ -4,7 +4,7 @@
   import MiniInputBar from '$lib/UI/MiniInputBar.svelte';
   import InputBar from '$lib/UI/InputBar.svelte';
   import { CSSUtility } from '$lib/Modules/cssFunctions';
-  import { clickedElementStyle } from '../../Stores';
+  import { clickedElement, clickedElementStyle } from '../../Stores';
 
   function setTextAlignment(e: CustomEvent) {
     const clickedBtn = e.detail.target as HTMLButtonElement;
@@ -61,6 +61,16 @@
   function setTextColor(e: CustomEvent) {
     CSSUtility.writeCSS('color', e.detail.target.value);
   }
+
+  function setTextDirection(e: CustomEvent) {
+    const clickedBtn = e.detail.target as HTMLButtonElement;
+    $clickedElement.setAttribute('dir', clickedBtn.id.replace('text-direction-', ''));
+  }
+
+  function setTextTransform(e: CustomEvent) {
+    const clickedBtn = e.detail.target as HTMLButtonElement;
+    CSSUtility.writeCSS('text-transform', clickedBtn.id.replace('text-transform-', ''));
+  }
 </script>
 
 <div class="flex flex-col gap-[10px] text-[#b8b6b6] text-[10px]">
@@ -101,6 +111,7 @@
     on:click={setFontWeight}
   />
 
+  <!-- Font Color -->
   <InputBar
     value={$clickedElementStyle?.color ?? '#000000'}
     type="color"
@@ -108,7 +119,7 @@
     on:blur={setTextColor}
   />
 
-  <!-- Font size + height -->
+  <!-- Font Size + Height -->
   <div class="grid grid-cols-2 gap-[10px]">
     <MiniInputBar
       id={'font-size'}
@@ -124,7 +135,7 @@
     />
   </div>
 
-  <!-- Font style -->
+  <!-- Font Style + Text Decoration -->
   <div class="flex justify-between gap-[10px]">
     <ButtonGroup
       Items={[
@@ -136,7 +147,6 @@
       on:click={setFontStyle}
     />
 
-    <!-- Text Decoration -->
     <ButtonGroup
       Items={[
         { text: '', iconPath: 'Icons/Typography/text-decoration-none.svg' },
@@ -154,6 +164,37 @@
       flexGrow={true}
       activeButtonId={'text-decoration-' + $clickedElementStyle?.textDecoration}
       on:click={setTextDecoration}
+    />
+  </div>
+
+  <!-- Text Direction + Transform -->
+  <div class="flex flex-row-reverse justify-between gap-[10px]">
+    <ButtonGroup
+      Items={[
+        { text: '', iconPath: 'Icons/Typography/text-direction-left.svg' },
+        { text: '', iconPath: 'Icons/Typography/text-direction-right.svg' }
+      ]}
+      ButtonIds={['text-direction-ltr', 'text-direction-rtl']}
+      activeButtonId={'text-direction-' + $clickedElementStyle.direction}
+      on:click={setTextDirection}
+    />
+
+    <ButtonGroup
+      Items={[
+        { text: '', iconPath: 'Icons/Typography/text-decoration-none.svg' },
+        { text: 'AA', iconPath: '' },
+        { text: 'Aa', iconPath: '' },
+        { text: 'aa', iconPath: '' }
+      ]}
+      ButtonIds={[
+        'text-transform-none',
+        'text-transform-uppercase',
+        'text-transform-capitalize',
+        'text-transform-lowercase'
+      ]}
+      IconSize={13}
+      activeButtonId={'text-transform-' + $clickedElementStyle.textTransform}
+      on:click={setTextTransform}
     />
   </div>
 </div>
