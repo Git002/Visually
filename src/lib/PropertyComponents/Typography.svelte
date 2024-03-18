@@ -175,7 +175,7 @@
         { text: '', iconPath: 'Icons/Typography/text-direction-right.svg' }
       ]}
       ButtonIds={['text-direction-ltr', 'text-direction-rtl']}
-      activeButtonId={'text-direction-' + $clickedElementStyle.direction}
+      activeButtonId={'text-direction-' + $clickedElementStyle?.direction}
       on:click={setTextDirection}
     />
 
@@ -193,7 +193,7 @@
         'text-transform-lowercase'
       ]}
       IconSize={13}
-      activeButtonId={'text-transform-' + $clickedElementStyle.textTransform}
+      activeButtonId={'text-transform-' + $clickedElementStyle?.textTransform}
       on:click={setTextTransform}
     />
   </div>
