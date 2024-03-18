@@ -209,7 +209,7 @@
 
 <div
   id="navigator-tree-view"
-  class="flex-col text-[#B8B6B6] text-[12px] cursor-pointer w-full font-bold text-center tracking-wide focus:outline-none"
+  class="flex-col text-[#B8B6B6] text-[12px] cursor-pointer w-full font-semibold text-center tracking-wide focus:outline-none"
   tabindex="-1"
 >
   {#if $iFrameDocument}

@@ -59,7 +59,7 @@
   </div>
 
   <div class="grid grid-cols-4 items-center gap-[30px]">
-    <div class="text-[12px] font-bold">Overflow</div>
+    <div class="text-[12px] font-semibold">Overflow</div>
     <div class="col-span-3">
       <Dropdown
         DropdownBtnText={$clickedElementStyle?.overflow}

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import '../app.css';
+  import '../app.postcss';
   import Loader from '../routes/Loader.svelte';
   import Header from '../routes/Header.svelte';
   import Sidebar from '../routes/Sidebar.svelte';

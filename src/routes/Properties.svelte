@@ -5,18 +5,19 @@
   import Spacing from '$lib/PropertyComponents/Spacing.svelte';
   import Sizing from '$lib/PropertyComponents/Sizing.svelte';
   import Typography from '$lib/PropertyComponents/Typography.svelte';
+  import Border from '$lib/PropertyComponents/Border.svelte';
 </script>
 
 <div class="flex flex-col select-none max-h-[94vh]">
   <div
-    class="flex items-center bg-[#292a2c] px-[12px] py-[5px] font-sans text-[10px] font-bold tracking-wider text-[#b7b4b4]"
+    class="flex items-center bg-[#292a2c] px-[12px] py-[5px] font-sans text-[10px] font-semibold tracking-wider text-[#b7b4b4]"
   >
     SELECTOR
   </div>
   <Selector />
 
   <div
-    class="flex items-center bg-[#292a2c] px-[12px] py-[5px] font-sans text-[10px] font-bold tracking-wider text-[#b7b4b4]"
+    class="flex items-center bg-[#292a2c] px-[12px] py-[5px] font-sans text-[10px] font-semibold tracking-wider text-[#b7b4b4]"
   >
     PROPERTIES
   </div>
@@ -32,6 +33,9 @@
     </Accordion>
     <Accordion ItemName="Typography">
       <Typography />
+    </Accordion>
+    <Accordion ItemName="Border">
+      <Border />
     </Accordion>
   </div>
 </div>

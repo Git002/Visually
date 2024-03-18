@@ -45,7 +45,7 @@
 >
   <input
     {id}
-    class="w-full text-[11px] bg-[#404040] rounded-[2px] focus:outline-none focus:ring-2 font-bold focus:ring-[#505050] tracking-wide capitalize text-[#b8b6b6]"
+    class="w-full text-[11px] bg-[#404040] rounded-[2px] focus:outline-none focus:ring-2 font-semibold focus:ring-[#505050] tracking-wide capitalize text-[#b8b6b6]"
     {value}
     autocomplete="off"
     spellcheck="false"
@@ -59,5 +59,9 @@
       if (e.key === 'Enter') customFunction(e);
     }}
   />
-  <div class="flex w-full justify-end items-end tracking-wide font-bold uppercase">{FieldName}</div>
+  <div
+    class="flex w-full justify-end items-end tracking-wider font-bold text-[9px] text-[#b8b8b6]/80 uppercase"
+  >
+    {FieldName}
+  </div>
 </div>

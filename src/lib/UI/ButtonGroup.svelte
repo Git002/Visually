@@ -27,7 +27,7 @@
 </script>
 
 <div
-  class="flex justify-between rounded-[6px] bg-[#404040] border-2 border-[#505050] text-[12px] font-sans font-bold tracking-widest h-[34px] shrink-0"
+  class="flex justify-between rounded-[6px] bg-[#404040] border-2 border-[#505050] text-[12px] font-semibold tracking-widest h-[34px] shrink-0"
   style={flexGrow ? 'flex-grow: 1;' : ''}
   on:click={(e) => {
     changeButtonColor(e);
