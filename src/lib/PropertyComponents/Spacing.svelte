@@ -31,7 +31,7 @@
 <div
   class="grid grid-cols-4 rounded-[6px] bg-[#404040] text-[12px] px-[8px] py-[8px] border-2 border-[#505050] text-[#b8b6b6] text-center items-center w-full gap-[8px] relative"
 >
-  <div class="absolute top-[4px] left-[6px] text-[8px] tracking-wider font-semibold text-[#9a9898] italic">
+  <div class="absolute top-[4px] left-[6px] text-[8px] tracking-wider font-semibold text-[#9a9898]">
     MARGIN
   </div>
 
@@ -55,7 +55,7 @@
   <div
     class="grid grid-cols-3 col-span-4 rounded-[6px] border-[3px] border-[#2e2f31] px-[4px] py-[10px] gap-y-[8px] relative"
   >
-    <div class="absolute top-[4px] left-[6px] text-[8px] tracking-wider font-semibold text-[#9a9898] italic">
+    <div class="absolute top-[4px] left-[6px] text-[8px] tracking-wider font-semibold text-[#9a9898]">
       PADDING
     </div>
 
