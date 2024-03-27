@@ -142,23 +142,23 @@ export function processStyles(element: HTMLElement) {
   if (!style.fontSize) style.fontSize = removePxUnit('font-size', computedStyle.fontSize.replace('px', ''));
 
   style.lineHeight = removePxUnit('line-height', computedStyle.lineHeight);
-
   style.textDecoration = computedStyle.textDecoration.split(' ')[0];
-
   style.fontWeight = computedStyle.fontWeight;
-
   style.fontFamily = computedStyle.fontFamily.replace(/['"]/g, '').split(',')[0].trim();
 
   style.color = '#' + rgbHex(computedStyle.color);
-
   style.backgroundColor = '#' + rgbHex(computedStyle.backgroundColor);
 
   style.direction = computedStyle.direction;
-
   style.textTransform = computedStyle.textTransform;
 
-  // attach computedStyle too, maybe, just maybe if in case...
-  style.computedStyle = computedStyle as CSSStyleDeclaration;
+  if (computedStyle.borderRadius.split(' ').length > 1) style.borderRadius = '';
+  else style.borderRadius = computedStyle.borderRadius.replace('px', '');
+
+  style.borderTopLeftRadius = computedStyle.borderTopLeftRadius.replace('px', '');
+  style.borderTopRightRadius = computedStyle.borderTopRightRadius.replace('px', '');
+  style.borderBottomLeftRadius = computedStyle.borderBottomLeftRadius.replace('px', '');
+  style.borderBottomRightRadius = computedStyle.borderBottomRightRadius.replace('px', '');
 
   clickedElementStyle.update(() => style);
 }

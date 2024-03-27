@@ -37,7 +37,7 @@
     <button
       type="button"
       id={ButtonIds[i]}
-      class="py-[6px] px-[10px] rounded-[5px] text-[#b8b6b6]"
+      class="px-[10px] rounded-[5px] text-[#b8b6b6]"
       style={activeButtonId === ButtonIds[i]
         ? 'background-color: #2e2f31; pointer-events: none'
         : deactiveButtonIds.includes(ButtonIds[i])

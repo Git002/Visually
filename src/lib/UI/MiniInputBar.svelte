@@ -3,6 +3,10 @@
   import { clickedElementStyle } from '../../Stores';
 
   export let FieldName: string = 'Input';
+  export let Icon: string = '';
+  export let IconSize: number = 10;
+  export let rotateIcon: number = 0;
+  export let rowReverse: boolean = false;
   export let value: string = 'Default';
   export let id: string = '';
 
@@ -38,14 +42,21 @@
       input.value = String(inputValue - 1);
     }
   }
+
+  function focusOnInput(e: Event) {
+    (e.target as HTMLDivElement).querySelector('input')?.focus();
+  }
 </script>
 
 <div
   class="flex justify-between rounded-[6px] bg-[#404040] p-[8px] gap-[10px] border-2 border-[#505050] h-[34px]"
+  style={rowReverse ? 'flex-direction: row-reverse' : ''}
+  on:click={(e) => focusOnInput(e)}
 >
   <input
     {id}
-    class="w-full text-[11px] bg-[#404040] rounded-[2px] focus:outline-none focus:ring-2 font-semibold focus:ring-[#505050] tracking-wide capitalize text-[#b8b6b6]"
+    class="w-[42px] text-[11px] bg-[#404040] rounded-[2px] focus:outline-none focus:ring-2 font-semibold focus:ring-[#505050] tracking-wide capitalize text-[#b8b6b6]"
+    style={rowReverse ? 'text-align: right' : ''}
     {value}
     autocomplete="off"
     spellcheck="false"
@@ -59,9 +70,19 @@
       if (e.key === 'Enter') customFunction(e);
     }}
   />
-  <div
-    class="flex w-full justify-end items-end tracking-wider font-bold text-[9px] text-[#b8b8b6]/80 uppercase"
-  >
-    {FieldName}
-  </div>
+  {#if Icon}
+    <img
+      src={Icon}
+      alt=""
+      width={IconSize}
+      height={IconSize}
+      style="transform: rotate({rotateIcon}deg); pointer-events: none;"
+    />
+  {:else}
+    <div
+      class="flex w-full justify-end items-end tracking-wider font-bold text-[9px] text-[#b8b8b6]/80 uppercase pointer-events-none"
+    >
+      {FieldName}
+    </div>
+  {/if}
 </div>

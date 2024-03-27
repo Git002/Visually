@@ -53,19 +53,19 @@
     CSSUtility.writeCSS('font-style', clickedBtn.id.replace('font-style-', ''));
   }
 
-  function setTextDecoration(e: CustomEvent) {
-    const clickedBtn = e.detail.target as HTMLButtonElement;
-    CSSUtility.writeCSS('text-decoration', clickedBtn.id.replace('text-decoration-', ''));
-  }
-
   function setTextColor(e: CustomEvent) {
     CSSUtility.writeCSS('color', e.detail.target.value);
   }
 
-  function setTextDirection(e: CustomEvent) {
-    const clickedBtn = e.detail.target as HTMLButtonElement;
-    $clickedElement.setAttribute('dir', clickedBtn.id.replace('text-direction-', ''));
-  }
+  //   function setTextDecoration(e: CustomEvent) {
+  //     const clickedBtn = e.detail.target as HTMLButtonElement;
+  //     CSSUtility.writeCSS('text-decoration', clickedBtn.id.replace('text-decoration-', ''));
+  //   }
+
+  //   function setTextDirection(e: CustomEvent) {
+  //     const clickedBtn = e.detail.target as HTMLButtonElement;
+  //     $clickedElement.setAttribute('dir', clickedBtn.id.replace('text-direction-', ''));
+  //   }
 
   function setTextTransform(e: CustomEvent) {
     const clickedBtn = e.detail.target as HTMLButtonElement;
@@ -135,7 +135,7 @@
     />
   </div>
 
-  <!-- Font Style + Text Decoration -->
+  <!-- Font Style + Text Transform -->
   <div class="flex justify-between gap-[10px]">
     <ButtonGroup
       Items={[
@@ -145,38 +145,6 @@
       ButtonIds={['font-style-normal', 'font-style-italic']}
       activeButtonId={'font-style-' + $clickedElementStyle?.fontStyle}
       on:click={setFontStyle}
-    />
-
-    <ButtonGroup
-      Items={[
-        { text: '', iconPath: 'Icons/Typography/text-decoration-none.svg' },
-        { text: '', iconPath: 'Icons/Typography/text-decoration-underline.svg' },
-        { text: '', iconPath: 'Icons/Typography/text-decoration-line-through.svg' },
-        { text: '', iconPath: 'Icons/Typography/text-decoration-overline.svg' }
-      ]}
-      ButtonIds={[
-        'text-decoration-none',
-        'text-decoration-underline',
-        'text-decoration-line-through',
-        'text-decoration-overline'
-      ]}
-      IconSize={13}
-      flexGrow={true}
-      activeButtonId={'text-decoration-' + $clickedElementStyle?.textDecoration}
-      on:click={setTextDecoration}
-    />
-  </div>
-
-  <!-- Text Direction + Transform -->
-  <div class="flex flex-row-reverse justify-between gap-[10px]">
-    <ButtonGroup
-      Items={[
-        { text: '', iconPath: 'Icons/Typography/text-direction-left.svg' },
-        { text: '', iconPath: 'Icons/Typography/text-direction-right.svg' }
-      ]}
-      ButtonIds={['text-direction-ltr', 'text-direction-rtl']}
-      activeButtonId={'text-direction-' + $clickedElementStyle?.direction}
-      on:click={setTextDirection}
     />
 
     <ButtonGroup
@@ -197,4 +165,36 @@
       on:click={setTextTransform}
     />
   </div>
+
+  <!-- Text Direction + Text Decoration -->
+  <!-- <div class="flex justify-between gap-[10px]">
+    <ButtonGroup
+      Items={[
+        { text: '', iconPath: 'Icons/Typography/text-decoration-none.svg' },
+        { text: '', iconPath: 'Icons/Typography/text-decoration-underline.svg' },
+        { text: '', iconPath: 'Icons/Typography/text-decoration-line-through.svg' },
+        { text: '', iconPath: 'Icons/Typography/text-decoration-overline.svg' }
+      ]}
+      ButtonIds={[
+        'text-decoration-none',
+        'text-decoration-underline',
+        'text-decoration-line-through',
+        'text-decoration-overline'
+      ]}
+      IconSize={13}
+      flexGrow={true}
+      activeButtonId={'text-decoration-' + $clickedElementStyle?.textDecoration}
+      on:click={setTextDecoration}
+    />
+
+    <ButtonGroup
+      Items={[
+        { text: '', iconPath: 'Icons/Typography/text-direction-left.svg' },
+        { text: '', iconPath: 'Icons/Typography/text-direction-right.svg' }
+      ]}
+      ButtonIds={['text-direction-ltr', 'text-direction-rtl']}
+      activeButtonId={'text-direction-' + $clickedElementStyle?.direction}
+      on:click={setTextDirection}
+    />
+  </div>  -->
 </div>
