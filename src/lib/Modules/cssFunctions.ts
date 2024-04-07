@@ -52,10 +52,10 @@ function getUserSetStyles(element: HTMLElement, props: string[]): { [key: string
   return styles;
 }
 
-// I am still thinking about doing this function with getUserSetStyles() right. Might have drastic changes in its working in future. But for now, let it be...
 export function processStyles(element: HTMLElement) {
   let style: { [key: string]: any } & CSSStyleDeclaration = { ...element.style };
   let computedStyle = getComputedStyle(element);
+  // I will redo the logic for this. I know it's not good and inefficient, but for now, let it be...
   let userSetStyles = getUserSetStyles(element, [
     'width',
     'height',
@@ -72,8 +72,22 @@ export function processStyles(element: HTMLElement) {
     'padding-right',
     'padding-bottom',
     'font-size',
-    'line-height'
+    'line-height',
+    'border-width',
+    'border-top-width',
+    'border-bottom-width',
+    'border-left-width',
+    'border-right-width'
   ]);
+
+  function removePxUnit(property: string, defaultValue: string) {
+    let CSSValue: string = userSetStyles[property];
+
+    if (CSSValue) CSSValue = CSSValue.endsWith('px') ? CSSValue.replace('px', '') : CSSValue;
+    else CSSValue = defaultValue;
+
+    return CSSValue;
+  }
 
   // Display properties ------->
   if (!style.display) style.display = computedStyle.display;
@@ -86,15 +100,6 @@ export function processStyles(element: HTMLElement) {
   if (!style.justifyContent) {
     let justifyContent = computedStyle.justifyContent;
     style.justifyContent = justifyContent === 'normal' ? 'flex-start' : justifyContent;
-  }
-
-  function removePxUnit(property: string, defaultValue: string) {
-    let CSSValue: string = userSetStyles[property];
-
-    if (CSSValue) CSSValue = CSSValue.endsWith('px') ? CSSValue.replace('px', '') : CSSValue;
-    else CSSValue = defaultValue;
-
-    return CSSValue;
   }
 
   // Sizing properties ------->
@@ -142,6 +147,7 @@ export function processStyles(element: HTMLElement) {
   if (!style.fontSize) style.fontSize = removePxUnit('font-size', computedStyle.fontSize.replace('px', ''));
 
   style.lineHeight = removePxUnit('line-height', computedStyle.lineHeight);
+
   style.textDecoration = computedStyle.textDecoration.split(' ')[0];
   style.fontWeight = computedStyle.fontWeight;
   style.fontFamily = computedStyle.fontFamily.replace(/['"]/g, '').split(',')[0].trim();
@@ -159,6 +165,24 @@ export function processStyles(element: HTMLElement) {
   style.borderTopRightRadius = computedStyle.borderTopRightRadius.replace('px', '');
   style.borderBottomLeftRadius = computedStyle.borderBottomLeftRadius.replace('px', '');
   style.borderBottomRightRadius = computedStyle.borderBottomRightRadius.replace('px', '');
+
+  if (computedStyle.borderWidth.split(' ').length > 1) style.borderWidth = '';
+  else style.borderWidth = removePxUnit('border-width', computedStyle.borderWidth.replace('px', ''));
+
+  style.borderTopWidth = removePxUnit('border-top-width', computedStyle.borderTopWidth.replace('px', ''));
+  style.borderBottomWidth = removePxUnit(
+    'border-bottom-width',
+    computedStyle.borderBottomWidth.replace('px', '')
+  );
+  style.borderLeftWidth = removePxUnit('border-left-width', computedStyle.borderLeftWidth.replace('px', ''));
+  style.borderRightWidth = removePxUnit(
+    'border-right-width',
+    computedStyle.borderRightWidth.replace('px', '')
+  );
+
+  style.borderStyle = computedStyle.borderStyle;
+
+  style.borderColor = '#' + rgbHex(computedStyle.borderColor);
 
   clickedElementStyle.update(() => style);
 }

@@ -4,7 +4,8 @@
   import MiniInputBar from '$lib/UI/MiniInputBar.svelte';
   import InputBar from '$lib/UI/InputBar.svelte';
   import { CSSUtility } from '$lib/Modules/cssFunctions';
-  import { clickedElement, clickedElementStyle } from '../../Stores';
+  import { clickedElementStyle } from '../../Stores';
+  import { setMiniInputBarStyle } from '$lib/Modules/helperFunctions';
 
   function setTextAlignment(e: CustomEvent) {
     const clickedBtn = e.detail.target as HTMLButtonElement;
@@ -33,19 +34,6 @@
     // convert '900 - Black' to 900
     let btnTextToInt = parseInt(targetButton.textContent as string);
     if (!isNaN(btnTextToInt)) CSSUtility.writeCSS('font-weight', String(btnTextToInt));
-  }
-
-  function setFontSizing(e: CustomEvent) {
-    let targetInput = e.detail.target;
-    if (targetInput.value === targetInput.oldValue) return;
-
-    if (Number(targetInput.value)) {
-      CSSUtility.writeCSS(targetInput.id, targetInput.value + 'px');
-    } else if (CSS.supports(targetInput.id, targetInput.value)) {
-      CSSUtility.writeCSS(targetInput.id, targetInput.value);
-    } else {
-      targetInput.value = targetInput.oldValue;
-    }
   }
 
   function setFontStyle(e: CustomEvent) {
@@ -125,13 +113,13 @@
       id={'font-size'}
       FieldName="Size"
       value={$clickedElementStyle?.fontSize}
-      on:blur={setFontSizing}
+      on:blur={setMiniInputBarStyle}
     />
     <MiniInputBar
       id={'line-height'}
       FieldName="Height"
       value={$clickedElementStyle?.lineHeight}
-      on:blur={setFontSizing}
+      on:blur={setMiniInputBarStyle}
     />
   </div>
 
@@ -165,36 +153,4 @@
       on:click={setTextTransform}
     />
   </div>
-
-  <!-- Text Direction + Text Decoration -->
-  <!-- <div class="flex justify-between gap-[10px]">
-    <ButtonGroup
-      Items={[
-        { text: '', iconPath: 'Icons/Typography/text-decoration-none.svg' },
-        { text: '', iconPath: 'Icons/Typography/text-decoration-underline.svg' },
-        { text: '', iconPath: 'Icons/Typography/text-decoration-line-through.svg' },
-        { text: '', iconPath: 'Icons/Typography/text-decoration-overline.svg' }
-      ]}
-      ButtonIds={[
-        'text-decoration-none',
-        'text-decoration-underline',
-        'text-decoration-line-through',
-        'text-decoration-overline'
-      ]}
-      IconSize={13}
-      flexGrow={true}
-      activeButtonId={'text-decoration-' + $clickedElementStyle?.textDecoration}
-      on:click={setTextDecoration}
-    />
-
-    <ButtonGroup
-      Items={[
-        { text: '', iconPath: 'Icons/Typography/text-direction-left.svg' },
-        { text: '', iconPath: 'Icons/Typography/text-direction-right.svg' }
-      ]}
-      ButtonIds={['text-direction-ltr', 'text-direction-rtl']}
-      activeButtonId={'text-direction-' + $clickedElementStyle?.direction}
-      on:click={setTextDirection}
-    />
-  </div>  -->
 </div>

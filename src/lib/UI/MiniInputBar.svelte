@@ -2,7 +2,7 @@
   import { createEventDispatcher } from 'svelte';
   import { clickedElementStyle } from '../../Stores';
 
-  export let FieldName: string = 'Input';
+  export let FieldName: string = '';
   export let Icon: string = '';
   export let IconSize: number = 10;
   export let rotateIcon: number = 0;
@@ -13,12 +13,12 @@
   const dispatch = createEventDispatcher();
 
   interface CustomInputElement extends HTMLInputElement {
-    oldValue?: string;
+    computedValue?: string;
   }
 
   function customFunction(e: Event) {
     let inputElement: CustomInputElement = e.target as HTMLInputElement;
-    inputElement.oldValue = value;
+    inputElement.computedValue = value;
 
     dispatch('blur', {
       target: inputElement
@@ -49,13 +49,13 @@
 </script>
 
 <div
-  class="flex justify-between rounded-[6px] bg-[#404040] p-[8px] gap-[10px] border-2 border-[#505050] h-[34px]"
+  class="flex justify-between rounded-[6px] bg-[#404040] p-[8px] gap-[10px] border-2 border-[#505050] h-[34px] min-w-0"
   style={rowReverse ? 'flex-direction: row-reverse' : ''}
   on:click={(e) => focusOnInput(e)}
 >
   <input
     {id}
-    class="w-[42px] text-[11px] bg-[#404040] rounded-[2px] focus:outline-none focus:ring-2 font-semibold focus:ring-[#505050] tracking-wide capitalize text-[#b8b6b6]"
+    class="min-w-0 shrink text-[11px] bg-[#404040] rounded-[2px] focus:outline-none focus:ring-2 font-semibold focus:ring-[#505050] tracking-wide capitalize text-[#b8b6b6]"
     style={rowReverse ? 'text-align: right' : ''}
     {value}
     autocomplete="off"
@@ -70,6 +70,7 @@
       if (e.key === 'Enter') customFunction(e);
     }}
   />
+
   {#if Icon}
     <img
       src={Icon}
@@ -80,7 +81,7 @@
     />
   {:else}
     <div
-      class="flex w-full justify-end items-end tracking-wider font-bold text-[9px] text-[#b8b8b6]/80 uppercase pointer-events-none"
+      class="flex min-w-max justify-end items-end tracking-wider font-bold text-[9px] text-[#b8b8b6]/80 uppercase pointer-events-none"
     >
       {FieldName}
     </div>
