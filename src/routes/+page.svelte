@@ -31,7 +31,6 @@
 
       <div class="flex flex-col bg-[#2e2f31] w-[250px] shrink-0">
         <Properties />
-        <!-- screen when no element selected -->
       </div>
     </div>
   </div>

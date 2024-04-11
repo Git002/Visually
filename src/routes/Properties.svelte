@@ -1,11 +1,13 @@
 <script lang="ts">
   import Accordion from '$lib/UI/Accordion.svelte';
   import Selector from '../lib/PropertyComponents/Selector.svelte';
+
   import Display from '$lib/PropertyComponents/Display.svelte';
   import Spacing from '$lib/PropertyComponents/Spacing.svelte';
   import Sizing from '$lib/PropertyComponents/Sizing.svelte';
   import Typography from '$lib/PropertyComponents/Typography.svelte';
   import Border from '$lib/PropertyComponents/Border.svelte';
+  import Background from '$lib/PropertyComponents/Background.svelte';
 </script>
 
 <div class="flex flex-col select-none max-h-[94vh]">
@@ -36,6 +38,9 @@
     </Accordion>
     <Accordion ItemName="Border">
       <Border />
+    </Accordion>
+    <Accordion ItemName="Background">
+      <Background />
     </Accordion>
   </div>
 </div>

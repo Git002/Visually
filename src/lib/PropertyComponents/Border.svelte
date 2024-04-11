@@ -123,6 +123,7 @@
   </div>
 
   <InputBar
+    id="border-color"
     value={$clickedElementStyle?.borderColor ?? '#000000'}
     type="color"
     on:input={setBorderColor}

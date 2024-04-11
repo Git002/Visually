@@ -101,6 +101,7 @@
 
   <!-- Font Color -->
   <InputBar
+    id="font-color"
     value={$clickedElementStyle?.color ?? '#000000'}
     type="color"
     on:input={setTextColor}

@@ -57,6 +57,7 @@
     />
 
     <input
+      {id}
       type="text"
       bind:value
       on:blur={(e) => blurEvent(e)}

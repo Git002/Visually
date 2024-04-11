@@ -113,8 +113,7 @@
     />
   </div>
 
-  <div />
-  <div class="col-span-4">
+  <div class="col-span-6">
     <Input
       id="margin-bottom"
       Class="my-[2px] text-center"
@@ -123,5 +122,4 @@
       on:arrowUpDown={incrementDecrementValue}
     />
   </div>
-  <div />
 </div>
