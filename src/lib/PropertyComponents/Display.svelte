@@ -1,5 +1,6 @@
 <script lang="ts">
   import ButtonGroup from '../UI/ButtonGroup.svelte';
+  import Dropdown from '$lib/UI/Dropdown.svelte';
   import { clickedElement, clickedElementStyle } from '../../Stores';
   import { CSSUtility } from '$lib/Modules/cssFunctions';
 
@@ -29,6 +30,14 @@
     CSSUtility.writeCSS('display', clickedButton.id.replace('display-', ''));
   }
 
+  function setFlexDirection(e: CustomEvent) {
+    let targetButton = e.detail.target as HTMLButtonElement;
+    CSSUtility.writeCSS(
+      'flex-direction',
+      targetButton.textContent?.toLowerCase().replace(' ', '-') as string
+    );
+  }
+
   function setAlignCSS(e: CustomEvent) {
     let clickedButton = e.detail.target as HTMLButtonElement;
     CSSUtility.writeCSS('align-items', clickedButton.id.replace('align-items-', ''));
@@ -43,12 +52,12 @@
 <div class="flex flex-col gap-[12px]">
   <ButtonGroup
     Items={[
-      { text: '', iconPath: 'Icons/Display/block.svg' },
-      { text: '', iconPath: 'Icons/Display/flex.svg' },
-      { text: '', iconPath: 'Icons/Display/grid.svg' },
-      { text: '', iconPath: 'Icons/Display/inline-block.svg' },
-      { text: '', iconPath: 'Icons/Display/inline.svg' },
-      { text: '', iconPath: 'Icons/Display/none.svg' }
+      { text: '', popupText: 'Block', iconPath: 'Icons/Display/block.svg' },
+      { text: '', popupText: 'Flex', iconPath: 'Icons/Display/flex.svg' },
+      { text: '', popupText: 'Grid', iconPath: 'Icons/Display/grid.svg' },
+      { text: '', popupText: 'Inline-block', iconPath: 'Icons/Display/inline-block.svg' },
+      { text: '', popupText: 'Inline', iconPath: 'Icons/Display/inline.svg' },
+      { text: '', popupText: 'None', iconPath: 'Icons/Display/none.svg' }
     ]}
     ButtonIds={[
       'display-block',
@@ -63,13 +72,25 @@
   />
 
   <div class={showFlexGroup ? 'flex flex-col gap-[12px] visible' : 'hidden'}>
+    <!-- Flex Direction -->
+    <div class="grid grid-cols-7 items-center">
+      <div class="col-span-2 text-[12px] text-[#b8b6b6] font-semibold">Direction</div>
+      <div class="col-span-5">
+        <Dropdown
+          DropdownBtnText={$clickedElementStyle?.flexDirection.replace('-', ' ')}
+          ItemsArray={['Row', 'Column', 'Row Reverse', 'Column Reverse']}
+          on:click={setFlexDirection}
+        />
+      </div>
+    </div>
+
     <ButtonGroup
       Items={[
-        { text: '', iconPath: 'Icons/Display/Align/start.svg' },
-        { text: '', iconPath: 'Icons/Display/Align/center.svg' },
-        { text: '', iconPath: 'Icons/Display/Align/end.svg' },
-        { text: '', iconPath: 'Icons/Display/Align/stretch.svg' },
-        { text: '', iconPath: 'Icons/Display/Align/baseline.svg' }
+        { text: '', popupText: 'Align Start', iconPath: 'Icons/Display/Align/start.svg' },
+        { text: '', popupText: 'Align Center', iconPath: 'Icons/Display/Align/center.svg' },
+        { text: '', popupText: 'Align End', iconPath: 'Icons/Display/Align/end.svg' },
+        { text: '', popupText: 'Align Stretch', iconPath: 'Icons/Display/Align/stretch.svg' },
+        { text: '', popupText: 'Align Baseline', iconPath: 'Icons/Display/Align/baseline.svg' }
       ]}
       ButtonIds={[
         'align-items-flex-start',
@@ -84,11 +105,11 @@
 
     <ButtonGroup
       Items={[
-        { text: '', iconPath: 'Icons/Display/Justify/start.svg' },
-        { text: '', iconPath: 'Icons/Display/Justify/center.svg' },
-        { text: '', iconPath: 'Icons/Display/Justify/end.svg' },
-        { text: '', iconPath: 'Icons/Display/Justify/between.svg' },
-        { text: '', iconPath: 'Icons/Display/Justify/evenly.svg' }
+        { text: '', popupText: 'Justify Start', iconPath: 'Icons/Display/Justify/start.svg' },
+        { text: '', popupText: 'Justify Center', iconPath: 'Icons/Display/Justify/center.svg' },
+        { text: '', popupText: 'Justify End', iconPath: 'Icons/Display/Justify/end.svg' },
+        { text: '', popupText: 'Justify Between', iconPath: 'Icons/Display/Justify/between.svg' },
+        { text: '', popupText: 'Justify Evenly', iconPath: 'Icons/Display/Justify/evenly.svg' }
       ]}
       ButtonIds={[
         'justify-content-flex-start',

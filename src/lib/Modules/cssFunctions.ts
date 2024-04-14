@@ -90,17 +90,15 @@ export function processStyles(element: HTMLElement) {
   }
 
   // Display properties ------->
-  if (!style.display) style.display = computedStyle.display;
+  style.display = computedStyle.display;
 
-  if (!style.alignItems) {
-    let alignItemsValue = computedStyle.alignItems;
-    style.alignItems = alignItemsValue === 'normal' ? 'stretch' : alignItemsValue;
-  }
+  style.flexDirection = computedStyle.flexDirection;
 
-  if (!style.justifyContent) {
-    let justifyContent = computedStyle.justifyContent;
-    style.justifyContent = justifyContent === 'normal' ? 'flex-start' : justifyContent;
-  }
+  let alignItemsValue = computedStyle.alignItems;
+  style.alignItems = alignItemsValue === 'normal' ? 'stretch' : alignItemsValue;
+
+  let justifyContent = computedStyle.justifyContent;
+  style.justifyContent = justifyContent === 'normal' ? 'flex-start' : justifyContent;
 
   // Sizing properties ------->
   if (!style.width) style.width = removePxUnit('width', 'Auto');

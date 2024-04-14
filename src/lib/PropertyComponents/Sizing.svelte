@@ -51,9 +51,9 @@
     />
   </div>
 
-  <div class="grid grid-cols-6 items-center">
+  <div class="grid grid-cols-7 items-center">
     <div class="col-span-2 text-[12px] font-semibold">Overflow</div>
-    <div class="col-span-4">
+    <div class="col-span-5">
       <Dropdown
         DropdownBtnText={$clickedElementStyle?.overflow}
         ItemsArray={['auto', 'hidden', 'visible', 'scroll']}
