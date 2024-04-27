@@ -24,38 +24,36 @@ function getUserSetStyles(element: HTMLElement, props: string[]): { [key: string
   let styles: { [key: string]: string } = {};
 
   for (let sheet of get(iFrameDocument).styleSheets) {
-    for (let prop of props) {
-      let selectorInfo: { [key: string]: string } = {};
+    for (const rule of sheet.cssRules) {
+      const selector = (rule as CSSStyleRule).selectorText;
 
-      for (let rule of sheet.cssRules) {
-        let selector = (rule as CSSStyleRule).selectorText;
+      selector.split(',').forEach((selectorUnit) => {
+        if (element.matches(selectorUnit)) {
+          for (let prop of props) {
+            let selectorInfo: { [key: string]: string } = {};
 
-        if (element.matches(selector)) {
-          let propValue = (rule as CSSStyleRule).style[prop as any];
-          if (propValue) {
-            selector.split(',').forEach((selectorUnit) => {
-              if (element.matches(selectorUnit)) selectorInfo[selectorUnit] = propValue;
-            });
+            let propValue = (rule as CSSStyleRule).style[prop as any];
+            if (propValue) selectorInfo[selectorUnit] = propValue;
+
+            // figure out the specificty --->
+            if (Object.keys(selectorInfo).length > 1) {
+              const highestSpecificitySelector: string = findHighestSpecificity(selectorInfo);
+              styles[prop] = selectorInfo[highestSpecificitySelector];
+            } else if (Object.keys(selectorInfo).length === 1) {
+              styles[prop] = Object.values(selectorInfo)[0];
+            }
           }
         }
-
-        // figure out the specificty --->
-        if (Object.keys(selectorInfo).length > 1) {
-          const highestSpecificitySelector: string = findHighestSpecificity(selectorInfo);
-          styles[prop] = selectorInfo[highestSpecificitySelector];
-        } else if (Object.keys(selectorInfo).length === 1) {
-          styles[prop] = Object.values(selectorInfo)[0];
-        }
-      }
+      });
     }
   }
+
   return styles;
 }
 
 export function processStyles(element: HTMLElement) {
   let style: { [key: string]: any } & CSSStyleDeclaration = { ...element.style };
   let computedStyle = getComputedStyle(element);
-  // I will redo the logic for this. I know it's not good and inefficient, but for now, let it be...
   let userSetStyles = getUserSetStyles(element, [
     'width',
     'height',
