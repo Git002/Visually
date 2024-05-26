@@ -7,14 +7,14 @@
     </button>
   </div>
 
-  <div class="flex flex-row py-[6px] gap-[8px]">
+  <div class="flex flex-row py-[8px] gap-[8px]">
     <button
       class="font-sans text-[10px] font-semibold tracking-widest text-center text-[#b8b6b6] rounded-full px-[10px] py-[6px] hover:text-[#d8d4d4]"
     >
       PREVIEW
     </button>
     <button
-      class="font-sans text-[12px] font-semibold tracking-wide text-center text-[#ebebeb] bg-[#cf672b] rounded-md px-[10px] hover:bg-[#d46a2c] inline-flex items-center gap-[6px]"
+      class="font-sans text-[12px] font-semibold tracking-wide text-center text-[#ebebeb] bg-[#cf672b] rounded-md px-[10px] hover:bg-[#d46a2c] inline-flex items-center gap-[8px]"
     >
       <object data="../Icons/Header/export.svg" title="" style="pointer-events: none;" /> Export
     </button>

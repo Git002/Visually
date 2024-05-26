@@ -1,5 +1,5 @@
 export function calculateRect(element: HTMLElement, selector: HTMLDivElement) {
-  let rect = element.getBoundingClientRect();
+  const rect = element.getBoundingClientRect();
   selector.style.width = rect.width + 'px';
   selector.style.height = rect.height + 'px';
   selector.style.top = rect.top + 'px';

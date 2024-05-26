@@ -11,21 +11,22 @@
     BODY: { name: 'Body', icon: './Icons/NavigatorPanel/window.svg' },
     DIV: { name: 'Div', icon: './Icons/NavigatorPanel/square.svg' },
     H1: { name: 'Heading', icon: './Icons/NavigatorPanel/heading.svg' },
-    P: { name: 'Pragraph', icon: './Icons/NavigatorPanel/paragraph.svg' },
-    IMG: { name: 'Image', icon: './Icons/NavigatorPanel/image.svg' },
+    P: { name: 'Pragraph ', icon: './Icons/NavigatorPanel/paragraph.svg' },
     BUTTON: { name: 'Button', icon: './Icons/NavigatorPanel/button.svg' },
-    INPUT: { name: 'Input', icon: './Icons/NavigatorPanel/input.svg' }
+    IMG: { name: 'Image', icon: './Icons/NavigatorPanel/image.svg' },
+    INPUT: { name: 'Input', icon: './Icons/NavigatorPanel/input.svg' },
+    BR: { name: 'BR', icon: './Icons/NavigatorPanel/br.svg' }
   };
 
   /**
-   * Returns the position at which the given node is at in the nav-tree.
+   * Returns the position at which the given node is in the nav-tree.
    */
   function getNodesPosition(currentNode: HTMLElement): number[] {
     let result = [];
     let parentNode: HTMLElement;
     let currentNodeIndex: number;
 
-    while (currentNode.textContent?.trim() !== 'body') {
+    while (currentNode.textContent?.trim().toLowerCase() !== 'body') {
       parentNode = currentNode.parentElement as HTMLElement;
       currentNodeIndex = Array.from(parentNode.children)
         .filter((element) => element.hasAttribute('data-header'))
@@ -56,7 +57,7 @@
 
   /**
    * Fetch the original element from iFrame based on the position provided.
-   * For example giving position=[0] will return <body>
+   * For example: position=[0] will return <body>
    */
   function getElementByPosition(position: number[]): HTMLElement {
     let node = $iFrameDocument.body as HTMLElement;
@@ -99,9 +100,7 @@
     prevActiveNode = activeNode;
   }
 
-  $: if ($clickedElement) {
-    toggleActiveNode();
-  }
+  $: if ($clickedElement) toggleActiveNode();
 
   onMount(() => {
     let navPanel = <HTMLDivElement>document.getElementById('navigator-tree-view');
@@ -119,7 +118,7 @@
 
     navPanel.addEventListener('keydown', (e: KeyboardEvent) => {
       if (['Delete', 'Backspace'].includes(e.key) && clickedElement.tagName !== 'BODY') {
-        const backspaceEvent = new KeyboardEvent('keydown', { key: 'Backspace' });
+        const backspaceEvent = new KeyboardEvent('keyup', { key: 'Backspace' });
         $iFrameDocument.dispatchEvent(backspaceEvent);
       }
     });

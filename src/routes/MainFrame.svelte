@@ -4,6 +4,8 @@
   import { processStyles } from '../lib/Modules/cssFunctions';
   import { calculateRect, ghostImageHandler } from '../lib/Modules/MainFrameFunctions';
   import { PanelElements } from '../lib/PanelComponents/ElementsPanel.svelte';
+  import MultiSelect from '$lib/UI/MultiSelect.svelte';
+  import { handleEnterEvent } from '$lib/Modules/helperFunctions';
 
   let hoveredElement: HTMLElement;
   let draggedElement: HTMLElement | null = null;
@@ -15,11 +17,13 @@
   const ABOVE = 'beforebegin';
   const BELOW = 'afterend';
 
+  let dblclickedElement: HTMLElement | null;
+
   onMount(() => {
     const iFrame = <HTMLIFrameElement>document.getElementById('frame');
     const ghost_img = <HTMLDivElement>document.getElementById('ghost_img');
 
-    // helper selectors for drag n drop
+    // helper selectors for drag & drop
     const click_selector = <HTMLDivElement>document.getElementById('click-selector');
     const hover_selector = <HTMLDivElement>document.getElementById('hover-selector');
     const indicator = <HTMLDivElement>document.getElementById('indicator');
@@ -95,7 +99,18 @@
 
         currentClickedElement = e.target as HTMLElement;
 
+        // removing contenteditable if clicked elsewhere
+        if (dblclickedElement && dblclickedElement !== currentClickedElement) {
+          dblclickedElement.normalize();
+          dblclickedElement.removeAttribute('contenteditable');
+          dblclickedElement = null;
+
+          click_selector.style.outlineStyle = 'none';
+          click_selector.style.border = '1px solid rgb(76, 120, 255)';
+        }
+
         calculateRect(currentClickedElement, click_selector);
+
         click_selector.style.display = 'block';
 
         $clickedElement = currentClickedElement;
@@ -119,14 +134,47 @@
         prevClickedElement = currentClickedElement;
       });
 
+      iFrameDoc.addEventListener('dblclick', (e: MouseEvent) => {
+        dblclickedElement = e.target as HTMLElement;
+
+        if (!['H1', 'P'].includes(dblclickedElement.tagName)) return;
+
+        if (!dblclickedElement.hasAttribute('contentEditable')) {
+          dblclickedElement.contentEditable = 'true';
+          dblclickedElement.focus();
+
+          // Set cursor to end
+          const range = iFrameDoc.createRange();
+          range.selectNodeContents(dblclickedElement);
+          range.collapse(false);
+
+          const selection = iFrame.contentWindow?.getSelection();
+          selection?.removeAllRanges();
+          selection?.addRange(range);
+
+          // Style the indicators so that it looks distinct while editing text
+          click_selector.style.outlineStyle = 'solid';
+          click_selector.style.border = '0px solid rgb(76, 120, 255)';
+          hover_selector.style.display = 'none';
+        }
+
+        // const popup = document.getElementById('popup') as HTMLDivElement;
+        // popup.style.top = dblclickedElement.offsetHeight + dblclickedElement.offsetTop + 10 + 'px';
+        // popup.style.left = dblclickedElement.offsetLeft + 'px';
+      });
+
       iFrameDoc.addEventListener('mouseover', (e: Event) => {
         hoveredElement = e.target as HTMLElement;
+
         if (hoveredElement.tagName !== 'BODY') hoveredElement.draggable = true;
 
-        calculateRect(currentClickedElement, click_selector);
         calculateRect(hoveredElement, hover_selector);
 
-        hover_selector.style.display = 'block';
+        if (hoveredElement === dblclickedElement) {
+          hover_selector.style.display = 'none';
+        } else {
+          hover_selector.style.display = 'block';
+        }
       });
 
       iFrameDoc.addEventListener('mouseout', (e: Event) => {
@@ -224,8 +272,13 @@
 
         ghostImageHandler(75, 60, 'none');
 
-        if (htmlCode) {
-          dropTarget ? dropTarget : (dropTarget = e.target as HTMLElement);
+        dropTarget ? dropTarget : (dropTarget = e.target as HTMLElement);
+
+        let allowDrop = true;
+
+        if (dropTarget !== draggedElement && draggedElement?.contains(dropTarget)) allowDrop = false;
+
+        if (htmlCode && dropTarget !== draggedElement && allowDrop) {
           dropTarget.insertAdjacentHTML(position, htmlCode);
 
           draggedElement?.remove();
@@ -273,17 +326,39 @@
       });
 
       iFrameDoc.addEventListener('keydown', (e: KeyboardEvent) => {
-        if (['Delete', 'Backspace'].includes(e.key) && currentClickedElement.tagName !== 'BODY') {
-          // the element to be clicked when the current element gets deleted
+        if (dblclickedElement && e.key === 'Enter') {
+          e.preventDefault();
+
+          handleEnterEvent(iFrameDoc);
+
+          dblclickedElement.click();
+
+          // trigger Navigator.svelte to re-render the tree
+          $iFrameDocument = iFrameDoc;
+        }
+      });
+
+      iFrameDoc.addEventListener('keyup', (e: KeyboardEvent) => {
+        // Deleting texts inside contenteditable
+        if (dblclickedElement && e.key === 'Backspace') {
+          e.preventDefault();
+
+          calculateRect(dblclickedElement, click_selector);
+
+          // trigger Navigator.svelte to re-render the tree
+          $iFrameDocument = iFrameDoc;
+        }
+
+        // Deleting the elements
+        else if (
+          ['Delete', 'Backspace'].includes(e.key) &&
+          !['BODY', 'HTML'].includes(currentClickedElement.tagName)
+        ) {
           let remainingElement: HTMLElement;
 
           let prevElement = <HTMLElement>currentClickedElement.previousElementSibling;
           let nextElement = <HTMLElement>currentClickedElement.nextElementSibling;
           let parentElement = <HTMLElement>currentClickedElement.parentElement;
-
-          parentElement.childNodes.forEach((node: ChildNode) => {
-            if (node.nodeName === '#text') node.remove();
-          });
 
           remainingElement = nextElement || prevElement || parentElement;
 
@@ -292,7 +367,8 @@
 
           calculateRect(hoveredElement, hover_selector);
 
-          $iFrameDocument = iFrameDoc; // trigger Navigator.svelte to re-render the tree
+          // trigger Navigator.svelte to re-render the tree
+          $iFrameDocument = iFrameDoc;
         }
       });
 
@@ -312,6 +388,7 @@
 <div id="frame_container" class="relative w-full h-full overflow-hidden">
   <iframe frameborder="0" title="Project" id="frame" style="color-scheme: dark; width: 100%; height: 100%;" />
 
+  <!-- For Clicks -->
   <div
     id="click-selector"
     style="
@@ -322,9 +399,12 @@
     position: absolute;
     border-radius: 0px;
     background-color: transparent;
+    outline-color: #abd4ff;
+    outline-width: 4px;
   "
   />
 
+  <!-- For Hover -->
   <div
     id="hover-selector"
     style="
@@ -338,6 +418,7 @@
   "
   />
 
+  <!-- For Drag & Drop -->
   <div
     id="indicator"
     style="
@@ -351,4 +432,33 @@
     background-color: transparent;
   "
   />
+
+  <!-- For Text editing popup -->
+  <div
+    id="popup"
+    class="rounded-[6px] shadow-gray-600 shadow-2xl"
+    style="
+    position: absolute;
+    display: none;
+    top: 10px;
+    "
+  >
+    <MultiSelect
+      Items={[
+        { text: '', iconPath: 'Icons/TextEdit/bold.svg' },
+        { text: '', iconPath: 'Icons/TextEdit/italic.svg' },
+        { text: '', iconPath: 'Icons/TextEdit/underline.svg' },
+        { text: '', iconPath: 'Icons/TextEdit/strikethrough.svg' },
+        { text: '', iconPath: 'Icons/TextEdit/style.svg' }
+      ]}
+      border={false}
+      ButtonIds={[
+        'set-text-bold',
+        'set-text-italic',
+        'set-text-underline',
+        'set-text-strikethrough',
+        'set-text-style'
+      ]}
+    />
+  </div>
 </div>

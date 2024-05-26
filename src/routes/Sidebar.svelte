@@ -54,7 +54,7 @@
 <div
   id="panel"
   class={$showPanelComponent
-    ? 'flex flex-col left-[45px] w-[250px] h-full bg-[#2e2f31] border-l-[1px] border-[#202124] absolute z-10 select-none'
+    ? 'flex flex-col left-[45px] w-[260px] h-full bg-[#2e2f31] border-l-[1px] border-[#202124] absolute z-10 select-none'
     : 'hidden'}
 >
   <div

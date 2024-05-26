@@ -3,9 +3,9 @@
   import { popup } from '@skeletonlabs/skeleton';
 
   export let Items: { text: string; popupText?: string; iconPath: string }[];
-  export let IconSize: number = 15;
+  export let IconSize: number = 14;
   export let ButtonIds: string[];
-  export let activeButtonId: string = ButtonIds[0];
+  export let activeButtonIds: string[] = [ButtonIds[0]];
   export let deactiveButtonIds: string[] = [''];
   export let flexGrow: boolean = false;
   export let border: boolean = true;
@@ -20,9 +20,14 @@
 
   async function changeButtonColor(e: Event) {
     let currentClickedItemId = (e.target as HTMLElement).id;
-    if (!ButtonIds.includes(currentClickedItemId)) return;
-
-    activeButtonId = currentClickedItemId;
+    if (activeButtonIds.includes(currentClickedItemId)) {
+      const index = activeButtonIds.indexOf(currentClickedItemId);
+      activeButtonIds.splice(index, 1);
+      activeButtonIds = activeButtonIds;
+    } else {
+      activeButtonIds.push(currentClickedItemId);
+      activeButtonIds = activeButtonIds;
+    }
     await tick();
     handleClick(e);
   }
@@ -31,7 +36,7 @@
 <div
   class={`flex justify-between rounded-[6px] bg-[#404040] ${
     border ? 'border-2 border-[#505050]' : ''
-  } text-[12px] font-semibold h-[34px] shrink-0`}
+  } text-[12px] font-semibold h-[34px] overflow-hidden shrink-0`}
   style={flexGrow ? 'flex-grow: 1;' : ''}
   on:click={(e) => {
     changeButtonColor(e);
@@ -41,9 +46,9 @@
     <button
       type="button"
       id={ButtonIds[i]}
-      class="px-[10px] rounded-[5px] text-[#b8b6b6] [&>*]:pointer-events-none"
-      style={activeButtonId === ButtonIds[i]
-        ? 'background-color: #2e2f31; pointer-events: none'
+      class="px-[10px] text-[#b8b6b6] [&>*]:pointer-events-none"
+      style={activeButtonIds.includes(ButtonIds[i])
+        ? 'background-color: #2e2f31;'
         : deactiveButtonIds.includes(ButtonIds[i])
         ? 'background-color: #404040; opacity: 0.4'
         : 'background-color: #404040'}

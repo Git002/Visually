@@ -23,7 +23,7 @@
 
 <div
   data-header
-  class="flex py-[5px] gap-[10px] border-y-2 border-[#2E2F31] hover:bg-[#353638] hover:border-[#353638] capitalize"
+  class="flex py-[7px] gap-[10px] border-y-2 border-[#2E2F31] hover:bg-[#353638] hover:border-[#353638] capitalize"
   {style}
   {draggable}
   on:click={treeToggle}
