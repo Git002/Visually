@@ -82,6 +82,7 @@
     />
 
     <Dropdown
+      id={'selectorDropdown'}
       DropdownBtnText={'Default'}
       ItemsArray={['Default', 'On Hover', 'On Click', 'On Focus']}
       on:click={changeCSSPseudoClass}

@@ -44,10 +44,10 @@
 
 <div class="font-sans text-[10px] mb-[15px] font-semibold tracking-wider text-[#ded9d9]">ELEMENTS</div>
 
-<div class="grid grid-cols-2 gap-[20px]">
+<div class="grid grid-cols-2 gap-[18px]">
   {#each Object.entries(PanelElements) as [key]}
     <div
-      class="flex flex-col border-2 border-[#404040] w-full h-[86px] rounded-md items-center justify-between cursor-grab overflow-hidden pb-[8px] pt-[12px]"
+      class="flex flex-col border-2 border-[#404040] w-full h-[88px] rounded-md items-center justify-between cursor-grab overflow-hidden pb-[8px] pt-[12px]"
       draggable="true"
       data-tagname={key}
     >

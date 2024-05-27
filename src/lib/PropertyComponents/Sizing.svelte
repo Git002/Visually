@@ -55,6 +55,7 @@
     <div class="col-span-2 text-[12px] font-semibold">Overflow</div>
     <div class="col-span-5">
       <Dropdown
+        id={'overflowDropdown'}
         DropdownBtnText={$clickedElementStyle?.overflow}
         ItemsArray={['auto', 'hidden', 'visible', 'scroll']}
         on:click={setOverflow}

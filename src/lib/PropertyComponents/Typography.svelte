@@ -77,6 +77,7 @@
 
   <!-- Font family -->
   <Dropdown
+    id={'fontFamilyDropdown'}
     DropdownBtnText={$clickedElementStyle?.fontFamily}
     ItemsArray={['Inter', 'Lora', 'Open Sans', 'Poppins', 'Roboto']}
     on:click={setFontFamily}
@@ -84,6 +85,7 @@
 
   <!-- Font weight -->
   <Dropdown
+    id={'fontWeightDropdown'}
     DropdownBtnText={fontWeightToValueDictionary[$clickedElementStyle?.fontWeight]}
     ItemsArray={[
       '100 - Thin',

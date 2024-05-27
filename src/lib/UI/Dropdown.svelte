@@ -1,10 +1,10 @@
 <script lang="ts">
   import { tick, createEventDispatcher } from 'svelte';
+  import { popup } from '@skeletonlabs/skeleton';
 
+  export let id: string;
   export let DropdownBtnText: string = 'Select';
   export let ItemsArray: string[];
-
-  let dropdownOpen = false;
 
   const dispatch = createEventDispatcher();
 
@@ -23,42 +23,20 @@
     await tick();
     customFunction(e);
   }
-
-  function dropdownClose() {
-    dropdownOpen = false;
-    document.body.removeEventListener('click', dropdownClose);
-  }
-
-  async function dropdownTrigger(e: Event) {
-    dropdownOpen = !dropdownOpen;
-    document.body.addEventListener('click', dropdownClose);
-    if (!dropdownOpen) return;
-
-    await tick();
-    const dropdownBtn = e.target as HTMLButtonElement;
-    const dropdownMenu = dropdownBtn.nextElementSibling as HTMLDivElement;
-
-    // clear the styles before calculating height to avoid incorrect values
-    dropdownMenu.style.top = '';
-
-    const dropdownMenuRect = dropdownMenu.getBoundingClientRect();
-
-    // position dropdown menu up if space is not there down below
-    if (dropdownMenuRect.top + dropdownMenuRect.height > window.innerHeight) {
-      dropdownMenu.style.top = `-${dropdownMenuRect.height + 19}px`;
-    }
-  }
 </script>
 
 <div class="text-[12px] w-full relative">
   <!-- Dropdown Button -->
   <button
     class="flex justify-between flex-row rounded-[6px] bg-[#404040] py-[6px] px-[12px] border-2 border-[#505050] items-center capitalize font-semibold tracking-wide text-[#b8b6b6] h-[34px] w-full focus:outline-0"
-    on:click|stopPropagation={(e) => {
-      dropdownTrigger(e);
-    }}
-    on:keydown|stopPropagation={(e) => {
-      if (e.key === 'Escape') dropdownOpen = false;
+    style="top: 0px;"
+    use:popup={{
+      event: 'click',
+      target: id,
+      placement: 'bottom',
+      middleware: {
+        offset: 10
+      }
     }}
   >
     {DropdownBtnText}
@@ -67,9 +45,8 @@
 
   <!-- Dropdown Menu -->
   <div
-    class={dropdownOpen
-      ? 'absolute w-full bg-[#494949] rounded-[6px] mt-[9px] font-semibold text-[#b8b6b6] tracking-wide overflow-hidden z-50 py-[4px] shadow-[0px_70px_50px_10px_#00000024]'
-      : 'hidden'}
+    class="absolute hidden w-full bg-[#494949] rounded-[6px] font-semibold text-[#b8b6b6] tracking-wide overflow-hidden z-50 py-[4px] shadow-[0px_70px_50px_10px_#00000024]"
+    data-popup={id}
     on:click={(e) => changeDropdownBtnText(e)}
   >
     {#each ItemsArray as item (item)}
