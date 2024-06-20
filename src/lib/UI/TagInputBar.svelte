@@ -7,7 +7,6 @@
   import { onMount } from 'svelte';
   import { createEventDispatcher } from 'svelte';
   import { random } from '$lib/Modules/helperFunctions';
-  import Tagify from '@yaireo/tagify';
   import '@yaireo/tagify/dist/tagify.css';
 
   export let id: string;
@@ -30,7 +29,9 @@
     });
   }
 
-  onMount(() => {
+  onMount(async () => {
+    const { default: Tagify } = await import('@yaireo/tagify');
+
     tagifyInstance = new Tagify(input, {
       blacklist: ['hover']
     });

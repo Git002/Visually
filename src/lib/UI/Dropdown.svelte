@@ -6,6 +6,12 @@
   export let DropdownBtnText: string = 'Select';
   export let ItemsArray: string[];
 
+  let buttonWidth: string;
+
+  async function changeBtnWidth(e: Event) {
+    buttonWidth = (e.target as HTMLButtonElement).offsetWidth.toString();
+  }
+
   const dispatch = createEventDispatcher();
 
   function customFunction(e: Event) {
@@ -30,6 +36,7 @@
   <button
     class="flex justify-between flex-row rounded-[6px] bg-[#404040] py-[6px] px-[12px] border-2 border-[#505050] items-center capitalize font-semibold tracking-wide text-[#b8b6b6] h-[34px] w-full focus:outline-0"
     style="top: 0px;"
+    on:click={changeBtnWidth}
     use:popup={{
       event: 'click',
       target: id,
@@ -42,30 +49,31 @@
     {DropdownBtnText}
     <object data="Icons/dropdown.svg" title="" style="pointer-events: none;" />
   </button>
+</div>
 
-  <!-- Dropdown Menu -->
-  <div
-    class="absolute hidden w-full bg-[#494949] rounded-[6px] font-semibold text-[#b8b6b6] tracking-wide overflow-hidden z-50 py-[4px] shadow-[0px_70px_50px_10px_#00000024]"
-    data-popup={id}
-    on:click={(e) => changeDropdownBtnText(e)}
-  >
-    {#each ItemsArray as item (item)}
-      <div class="px-[6px] py-[3px]">
-        {#if item.toLowerCase() === DropdownBtnText.toLowerCase()}
-          <button
-            class="inline-flex w-full justify-between bg-[#cf672b] text-[#ebebeb] text-left capitalize px-[12px] py-[6px] rounded-[6px] cursor-default"
-          >
-            {item}
-            <img src="Icons/selected.svg" alt="" width="16" height="16" style="pointer-events: none;" />
-          </button>
-        {:else}
-          <button
-            class="inline-flex w-full justify-between hover:text-[#ebebeb] text-left capitalize hover:bg-[#606060] px-[12px] py-[6px] rounded-[6px] cursor-default"
-          >
-            {item}
-          </button>
-        {/if}
-      </div>
-    {/each}
-  </div>
+<!-- Dropdown Menu -->
+<div
+  class="absolute hidden bg-[#494949] rounded-[6px] text-[12px] font-semibold text-[#b8b6b6] tracking-wide overflow-hidden z-50 py-[4px] shadow-[0px_70px_50px_10px_#00000024]"
+  style="width: {buttonWidth}px;"
+  data-popup={id}
+  on:click={(e) => changeDropdownBtnText(e)}
+>
+  {#each ItemsArray as item (item)}
+    <div class="px-[6px] py-[3px]">
+      {#if item.toLowerCase() === DropdownBtnText.toLowerCase()}
+        <button
+          class="inline-flex w-full justify-between bg-[#cf672b] text-[#ebebeb] text-left capitalize px-[12px] py-[6px] rounded-[6px] cursor-default"
+        >
+          {item}
+          <img src="Icons/selected.svg" alt="" width="16" height="16" style="pointer-events: none;" />
+        </button>
+      {:else}
+        <button
+          class="inline-flex w-full justify-between hover:text-[#ebebeb] text-left capitalize hover:bg-[#606060] px-[12px] py-[6px] rounded-[6px] cursor-default"
+        >
+          {item}
+        </button>
+      {/if}
+    </div>
+  {/each}
 </div>

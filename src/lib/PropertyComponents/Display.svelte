@@ -77,6 +77,7 @@
       <div class="col-span-2 text-[12px] text-[#b8b6b6] font-semibold">Direction</div>
       <div class="col-span-5">
         <Dropdown
+          id={'flexDirectionDropdown'}
           DropdownBtnText={$clickedElementStyle?.flexDirection.replace('-', ' ')}
           ItemsArray={['Row', 'Column', 'Row Reverse', 'Column Reverse']}
           on:click={setFlexDirection}
