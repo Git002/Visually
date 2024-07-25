@@ -61,14 +61,14 @@
   }
 </script>
 
-<div class="flex flex-col gap-[10px] text-[#b8b6b6] text-[10px]">
+<div class="flex flex-col gap-[12px] text-[#b8b6b6] text-[10px]">
   <!-- Text align -->
   <ButtonGroup
     Items={[
-      { text: '', iconPath: 'Icons/Typography/text-left.svg' },
-      { text: '', iconPath: 'Icons/Typography/text-center.svg' },
-      { text: '', iconPath: 'Icons/Typography/text-right.svg' },
-      { text: '', iconPath: 'Icons/Typography/text-justify.svg' }
+      { text: '', popupText: 'Left', iconPath: 'Icons/Typography/text-left.svg' },
+      { text: '', popupText: 'Center', iconPath: 'Icons/Typography/text-center.svg' },
+      { text: '', popupText: 'Right', iconPath: 'Icons/Typography/text-right.svg' },
+      { text: '', popupText: 'Justify', iconPath: 'Icons/Typography/text-justify.svg' }
     ]}
     ButtonIds={['text-align-left', 'text-align-center', 'text-align-right', 'text-align-justify']}
     activeButtonId={'text-align-' + $clickedElementStyle?.textAlign}
@@ -127,7 +127,7 @@
   </div>
 
   <!-- Font Style + Text Transform -->
-  <div class="flex justify-between gap-[10px]">
+  <div class="flex justify-between gap-[12px]">
     <ButtonGroup
       Items={[
         { text: '', iconPath: 'Icons/Typography/text-regular.svg' },
@@ -140,10 +140,10 @@
 
     <ButtonGroup
       Items={[
-        { text: '', iconPath: 'Icons/Typography/text-decoration-none.svg' },
-        { text: 'AA', iconPath: '' },
-        { text: 'Aa', iconPath: '' },
-        { text: 'aa', iconPath: '' }
+        { text: '', popupText: 'Default', iconPath: 'Icons/Typography/text-decoration-none.svg' },
+        { text: 'AA', popupText: 'Uppercase', iconPath: '' },
+        { text: 'Aa', popupText: 'Capitalize', iconPath: '' },
+        { text: 'aa', popupText: 'Lowercase', iconPath: '' }
       ]}
       ButtonIds={[
         'text-transform-none',
@@ -153,6 +153,7 @@
       ]}
       IconSize={13}
       activeButtonId={'text-transform-' + $clickedElementStyle?.textTransform}
+      popupAlignment={'bottom'}
       on:click={setTextTransform}
     />
   </div>

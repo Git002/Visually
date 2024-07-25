@@ -9,6 +9,7 @@
   export let deactiveButtonIds: string[] = [''];
   export let flexGrow: boolean = false;
   export let border: boolean = true;
+  export let popupAlignment: 'top' | 'bottom' | 'left' | 'right' = 'top';
 
   const dispatch = createEventDispatcher();
 
@@ -45,12 +46,12 @@
       style={activeButtonId === ButtonIds[i]
         ? 'background-color: #2e2f31; pointer-events: none'
         : deactiveButtonIds.includes(ButtonIds[i])
-        ? 'background-color: #404040; opacity: 0.4'
-        : 'background-color: #404040'}
+          ? 'background-color: #404040; opacity: 0.4'
+          : 'background-color: #404040'}
       use:popup={{
         event: 'hover',
         target: 'popupHover-' + ButtonIds[i],
-        placement: 'top'
+        placement: popupAlignment
       }}
     >
       {#if item.iconPath}

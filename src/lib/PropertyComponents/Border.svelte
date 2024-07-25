@@ -15,7 +15,9 @@
   }
 
   function setBorder(e: CustomEvent) {
-    if ($clickedElementStyle.borderStyle === 'none') CSSUtility.writeCSS('border-style', 'solid');
+    if ($clickedElementStyle.borderWidth !== '0') {
+      if ($clickedElementStyle.borderStyle === 'none') CSSUtility.writeCSS('border-style', 'solid');
+    }
     setMiniInputBarStyle(e);
   }
 
@@ -24,7 +26,7 @@
   }
 </script>
 
-<div class="flex flex-col gap-[10px]">
+<div class="flex flex-col gap-[12px]">
   <div class="flex gap-[10px]">
     <ButtonGroup
       ButtonIds={['border-radius-switch', 'border-thickness-switch']}
@@ -55,7 +57,7 @@
     {/if}
   </div>
 
-  <div class="grid grid-cols-2 gap-[10px]">
+  <div class="grid grid-cols-2 gap-[12px]">
     {#if showRadiusSwitch}
       <MiniInputBar
         id={'border-top-left-radius'}
@@ -88,7 +90,7 @@
     {/if}
   </div>
 
-  <div class="grid grid-cols-2 gap-[10px]">
+  <div class="grid grid-cols-2 gap-[12px]">
     {#if showRadiusSwitch}
       <MiniInputBar
         id={'border-bottom-left-radius'}

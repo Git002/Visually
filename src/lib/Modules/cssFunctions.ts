@@ -1,8 +1,25 @@
-import { clickedElement, clickedElementStyle, iFrameDocument, currentCSSActionClass } from '../../Stores';
+import { clickedElement, clickedElementStyle, iFrameDocument, cssPseudoSelector } from '../../Stores';
 import { get } from 'svelte/store';
 import { random } from './helperFunctions';
 import { calculate, compare } from 'specificity';
 import rgbHex from 'rgb-hex';
+import Color from 'color';
+
+function getBrowserDefaultValue(property: any) {
+  const container = get(iFrameDocument).createElement('div');
+  const element = get(clickedElement).cloneNode() as HTMLElement;
+
+  container.style.display = 'none';
+  container.appendChild(element);
+  get(iFrameDocument).body.appendChild(container);
+
+  let CSSValue = getComputedStyle(element)[property];
+
+  element.remove();
+  container.remove();
+
+  return CSSValue;
+}
 
 function findHighestSpecificity(obj: Object) {
   const specificityResults = Object.keys(obj).map((selector) => {
@@ -17,23 +34,44 @@ function findHighestSpecificity(obj: Object) {
 }
 
 /**
- * Retrieve any styles set by the user instead of getting the browser's computed property.
- * For example: getUserSetStyles(element, ['width', 'max-height'])
+ * Retrieve any styles set by the user instead of getting the browser's computed property. Usage:
+ * `getUserSetStyles('default', element, ['width', 'max-height', 'color'])`
  */
-function getUserSetStyles(element: HTMLElement, props: string[]): { [key: string]: string } {
+function getUserSetStyles(
+  pseudoSelector: 'default' | ':hover' | ':active' | ':focus',
+  element: HTMLElement,
+  props: string[]
+): { [key: string]: string } {
   let styles: { [key: string]: string } = {};
 
   for (let sheet of get(iFrameDocument).styleSheets) {
     for (const rule of sheet.cssRules) {
-      const selector = (rule as CSSStyleRule).selectorText;
+      const selectors = (rule as CSSStyleRule).selectorText;
 
-      selector.split(',').forEach((selectorUnit) => {
-        if (element.matches(selectorUnit)) {
+      selectors.split(',').forEach((selector) => {
+        /**
+         * `element.matches()` only returns true when the element state is equal to pseudo selector.
+         * Which means, even if we want the `#btn` to `match()` with `#btn:hover`, it will return False until we manually hover over the `#btn` element. Then only `#btn === #btn:hover`
+         * That's why we are removing the pseudo selector to trick the `match()` function
+         */
+        const selectorWithoutPseudoSelector =
+          selector.split(':')[0].length > 0 ? selector.split(':')[0] : selector;
+
+        if (element.matches(selectorWithoutPseudoSelector)) {
           for (let prop of props) {
             let selectorInfo: { [key: string]: string } = {};
 
             let propValue = (rule as CSSStyleRule).style[prop as any];
-            if (propValue) selectorInfo[selectorUnit] = propValue;
+
+            if (!propValue) continue;
+
+            if (pseudoSelector === 'default' && !selector.includes(':')) {
+              selectorInfo[selector] = propValue;
+            } else if (selector.includes(pseudoSelector)) {
+              selectorInfo[selector] = propValue;
+            } else {
+              continue;
+            }
 
             // figure out the specificty --->
             if (Object.keys(selectorInfo).length > 1) {
@@ -53,14 +91,18 @@ function getUserSetStyles(element: HTMLElement, props: string[]): { [key: string
 
 export function processStyles(element: HTMLElement) {
   let style: { [key: string]: any } & CSSStyleDeclaration = { ...element.style };
-  let computedStyle = getComputedStyle(element);
-  let userSetStyles = getUserSetStyles(element, [
+  const stylesToCompute: string[] = [
+    'display',
+    'flex-direction',
+    'align-items',
+    'justify-content',
     'width',
     'height',
     'max-width',
     'max-height',
     'min-width',
     'min-height',
+    'overflow',
     'margin-top',
     'margin-left',
     'margin-right',
@@ -69,116 +111,173 @@ export function processStyles(element: HTMLElement) {
     'padding-left',
     'padding-right',
     'padding-bottom',
+    'font-style',
     'font-size',
+    'text-align',
     'line-height',
+    'text-decoration',
+    'font-weight',
+    'font-family',
+    'color',
+    'background-color',
+    'direction',
+    'text-transform',
+    'border-radius',
+    'border-top-left-radius',
+    'border-top-right-radius',
+    'border-bottom-left-radius',
+    'border-bottom-right-radius',
     'border-width',
     'border-top-width',
     'border-bottom-width',
     'border-left-width',
-    'border-right-width'
-  ]);
+    'border-right-width',
+    'border-style',
+    'border-color'
+  ];
 
-  function removePxUnit(property: string, defaultValue: string) {
+  let userSetStyles = getUserSetStyles(get(cssPseudoSelector), element, stylesToCompute);
+  let defaultStateStyles: { [key: string]: string };
+
+  if (get(cssPseudoSelector) !== 'default') {
+    defaultStateStyles = getUserSetStyles('default', element, stylesToCompute);
+  }
+
+  /**
+   * Get style values from `userSetStyles{}`. If `defaultValue` is not given, then it will automatically
+   * get the default browser style through `getComputedStyle()`
+   */
+  function getStyle(property: string, defaultValue: string | null = null): string {
+    // userSetStyles could be  default, hover or of any other state
     let CSSValue: string = userSetStyles[property];
 
-    if (CSSValue) CSSValue = CSSValue.endsWith('px') ? CSSValue.replace('px', '') : CSSValue;
-    else CSSValue = defaultValue;
+    // if state is 'default' ----->
+    if (get(cssPseudoSelector) === 'default') {
+      if (!CSSValue) {
+        if (defaultValue !== null) CSSValue = defaultValue;
+        else CSSValue = getBrowserDefaultValue(property);
+      }
+    }
+    // if state is ':hover', ':active', ':focus' ----->
+    else {
+      // if hover style is empty
+      if (!CSSValue) {
+        CSSValue = defaultStateStyles[property];
+        // if default styles are empty too
+        if (!CSSValue) {
+          if (defaultValue !== null) CSSValue = defaultValue;
+          else CSSValue = getBrowserDefaultValue(property);
+        }
+      }
+    }
 
-    return CSSValue;
+    if (property.includes('color')) CSSValue = '#' + rgbHex(Color(CSSValue).string());
+
+    return CSSValue.endsWith('px') ? CSSValue.replace('px', '') : CSSValue;
   }
 
   // Display properties ------->
-  style.display = computedStyle.display;
+  if (!style.display) style.display = getStyle('display');
 
-  style.flexDirection = computedStyle.flexDirection;
+  if (!style.flexDirection) style.flexDirection = getStyle('flex-direction');
 
-  let alignItemsValue = computedStyle.alignItems;
-  style.alignItems = alignItemsValue === 'normal' ? 'stretch' : alignItemsValue;
+  if (!style.alignItems) {
+    let alignItemsValue = getStyle('align-items');
+    style.alignItems = alignItemsValue === 'normal' ? 'stretch' : alignItemsValue;
+  }
 
-  let justifyContent = computedStyle.justifyContent;
-  style.justifyContent = justifyContent === 'normal' ? 'flex-start' : justifyContent;
+  if (!style.justifyContent) {
+    let justifyContent = getStyle('justify-content');
+    style.justifyContent = justifyContent === 'normal' ? 'flex-start' : justifyContent;
+  }
 
   // Sizing properties ------->
-  if (!style.width) style.width = removePxUnit('width', 'Auto');
+  if (!style.width) style.width = getStyle('width', 'Auto');
 
-  if (!style.height) style.height = removePxUnit('height', 'Auto');
+  if (!style.height) style.height = getStyle('height', 'Auto');
 
-  if (!style.maxWidth) style.maxWidth = removePxUnit('max-width', 'None');
+  if (!style.maxWidth) style.maxWidth = getStyle('max-width', 'None');
 
-  if (!style.maxHeight) style.maxHeight = removePxUnit('max-height', 'None');
+  if (!style.maxHeight) style.maxHeight = getStyle('max-height', 'None');
 
-  if (!style.minWidth) style.minWidth = removePxUnit('min-width', '0');
+  if (!style.minWidth) style.minWidth = getStyle('min-width', '0');
 
-  if (!style.minHeight) style.minHeight = removePxUnit('min-height', '0');
+  if (!style.minHeight) style.minHeight = getStyle('min-height', '0');
 
-  if (!style.overflow) style.overflow = computedStyle.overflow;
+  if (!style.overflow) style.overflow = getStyle('overflow');
 
   // Spacing properties ------->
-  if (!style.marginTop) style.marginTop = removePxUnit('margin-top', '0');
+  if (!style.marginTop) style.marginTop = getStyle('margin-top', '0');
 
-  if (!style.marginLeft) style.marginLeft = removePxUnit('margin-left', '0');
+  if (!style.marginLeft) style.marginLeft = getStyle('margin-left', '0');
 
-  if (!style.marginRight) style.marginRight = removePxUnit('margin-right', '0');
+  if (!style.marginRight) style.marginRight = getStyle('margin-right', '0');
 
-  if (!style.marginBottom) style.marginBottom = removePxUnit('margin-bottom', '0');
+  if (!style.marginBottom) style.marginBottom = getStyle('margin-bottom', '0');
 
-  if (!style.paddingTop) style.paddingTop = removePxUnit('padding-top', '0');
+  if (!style.paddingTop) style.paddingTop = getStyle('padding-top', '0');
 
-  if (!style.paddingLeft) style.paddingLeft = removePxUnit('padding-left', '0');
+  if (!style.paddingLeft) style.paddingLeft = getStyle('padding-left', '0');
 
-  if (!style.paddingRight) style.paddingRight = removePxUnit('padding-right', '0');
+  if (!style.paddingRight) style.paddingRight = getStyle('padding-right', '0');
 
-  if (!style.paddingBottom) style.paddingBottom = removePxUnit('padding-bottom', '0');
+  if (!style.paddingBottom) style.paddingBottom = getStyle('padding-bottom', '0');
 
   // Typography properties ------->
-  if (!style.fontStyle) style.fontStyle = computedStyle.fontStyle;
+  if (!style.fontStyle) style.fontStyle = getStyle('font-style');
 
   if (!style.textAlign) {
     // Proper support for languages that starts from RTL will be added later
-    if (computedStyle.textAlign === 'start') style.textAlign = 'left';
-    else if (computedStyle.textAlign === 'end') style.textAlign = 'right';
-    else style.textAlign = computedStyle.textAlign;
+    const textAlign = getStyle('text-align');
+    if (textAlign === 'start') style.textAlign = 'left';
+    else if (textAlign === 'end') style.textAlign = 'right';
+    else style.textAlign = textAlign;
   }
 
-  if (!style.fontSize) style.fontSize = removePxUnit('font-size', computedStyle.fontSize.replace('px', ''));
+  if (!style.fontSize) style.fontSize = getStyle('font-size');
 
-  style.lineHeight = removePxUnit('line-height', computedStyle.lineHeight);
+  if (!style.lineHeight) style.lineHeight = getStyle('line-height');
 
-  style.textDecoration = computedStyle.textDecoration.split(' ')[0];
-  style.fontWeight = computedStyle.fontWeight;
-  style.fontFamily = computedStyle.fontFamily.replace(/['"]/g, '').split(',')[0].trim();
+  if (!style.textDecoration) style.textDecoration = getStyle('text-decoration').split(' ')[0];
+  if (!style.fontWeight) style.fontWeight = getStyle('font-weight');
+  if (!style.fontFamily) {
+    style.fontFamily = getStyle('font-family').replace(/['"]/g, '').split(',')[0].trim();
+  }
 
-  style.color = '#' + rgbHex(computedStyle.color);
-  style.backgroundColor = '#' + rgbHex(computedStyle.backgroundColor);
+  if (!style.color) style.color = getStyle('color');
+  if (!style.backgroundColor) style.backgroundColor = getStyle('background-color');
 
-  style.direction = computedStyle.direction;
-  style.textTransform = computedStyle.textTransform;
+  if (!style.direction) style.direction = getStyle('direction');
+  if (!style.textTransform) style.textTransform = getStyle('text-transform');
 
-  if (computedStyle.borderRadius.split(' ').length > 1) style.borderRadius = '';
-  else style.borderRadius = computedStyle.borderRadius.replace('px', '');
+  if (style.borderRadius) {
+    if (style.borderRadius.split(' ').length > 1) style.borderRadius = '';
+    else style.borderRadius = style.borderRadius.replace('px', '');
+  } else {
+    const borderRadius = getStyle('border-radius');
+    if (borderRadius.split(' ').length > 1) style.borderRadius = '';
+    else style.borderRadius = borderRadius;
+  }
 
-  style.borderTopLeftRadius = computedStyle.borderTopLeftRadius.replace('px', '');
-  style.borderTopRightRadius = computedStyle.borderTopRightRadius.replace('px', '');
-  style.borderBottomLeftRadius = computedStyle.borderBottomLeftRadius.replace('px', '');
-  style.borderBottomRightRadius = computedStyle.borderBottomRightRadius.replace('px', '');
+  if (!style.borderTopLeftRadius) style.borderTopLeftRadius = getStyle('border-top-left-radius');
+  if (!style.borderTopRightRadius) style.borderTopRightRadius = getStyle('border-top-right-radius');
+  if (!style.borderBottomLeftRadius) style.borderBottomLeftRadius = getStyle('border-bottom-left-radius');
+  if (!style.borderBottomRightRadius) style.borderBottomRightRadius = getStyle('border-bottom-right-radius');
 
-  if (computedStyle.borderWidth.split(' ').length > 1) style.borderWidth = '';
-  else style.borderWidth = removePxUnit('border-width', computedStyle.borderWidth.replace('px', ''));
+  if (!style.borderWidth) {
+    const borderWidth = getStyle('border-width');
+    if (borderWidth.split(' ').length > 1) style.borderWidth = '';
+    else style.borderWidth = borderWidth;
+  }
 
-  style.borderTopWidth = removePxUnit('border-top-width', computedStyle.borderTopWidth.replace('px', ''));
-  style.borderBottomWidth = removePxUnit(
-    'border-bottom-width',
-    computedStyle.borderBottomWidth.replace('px', '')
-  );
-  style.borderLeftWidth = removePxUnit('border-left-width', computedStyle.borderLeftWidth.replace('px', ''));
-  style.borderRightWidth = removePxUnit(
-    'border-right-width',
-    computedStyle.borderRightWidth.replace('px', '')
-  );
+  if (!style.borderTopWidth) style.borderTopWidth = getStyle('border-top-width');
+  if (!style.borderBottomWidth) style.borderBottomWidth = getStyle('border-bottom-width');
+  if (!style.borderLeftWidth) style.borderLeftWidth = getStyle('border-left-width');
+  if (!style.borderRightWidth) style.borderRightWidth = getStyle('border-right-width');
 
-  style.borderStyle = computedStyle.borderStyle;
+  if (!style.borderStyle) style.borderStyle = getStyle('border-style');
 
-  style.borderColor = '#' + rgbHex(computedStyle.borderColor);
+  if (!style.borderColor) style.borderColor = getStyle('border-color');
 
   clickedElementStyle.update(() => style);
 }
@@ -195,39 +294,32 @@ function getSelector(element: HTMLElement): string {
 class cssUtility {
   private element: HTMLElement = get(clickedElement);
   private iFrameDoc: Document = get(iFrameDocument);
-  private CSSActionClass: string = get(currentCSSActionClass);
 
   constructor() {
     clickedElement.subscribe((value: HTMLElement) => (this.element = value));
     iFrameDocument.subscribe((value: Document) => (this.iFrameDoc = value));
-    currentCSSActionClass.subscribe((value: string) => (this.CSSActionClass = value));
   }
 
   writeCSS(property: string, value: string) {
+    const styleTag = this.iFrameDoc.getElementById('visually-default-stylesheet') as HTMLStyleElement;
+    const styleSheet = styleTag.sheet as CSSStyleSheet;
+
     let selectorText = getSelector(this.element);
 
-    if (
-      !selectorText ||
-      selectorText === '.hover' ||
-      selectorText === '.active' ||
-      selectorText === '.focus'
-    ) {
+    if (!selectorText) {
       this.element.classList.add(this.generateNewClass());
+      selectorText = getSelector(this.element);
     }
 
-    // have to do this in-order to put action-class position at the end
-    if (this.CSSActionClass !== '') {
-      this.element.classList.remove(this.CSSActionClass);
-      this.element.classList.add(this.CSSActionClass);
-    }
+    let pseudoSelector = get(cssPseudoSelector) === 'default' ? '' : get(cssPseudoSelector);
 
-    // write rules to stylesheet
-    let styleTag = this.iFrameDoc.getElementById('visually-default-stylesheet') as HTMLStyleElement;
-    let styleSheet = styleTag.sheet as CSSStyleSheet;
+    // write rules to stylesheet. For example => #id.class {color: red;}
+    styleSheet.insertRule(
+      selectorText + pseudoSelector + `{${property}: ${value}}`,
+      styleSheet.cssRules.length
+    );
 
-    styleSheet.insertRule(getSelector(this.element) + `{${property}: ${value}}`, styleSheet.cssRules.length);
-
-    // console.log(styleSheet.cssRules);
+    // console.log(selectorText + pseudoSelector + `{${property}: ${value}}`);
 
     get(clickedElement).click();
   }

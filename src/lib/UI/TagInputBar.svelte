@@ -32,9 +32,9 @@
   onMount(async () => {
     const { default: Tagify } = await import('@yaireo/tagify');
 
-    tagifyInstance = new Tagify(input, {
-      blacklist: ['hover']
-    });
+    if (!input) return;
+
+    tagifyInstance = new Tagify(input);
 
     let tagifyInputBar = <HTMLElement>document.querySelector(`.tagify.${className}`);
     tagifyInputBar.id = id;

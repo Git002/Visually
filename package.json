@@ -2,7 +2,7 @@
 	"name": "visually",
 	"version": "0.0.1",
 	"private": true,
-    "type": "module",
+	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
@@ -19,6 +19,7 @@
 		"@sveltejs/adapter-node": "^5.2.0",
 		"@sveltejs/adapter-static": "^3.0.2",
 		"@sveltejs/kit": "^2.5.17",
+		"@types/color": "^3.0.6",
 		"@types/yaireo__tagify": "^4.24.0",
 		"autoprefixer": "^10.4.19",
 		"postcss": "^8.4.38",
@@ -35,6 +36,7 @@
 		"@lottiefiles/lottie-player": "^2.0.4",
 		"@yaireo/tagify": "^4.26.6",
 		"classnames": "^2.5.1",
+		"color": "^4.2.3",
 		"rgb-hex": "^4.1.0",
 		"specificity": "^1.0.0"
 	}

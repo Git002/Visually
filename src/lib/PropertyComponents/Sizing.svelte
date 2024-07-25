@@ -11,8 +11,8 @@
   }
 </script>
 
-<div class="flex flex-col gap-[10px] text-[10px] tracking-wide text-[#b8b6b6]">
-  <div class="grid grid-cols-2 gap-[10px]">
+<div class="flex flex-col gap-[12px] text-[10px] tracking-wide text-[#b8b6b6]">
+  <div class="grid grid-cols-2 gap-[12px]">
     <MiniInputBar
       id={'width'}
       FieldName={'width'}
@@ -51,9 +51,9 @@
     />
   </div>
 
-  <div class="grid grid-cols-7 items-center">
-    <div class="col-span-2 text-[12px] font-semibold">Overflow</div>
-    <div class="col-span-5">
+  <div class="grid grid-cols-10 items-center">
+    <div class="col-span-3 text-[12px] font-semibold">Overflow</div>
+    <div class="col-span-7">
       <Dropdown
         id={'overflowDropdown'}
         DropdownBtnText={$clickedElementStyle?.overflow}

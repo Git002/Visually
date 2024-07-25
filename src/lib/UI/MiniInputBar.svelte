@@ -29,14 +29,13 @@
     const input = <HTMLInputElement>e.target;
     const inputValue = parseInt(input.value);
 
-    // if value is NaN like 'Auto', then get the computedStyle that will give its numeric value like 1020.8 and then you can increment that value up/down
+    // if value is like 'Auto', then just cancel the event
     if (isNaN(inputValue)) {
-      let computedValue: any = $clickedElementStyle.computedStyle[input.id as keyof CSSStyleDeclaration];
-      if (computedValue) input.value = computedValue;
       return;
     }
 
     if (e.key === 'ArrowUp') {
+      console.log('before: ', inputValue, ' after: ', String(inputValue + 1));
       input.value = String(inputValue + 1);
     } else if (e.key === 'ArrowDown' && inputValue !== 0) {
       input.value = String(inputValue - 1);

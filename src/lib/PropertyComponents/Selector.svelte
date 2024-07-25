@@ -3,7 +3,7 @@
   import ButtonGroup from '../UI/ButtonGroup.svelte';
   import InputBar from '../UI/InputBar.svelte';
   import TagInputBar, { tagifyInstance, tagifyInput } from '../UI/TagInputBar.svelte';
-  import { clickedElement, currentCSSActionClass } from '../../Stores';
+  import { clickedElement, cssPseudoSelector } from '../../Stores';
 
   // update the values of tagged input on click
   $: {
@@ -49,11 +49,11 @@
     idInput.classList.toggle('hidden', clickedBtn.id === 'selector-class-btn');
   }
 
-  let allowedActionClasses: { [key: string]: '' | 'hover' | 'active' | 'focus' } = {
-    default: '',
-    'on hover': 'hover',
-    'on click': 'active',
-    'on focus': 'focus'
+  let allowedActionClasses: { [key: string]: 'default' | ':hover' | ':active' | ':focus' } = {
+    default: 'default',
+    'on hover': ':hover',
+    'on click': ':active',
+    'on focus': ':focus'
   };
 
   function changeCSSPseudoClass(e: CustomEvent) {
@@ -63,14 +63,13 @@
     let clickedBtnText = clickedBtn.textContent.toLowerCase();
     if (!Object.keys(allowedActionClasses).includes(clickedBtnText)) return;
 
-    $currentCSSActionClass = allowedActionClasses[clickedBtnText];
+    $cssPseudoSelector = allowedActionClasses[clickedBtnText];
 
-    $clickedElement?.classList.remove('hover', 'active', 'focus');
-    if (clickedBtnText !== 'default') $clickedElement?.classList.add(allowedActionClasses[clickedBtnText]);
+    $clickedElement.click();
   }
 </script>
 
-<div class="flex flex-col px-[12px] py-[12px] gap-[10px]">
+<div class="flex flex-col px-[12px] py-[14px] gap-[12px]">
   <div class="flex justify-between gap-[10px]">
     <ButtonGroup
       Items={[

@@ -13,7 +13,7 @@
 
 <div
   data-header
-  class="flex justify-between px-[12px] pt-[12px] gap-[6px] text-[#d2d2d2] text-[13px] w-full font-medium text-center tracking-wide"
+  class="flex justify-between px-[12px] pt-[13px] gap-[6px] text-[#d2d2d2] text-[13px] w-full font-medium text-center tracking-wide"
   on:click={accordianToggle}
 >
   <div class="flex gap-[8px]">

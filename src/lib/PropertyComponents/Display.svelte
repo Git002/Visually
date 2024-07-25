@@ -72,19 +72,6 @@
   />
 
   <div class={showFlexGroup ? 'flex flex-col gap-[12px] visible' : 'hidden'}>
-    <!-- Flex Direction -->
-    <div class="grid grid-cols-7 items-center">
-      <div class="col-span-2 text-[12px] text-[#b8b6b6] font-semibold">Direction</div>
-      <div class="col-span-5">
-        <Dropdown
-          id={'flexDirectionDropdown'}
-          DropdownBtnText={$clickedElementStyle?.flexDirection.replace('-', ' ')}
-          ItemsArray={['Row', 'Column', 'Row Reverse', 'Column Reverse']}
-          on:click={setFlexDirection}
-        />
-      </div>
-    </div>
-
     <ButtonGroup
       Items={[
         { text: '', popupText: 'Align Start', iconPath: 'Icons/Display/Align/start.svg' },
@@ -122,6 +109,19 @@
       bind:activeButtonId={justifyContentButtonId}
       on:click={setJustifyCSS}
     />
+
+    <!-- Flex Direction -->
+    <div class="grid grid-cols-10 items-center">
+      <div class="col-span-3 text-[12px] text-[#b8b6b6] font-semibold">Direction</div>
+      <div class="col-span-7">
+        <Dropdown
+          id={'flexDirectionDropdown'}
+          DropdownBtnText={$clickedElementStyle?.flexDirection.replace('-', ' ')}
+          ItemsArray={['Row', 'Column', 'Row Reverse', 'Column Reverse']}
+          on:click={setFlexDirection}
+        />
+      </div>
+    </div>
   </div>
 
   <div
