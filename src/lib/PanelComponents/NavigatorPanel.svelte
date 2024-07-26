@@ -144,11 +144,16 @@
       let elem = e.target as HTMLDivElement;
       let elemRect = elem.getBoundingClientRect();
 
-      if (elem.textContent?.trim() === 'body' || elem.parentElement?.textContent?.trim() === 'body') return;
+      if (
+        elem.textContent?.trim().toLowerCase() === 'body' ||
+        elem.parentElement?.textContent?.trim().toLowerCase() === 'body'
+      )
+        return;
 
       /* The draggedNode might be having a bg-color of #353638 as it's on hovered state while rest of the nodes will be #2E2F31. That's why border styles needs to be reset after the drop event */
       let defaultBorderStyle: string;
-      if (elem === draggedNode) defaultBorderStyle = '2px solid #353638'; //lighter
+      if (elem === draggedNode)
+        defaultBorderStyle = '2px solid #353638'; //lighter
       else defaultBorderStyle = '2px solid #2E2F31'; //darker
 
       let cursorPos = (e as MouseEvent).pageY - elemRect.top;
@@ -175,7 +180,9 @@
     navPanel.addEventListener('drop', (e: DragEvent) => {
       let targetNode = e.target as HTMLDivElement;
 
-      if (targetNode.textContent?.trim() === 'body') return;
+      console.log(targetNode.textContent?.trim());
+
+      if (targetNode.textContent?.trim().toLowerCase() === 'body') return;
 
       if (targetNode.hasAttribute('data-caret-down')) targetNode = targetNode.parentElement as HTMLDivElement;
 
