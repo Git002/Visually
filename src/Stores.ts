@@ -7,3 +7,4 @@ export let clickedElementStyle = writable<{ [key: string]: any } & CSSStyleDecla
 export let cssPseudoSelector = writable<'default' | ':hover' | ':active' | ':focus'>('default');
 
 export let iFrameDocument = writable<Document>();
+export let preview = writable<Boolean>(false);

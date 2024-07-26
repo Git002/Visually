@@ -1,10 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { clickedElement, showPanelComponent, iFrameDocument } from '../Stores';
+  import { clickedElement, showPanelComponent, iFrameDocument, preview } from '../Stores';
   import { processStyles } from '../lib/Modules/cssFunctions';
   import { calculateRect, ghostImageHandler } from '../lib/Modules/MainFrameFunctions';
   import { PanelElements } from '../lib/PanelComponents/ElementsPanel.svelte';
-  import MultiSelect from '$lib/UI/MultiSelect.svelte';
   import { handleEnterEvent } from '$lib/Modules/helperFunctions';
 
   let hoveredElement: HTMLElement;
@@ -32,6 +31,8 @@
 
     // drag and drop operations for document --->
     document.addEventListener('dragstart', (e: DragEvent) => {
+      if ($preview) return;
+
       const grabbedElem = e.target as HTMLDivElement;
       if (!grabbedElem.closest('#elements-panel')) return;
 
@@ -45,6 +46,8 @@
     });
 
     document.addEventListener('dragover', (e: DragEvent) => {
+      if ($preview) return;
+
       e.preventDefault();
 
       if (!(e.target as HTMLElement).closest('#elements-panel')) {
@@ -60,10 +63,11 @@
     });
 
     document.addEventListener('drop', (e: DragEvent) => {
+      if ($preview) return;
+
       e.preventDefault();
 
       ghostImageHandler(75, 60, 'none');
-
       indicator.style.display = 'none';
 
       draggedElement = null;
@@ -71,10 +75,11 @@
     });
 
     document.addEventListener('dragend', (e: DragEvent) => {
+      if ($preview) return;
+
       e.preventDefault();
 
       ghostImageHandler(75, 60, 'none');
-
       indicator.style.display = 'none';
 
       draggedElement = null;
@@ -92,6 +97,8 @@
       let currentElementObserver: MutationObserver;
 
       iFrameDoc.addEventListener('click', (e: Event) => {
+        if ($preview) return;
+
         e.preventDefault();
         e.stopPropagation();
 
@@ -135,6 +142,8 @@
       });
 
       iFrameDoc.addEventListener('dblclick', (e: MouseEvent) => {
+        if ($preview) return;
+
         dblclickedElement = e.target as HTMLElement;
 
         if (!['H1', 'P'].includes(dblclickedElement.tagName)) return;
@@ -164,6 +173,8 @@
       });
 
       iFrameDoc.addEventListener('mouseover', (e: Event) => {
+        if ($preview) return;
+
         hoveredElement = e.target as HTMLElement;
 
         if (hoveredElement.tagName !== 'BODY') hoveredElement.draggable = true;
@@ -178,6 +189,8 @@
       });
 
       iFrameDoc.addEventListener('mouseout', (e: Event) => {
+        if ($preview) return;
+
         const mouseoutElem = e.target as HTMLElement;
         mouseoutElem.removeAttribute('draggable');
 
@@ -185,6 +198,8 @@
       });
 
       iFrameDoc.addEventListener('dragstart', (e: DragEvent) => {
+        if ($preview) return;
+
         e.stopPropagation();
 
         const blank = iFrameDoc.createElement('div');
@@ -197,6 +212,8 @@
       });
 
       iFrameDoc.addEventListener('dragover', (e: DragEvent) => {
+        if ($preview) return;
+
         e.preventDefault();
         e.stopPropagation();
 
@@ -267,6 +284,8 @@
       });
 
       iFrameDoc.addEventListener('drop', (e: DragEvent) => {
+        if ($preview) return;
+
         e.preventDefault();
         e.stopPropagation();
 
@@ -312,6 +331,8 @@
       });
 
       iFrameDoc.addEventListener('dragend', (e: DragEvent) => {
+        if ($preview) return;
+
         e.stopPropagation();
         indicator.style.display = 'none';
 
@@ -321,11 +342,15 @@
       });
 
       iFrameDoc.addEventListener('scroll', () => {
+        if ($preview) return;
+
         if ($clickedElement) calculateRect($clickedElement, click_selector);
         calculateRect(hoveredElement, hover_selector);
       });
 
       iFrameDoc.addEventListener('keydown', (e: KeyboardEvent) => {
+        if ($preview) return;
+
         if (dblclickedElement && e.key === 'Enter') {
           e.preventDefault();
 
@@ -339,6 +364,8 @@
       });
 
       iFrameDoc.addEventListener('keyup', (e: KeyboardEvent) => {
+        if ($preview) return;
+
         // Deleting texts inside contenteditable
         if (dblclickedElement && e.key === 'Backspace') {
           e.preventDefault();
@@ -376,6 +403,8 @@
     });
 
     window.addEventListener('resize', () => {
+      if ($preview) return;
+
       if ($clickedElement) {
         calculateRect($clickedElement, click_selector);
         hover_selector.style.display = 'none';
@@ -434,7 +463,7 @@
   />
 
   <!-- For Text editing popup -->
-  <div
+  <!-- <div
     id="popup"
     class="rounded-[6px] shadow-gray-600 shadow-2xl"
     style="
@@ -460,5 +489,5 @@
         'set-text-style'
       ]}
     />
-  </div>
+  </div> -->
 </div>

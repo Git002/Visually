@@ -29,7 +29,7 @@
         <MainFrame />
       </div>
 
-      <div class="flex flex-col bg-[#2e2f31] w-[250px] shrink-0">
+      <div id="properties" class="flex flex-col bg-[#2e2f31] w-[250px] shrink-0">
         <Properties />
       </div>
     </div>
