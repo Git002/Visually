@@ -22,7 +22,7 @@
   </TreeView>
 {:else if element.tagName === 'BODY'}
   <div
-    class="flex gap-[9px] py-[5px] text-[#B8B6B6] text-[12px] text-start cursor-pointer w-full font-semibold tracking-wide border-y-2 border-[#2E2F31] hover:bg-[#353638] hover:border-[#353638] capitalize"
+    class="flex gap-[9px] py-[4px] text-[#B8B6B6] text-[12px] text-start cursor-pointer w-full font-semibold tracking-wide border-y-2 border-[#2E2F31] hover:bg-[#353638] hover:border-[#353638] capitalize"
     style="padding-left: {basePaddingLeft}px;"
   >
     <img src={tagInfo[element.tagName]?.icon} alt="" style="pointer-events: none;" width="14" />
@@ -31,7 +31,7 @@
 {:else}
   <div
     data-header
-    class="flex gap-[11px] py-[7px] text-[#B8B6B6] text-[12px] text-start cursor-pointer w-full font-semibold tracking-wide border-y-2 border-[#2E2F31] hover:bg-[#353638] hover:border-[#353638] capitalize"
+    class="flex gap-[11px] py-[4px] text-[#B8B6B6] text-[12px] text-start cursor-pointer w-full font-semibold tracking-wide border-y-2 border-[#2E2F31] hover:bg-[#353638] hover:border-[#353638] capitalize"
     draggable="true"
     style="padding-left: {basePaddingLeft}px;"
   >

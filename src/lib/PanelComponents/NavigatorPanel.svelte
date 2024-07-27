@@ -209,7 +209,7 @@
   });
 </script>
 
-<div class="font-sans px-[20px] text-[10px] mb-[14px] font-semibold tracking-wider text-[#ded9d9]">
+<div class="font-sans px-[20px] text-[10px] mb-[9px] font-semibold tracking-wider text-[#ded9d9]">
   NAVIGATOR
 </div>
 
