@@ -18,17 +18,29 @@ export function random(length: number, numbers: boolean = false, special_char: b
 }
 
 // validating style changes
-export function setMiniInputBarStyle(e: CustomEvent) {
+export function applyChanges(e: CustomEvent) {
   let targetInput = e.detail.target;
-  if (targetInput.value === targetInput.computedValue) return;
 
-  if (Number(targetInput.value)) {
-    CSSUtility.writeCSS(targetInput.id, targetInput.value + 'px');
-  } else if (CSS.supports(targetInput.id, targetInput.value)) {
+  if (targetInput.value === targetInput.oldValue) return;
+
+  if (CSS.supports(targetInput.id, targetInput.value)) {
     CSSUtility.writeCSS(targetInput.id, targetInput.value);
+  } else if (Number(targetInput.value) && CSS.supports(targetInput.id, targetInput.value + 'px')) {
+    CSSUtility.writeCSS(targetInput.id, targetInput.value + 'px');
+  } else {
+    targetInput.value = targetInput.oldValue;
+  }
+}
+
+export function cssRulesToText(cssRules: CSSRuleList): string {
+  const result: string[] = [];
+
+  for (let i = 0; i < cssRules.length; i++) {
+    const rule = cssRules[i];
+    result.push(rule.cssText);
   }
 
-  targetInput.value = targetInput.computedValue;
+  return result.join('');
 }
 
 // for contenteditable

@@ -11,9 +11,16 @@
 
   const dispatch = createEventDispatcher();
 
+  interface CustomInputElement extends HTMLInputElement {
+    oldValue?: string;
+  }
+
   function blurEvent(e: Event) {
+    let inputElement: CustomInputElement = e.target as HTMLInputElement;
+    inputElement.oldValue = value;
+
     dispatch('blur', {
-      target: e.target
+      target: inputElement
     });
   }
 
@@ -32,8 +39,8 @@
     {placeholder}
     spellcheck="false"
     {value}
-    on:blur={(e) => blurEvent(e)}
-    on:input={(e) => inputChangeEvent(e)}
+    on:blur={blurEvent}
+    on:input={inputChangeEvent}
     on:keydown|stopPropagation={(e) => {
       if (blurEvent && e.key === 'Enter') blurEvent(e);
     }}
@@ -59,8 +66,8 @@
     <input
       {id}
       type="text"
-      bind:value
-      on:blur={(e) => blurEvent(e)}
+      {value}
+      on:blur={blurEvent}
       on:keydown|stopPropagation={(e) => {
         if (blurEvent && e.key === 'Enter') blurEvent(e);
       }}

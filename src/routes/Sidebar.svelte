@@ -59,20 +59,20 @@
 >
   <div
     id="elements-panel"
-    class={activeBtnId === 'elements-panel-btn' ? 'py-[20px] px-[20px] h-full' : 'hidden'}
+    class={activeBtnId === 'elements-panel-btn' ? 'py-[16px] px-[20px] h-full' : 'hidden'}
   >
     <ElementsPanel />
   </div>
-  <div id="navigator-panel" class={activeBtnId === 'navigator-panel-btn' ? 'py-[20px] h-full' : 'hidden'}>
+  <div id="navigator-panel" class={activeBtnId === 'navigator-panel-btn' ? 'py-[16px] h-full' : 'hidden'}>
     <NavigatorPanel />
   </div>
-  <div id="components-panel" class={activeBtnId === 'components-panel-btn' ? 'py-[20px] h-full' : 'hidden'}>
+  <div id="components-panel" class={activeBtnId === 'components-panel-btn' ? 'py-[16px] h-full' : 'hidden'}>
     <ComponentsPanel />
   </div>
-  <div id="pages-panel" class={activeBtnId === 'pages-panel-btn' ? 'py-[20px] h-full' : 'hidden'}>
+  <div id="pages-panel" class={activeBtnId === 'pages-panel-btn' ? 'py-[16px] h-full' : 'hidden'}>
     <PagesPanel />
   </div>
-  <div id="uploads-panel" class={activeBtnId === 'uploads-panel-btn' ? 'py-[20px] h-full' : 'hidden'}>
+  <div id="uploads-panel" class={activeBtnId === 'uploads-panel-btn' ? 'py-[16px] h-full' : 'hidden'}>
     <UploadsPanel />
   </div>
 </div>

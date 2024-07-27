@@ -11,7 +11,7 @@
     oldValue?: string;
   }
 
-  function customFunction(e: Event) {
+  function blurEvent(e: Event) {
     let inputElement: CustomInputElement = e.target as HTMLInputElement;
     inputElement.oldValue = value;
 
@@ -37,12 +37,12 @@
   {value}
   autocomplete="off"
   placeholder="--"
-  on:blur={customFunction}
+  on:blur={blurEvent}
   on:keydown|stopPropagation={(e) => {
     if (['ArrowUp', 'ArrowDown'].includes(e.key)) {
       arrowUpDown(e);
-      customFunction(e);
+      blurEvent(e);
     }
-    if (e.key === 'Enter') customFunction(e);
+    if (e.key === 'Enter') blurEvent(e);
   }}
 />

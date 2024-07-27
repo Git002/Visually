@@ -1,6 +1,5 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
-  import { clickedElementStyle } from '../../Stores';
 
   export let FieldName: string = '';
   export let Icon: string = '';
@@ -13,12 +12,12 @@
   const dispatch = createEventDispatcher();
 
   interface CustomInputElement extends HTMLInputElement {
-    computedValue?: string;
+    oldValue?: string;
   }
 
-  function customFunction(e: Event) {
+  function blurEvent(e: Event) {
     let inputElement: CustomInputElement = e.target as HTMLInputElement;
-    inputElement.computedValue = value;
+    inputElement.oldValue = value;
 
     dispatch('blur', {
       target: inputElement
@@ -35,7 +34,6 @@
     }
 
     if (e.key === 'ArrowUp') {
-      console.log('before: ', inputValue, ' after: ', String(inputValue + 1));
       input.value = String(inputValue + 1);
     } else if (e.key === 'ArrowDown' && inputValue !== 0) {
       input.value = String(inputValue - 1);
@@ -60,13 +58,13 @@
     autocomplete="off"
     spellcheck="false"
     placeholder="--"
-    on:blur={customFunction}
+    on:blur={blurEvent}
     on:keydown|stopPropagation={(e) => {
       if (['ArrowUp', 'ArrowDown'].includes(e.key)) {
         incrementDecrementValue(e);
-        customFunction(e);
+        blurEvent(e);
       }
-      if (e.key === 'Enter') customFunction(e);
+      if (e.key === 'Enter') blurEvent(e);
     }}
   />
 
@@ -80,7 +78,7 @@
     />
   {:else}
     <div
-      class="flex min-w-max justify-end items-end tracking-wider font-bold text-[9px] text-[#b8b8b6]/80 uppercase pointer-events-none"
+      class="flex min-w-max justify-between items-center tracking-wider font-bold text-[9px] text-[#b8b8b6]/80 uppercase pointer-events-none"
     >
       {FieldName}
     </div>

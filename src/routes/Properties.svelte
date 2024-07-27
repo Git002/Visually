@@ -12,18 +12,18 @@
 
 <div class="flex flex-col select-none max-h-[94vh]">
   <div
-    class="flex items-center bg-[#292a2c] px-[12px] py-[5px] font-sans text-[10px] font-semibold tracking-wider text-[#b7b4b4]"
+    class="flex items-center bg-[#292a2c] px-[12px] py-[2px] font-sans text-[10px] font-semibold tracking-wider text-[#b7b4b4]"
   >
     SELECTOR
   </div>
   <Selector />
 
   <div
-    class="flex items-center bg-[#292a2c] px-[12px] py-[5px] font-sans text-[10px] font-semibold tracking-wider text-[#b7b4b4]"
+    class="flex items-center bg-[#292a2c] px-[12px] py-[2px] font-sans text-[10px] font-semibold tracking-wider text-[#b7b4b4]"
   >
     PROPERTIES
   </div>
-  <div id="properties-panel" class="overflow-auto">
+  <div id="properties-panel" class="overflow-auto hide-scrollbar">
     <Accordion ItemName="Display">
       <Display />
     </Accordion>
@@ -46,7 +46,4 @@
 </div>
 
 <style>
-  #properties-panel::-webkit-scrollbar {
-    display: none;
-  }
 </style>

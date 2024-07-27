@@ -5,7 +5,7 @@
   import InputBar from '$lib/UI/InputBar.svelte';
   import { CSSUtility } from '$lib/Modules/cssFunctions';
   import { clickedElementStyle } from '../../Stores';
-  import { setMiniInputBarStyle } from '$lib/Modules/helperFunctions';
+  import { applyChanges } from '$lib/Modules/helperFunctions';
 
   function setTextAlignment(e: CustomEvent) {
     const clickedBtn = e.detail.target as HTMLButtonElement;
@@ -103,11 +103,11 @@
 
   <!-- Font Color -->
   <InputBar
-    id="font-color"
-    value={$clickedElementStyle?.color ?? '#000000'}
+    id="color"
     type="color"
+    value={$clickedElementStyle?.color ?? '#000000'}
     on:input={setTextColor}
-    on:blur={setTextColor}
+    on:blur={applyChanges}
   />
 
   <!-- Font Size + Height -->
@@ -116,13 +116,13 @@
       id={'font-size'}
       FieldName="Size"
       value={$clickedElementStyle?.fontSize}
-      on:blur={setMiniInputBarStyle}
+      on:blur={applyChanges}
     />
     <MiniInputBar
       id={'line-height'}
       FieldName="Height"
       value={$clickedElementStyle?.lineHeight}
-      on:blur={setMiniInputBarStyle}
+      on:blur={applyChanges}
     />
   </div>
 

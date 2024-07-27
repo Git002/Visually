@@ -61,6 +61,7 @@ function getUserSetStyles(
           for (let prop of props) {
             let selectorInfo: { [key: string]: string } = {};
 
+            // `rule` might return some browser initialized values too for some props
             let propValue = (rule as CSSStyleRule).style[prop as any];
 
             if (!propValue) continue;
@@ -171,7 +172,13 @@ export function processStyles(element: HTMLElement) {
       }
     }
 
-    if (property.includes('color')) CSSValue = '#' + rgbHex(Color(CSSValue).string());
+    try {
+      if (['color', 'background-color', 'border-color'].includes(property)) {
+        CSSValue = '#' + rgbHex(Color(CSSValue).string());
+      }
+    } catch {
+      CSSValue = '#' + rgbHex(Color(getBrowserDefaultValue(property)).string());
+    }
 
     return CSSValue.endsWith('px') ? CSSValue.replace('px', '') : CSSValue;
   }

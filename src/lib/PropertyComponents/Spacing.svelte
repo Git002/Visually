@@ -1,7 +1,7 @@
 <script lang="ts">
   import Input from '$lib/UI/Input.svelte';
   import { clickedElementStyle } from '../../Stores';
-  import { CSSUtility } from '$lib/Modules/cssFunctions';
+  import { applyChanges } from '$lib/Modules/helperFunctions';
 
   function incrementDecrementValue(e: CustomEvent) {
     const input = <HTMLInputElement>e.detail.target;
@@ -13,25 +13,12 @@
       input.value = String(inputValue - 1);
     }
   }
-
-  function applyCSS(e: any) {
-    let targetInput = e.detail.target;
-    if (targetInput.value === targetInput.oldValue) return;
-
-    if (Number(targetInput.value)) {
-      CSSUtility.writeCSS(targetInput.id, targetInput.value + 'px');
-    } else if (CSS.supports(targetInput.id, targetInput.value)) {
-      CSSUtility.writeCSS(targetInput.id, targetInput.value);
-    } else {
-      targetInput.value = targetInput.oldValue;
-    }
-  }
 </script>
 
 <div
-  class="grid grid-cols-4 rounded-[6px] bg-[#404040] text-[12px] px-[8px] py-[10px] border-2 border-[#505050] text-[#b8b6b6] text-center items-center w-full gap-[8px] relative"
+  class="grid grid-cols-4 rounded-[6px] bg-[#404040] text-[12px] px-[8px] py-[6px] border-2 border-[#505050] text-[#b8b6b6] text-center items-center w-full gap-[8px] relative"
 >
-  <div class="absolute top-[4px] left-[6px] text-[8px] tracking-wider font-semibold text-[#9a9898]">
+  <div class="absolute top-[2px] left-[8px] text-[8px] tracking-wider font-semibold text-[#9a9898]">
     MARGIN
   </div>
 
@@ -40,31 +27,29 @@
       id="margin-top"
       Class="my-[2px] text-center"
       value={$clickedElementStyle?.marginTop}
-      on:blur={applyCSS}
+      on:blur={applyChanges}
       on:arrowUpDown={incrementDecrementValue}
     />
   </div>
   <Input
     id="margin-left"
-    Class="mt-[6px] text-center"
+    Class="mt-[12px] text-center"
     value={$clickedElementStyle?.marginLeft}
-    on:blur={applyCSS}
+    on:blur={applyChanges}
     on:arrowUpDown={incrementDecrementValue}
   />
 
   <div
-    class="grid grid-cols-3 col-span-4 rounded-[6px] border-[3px] border-[#2e2f31] px-[4px] py-[10px] gap-y-[8px] relative"
+    class="grid grid-cols-3 col-span-4 rounded-[6px] border-[3px] border-[#2e2f31] px-[4px] py-[8px] gap-y-[4px] relative"
   >
-    <div class="absolute top-[4px] left-[6px] text-[8px] tracking-wider font-semibold text-[#9a9898]">
-      PADDING
-    </div>
+    <div class="absolute left-[8px] text-[8px] tracking-wider font-semibold text-[#9a9898]">PADDING</div>
 
     <div class="col-span-3">
       <Input
         id="padding-top"
-        Class="mt-[6px] text-center"
+        Class="mt-[12px] text-center"
         value={$clickedElementStyle?.paddingTop}
-        on:blur={applyCSS}
+        on:blur={applyChanges}
         on:arrowUpDown={incrementDecrementValue}
       />
     </div>
@@ -73,7 +58,7 @@
         id="padding-left"
         Class="text-center"
         value={$clickedElementStyle?.paddingLeft}
-        on:blur={applyCSS}
+        on:blur={applyChanges}
         on:arrowUpDown={incrementDecrementValue}
       />
     </div>
@@ -88,7 +73,7 @@
         id="padding-right"
         Class="text-center"
         value={$clickedElementStyle?.paddingRight}
-        on:blur={applyCSS}
+        on:blur={applyChanges}
         on:arrowUpDown={incrementDecrementValue}
       />
     </div>
@@ -97,7 +82,7 @@
         id="padding-bottom"
         Class="text-center"
         value={$clickedElementStyle?.paddingBottom}
-        on:blur={applyCSS}
+        on:blur={applyChanges}
         on:arrowUpDown={incrementDecrementValue}
       />
     </div>
@@ -106,9 +91,9 @@
   <div>
     <Input
       id="margin-right"
-      Class="mt-[6px] text-center"
+      Class="mt-[12px] text-center"
       value={$clickedElementStyle?.marginRight}
-      on:blur={applyCSS}
+      on:blur={applyChanges}
       on:arrowUpDown={incrementDecrementValue}
     />
   </div>
@@ -118,7 +103,7 @@
       id="margin-bottom"
       Class="my-[2px] text-center"
       value={$clickedElementStyle?.marginBottom}
-      on:blur={applyCSS}
+      on:blur={applyChanges}
       on:arrowUpDown={incrementDecrementValue}
     />
   </div>

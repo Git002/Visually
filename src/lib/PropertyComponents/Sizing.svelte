@@ -3,7 +3,7 @@
   import Dropdown from '$lib/UI/Dropdown.svelte';
   import { clickedElementStyle } from '../../Stores';
   import { CSSUtility } from '$lib/Modules/cssFunctions';
-  import { setMiniInputBarStyle } from '$lib/Modules/helperFunctions';
+  import { applyChanges } from '$lib/Modules/helperFunctions';
 
   function setOverflow(e: CustomEvent) {
     let targetButton = e.detail.target as HTMLButtonElement;
@@ -17,37 +17,37 @@
       id={'width'}
       FieldName={'width'}
       value={$clickedElementStyle?.width}
-      on:blur={setMiniInputBarStyle}
+      on:blur={applyChanges}
     />
     <MiniInputBar
       id={'height'}
       FieldName={'height'}
       value={$clickedElementStyle?.height}
-      on:blur={setMiniInputBarStyle}
+      on:blur={applyChanges}
     />
     <MiniInputBar
       id={'min-width'}
       FieldName={'min w'}
       value={$clickedElementStyle?.minWidth}
-      on:blur={setMiniInputBarStyle}
+      on:blur={applyChanges}
     />
     <MiniInputBar
       id={'min-height'}
       FieldName={'min h'}
       value={$clickedElementStyle?.minHeight}
-      on:blur={setMiniInputBarStyle}
+      on:blur={applyChanges}
     />
     <MiniInputBar
       id={'max-width'}
       FieldName={'max w'}
       value={$clickedElementStyle?.maxWidth}
-      on:blur={setMiniInputBarStyle}
+      on:blur={applyChanges}
     />
     <MiniInputBar
       id={'max-height'}
       FieldName={'max h'}
       value={$clickedElementStyle?.maxHeight}
-      on:blur={setMiniInputBarStyle}
+      on:blur={applyChanges}
     />
   </div>
 

@@ -16,22 +16,20 @@
   });
 </script>
 
-<div class="flex flex-row h-screen">
-  <Loader />
+<Loader />
 
-  <div class="flex flex-col w-full">
-    <Header />
+<div class="flex flex-col w-full">
+  <Header />
 
-    <div class="flex flex-row flex-1">
-      <Sidebar />
+  <div class="flex flex-row">
+    <Sidebar />
 
-      <div class="flex flex-col px-[8px] flex-1 bg-[#202123]">
-        <MainFrame />
-      </div>
+    <div class="flex flex-col px-[8px] flex-1 bg-[#202123]">
+      <MainFrame />
+    </div>
 
-      <div id="properties" class="flex flex-col bg-[#2e2f31] w-[250px] shrink-0">
-        <Properties />
-      </div>
+    <div id="properties" class="flex flex-col bg-[#2e2f31] w-[250px]">
+      <Properties />
     </div>
   </div>
 </div>

@@ -3,7 +3,7 @@
   import MiniInputBar from '$lib/UI/MiniInputBar.svelte';
   import InputBar from '$lib/UI/InputBar.svelte';
   import ButtonGroup from '$lib/UI/ButtonGroup.svelte';
-  import { setMiniInputBarStyle } from '$lib/Modules/helperFunctions';
+  import { applyChanges } from '$lib/Modules/helperFunctions';
   import { CSSUtility } from '$lib/Modules/cssFunctions';
 
   let activeBorderSwitch: string = 'border-radius-switch';
@@ -15,10 +15,8 @@
   }
 
   function setBorder(e: CustomEvent) {
-    if ($clickedElementStyle.borderWidth !== '0') {
-      if ($clickedElementStyle.borderStyle === 'none') CSSUtility.writeCSS('border-style', 'solid');
-    }
-    setMiniInputBarStyle(e);
+    if ($clickedElementStyle.borderWidth !== '0') CSSUtility.writeCSS('border-style', 'solid');
+    applyChanges(e);
   }
 
   function setBorderColor(e: CustomEvent) {
@@ -44,7 +42,7 @@
         id={'border-radius'}
         value={$clickedElementStyle?.borderRadius}
         rowReverse
-        on:blur={setMiniInputBarStyle}
+        on:blur={applyChanges}
       />
     {:else}
       <!-- Border width -->
@@ -63,7 +61,7 @@
         id={'border-top-left-radius'}
         Icon={'/Icons/Border/corner.svg'}
         value={$clickedElementStyle?.borderTopLeftRadius}
-        on:blur={setMiniInputBarStyle}
+        on:blur={applyChanges}
       />
       <MiniInputBar
         id={'border-top-right-radius'}
@@ -71,7 +69,7 @@
         rowReverse
         rotateIcon={90}
         value={$clickedElementStyle?.borderTopRightRadius}
-        on:blur={setMiniInputBarStyle}
+        on:blur={applyChanges}
       />
     {:else}
       <!-- Border width -->
@@ -79,13 +77,13 @@
         id={'border-top-width'}
         FieldName="Top"
         value={$clickedElementStyle?.borderTopWidth}
-        on:blur={setMiniInputBarStyle}
+        on:blur={applyChanges}
       />
       <MiniInputBar
         id={'border-bottom-width'}
         FieldName="Bottom"
         value={$clickedElementStyle?.borderBottomWidth}
-        on:blur={setMiniInputBarStyle}
+        on:blur={applyChanges}
       />
     {/if}
   </div>
@@ -97,7 +95,7 @@
         Icon={'/Icons/Border/corner.svg'}
         rotateIcon={270}
         value={$clickedElementStyle?.borderBottomLeftRadius}
-        on:blur={setMiniInputBarStyle}
+        on:blur={applyChanges}
       />
       <MiniInputBar
         id={'border-bottom-right-radius'}
@@ -105,7 +103,7 @@
         rowReverse
         rotateIcon={180}
         value={$clickedElementStyle?.borderBottomRightRadius}
-        on:blur={setMiniInputBarStyle}
+        on:blur={applyChanges}
       />
     {:else}
       <!-- Border width -->
@@ -113,13 +111,13 @@
         id={'border-left-width'}
         FieldName="Left"
         value={$clickedElementStyle?.borderLeftWidth}
-        on:blur={setMiniInputBarStyle}
+        on:blur={applyChanges}
       />
       <MiniInputBar
         id={'border-right-width'}
         FieldName="Right"
         value={$clickedElementStyle?.borderRightWidth}
-        on:blur={setMiniInputBarStyle}
+        on:blur={applyChanges}
       />
     {/if}
   </div>

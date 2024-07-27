@@ -62,14 +62,14 @@
     <div class="px-[6px] py-[3px]">
       {#if item.toLowerCase() === DropdownBtnText.toLowerCase()}
         <button
-          class="inline-flex w-full justify-between bg-[#cf672b] text-[#ebebeb] text-left capitalize px-[12px] py-[6px] rounded-[6px] cursor-default"
+          class="inline-flex w-full justify-between bg-[#cf672b] text-[#ebebeb] text-left capitalize px-[12px] py-[3px] rounded-[6px] cursor-default"
         >
           {item}
           <img src="Icons/selected.svg" alt="" width="16" height="16" style="pointer-events: none;" />
         </button>
       {:else}
         <button
-          class="inline-flex w-full justify-between hover:text-[#ebebeb] text-left capitalize hover:bg-[#606060] px-[12px] py-[6px] rounded-[6px] cursor-default"
+          class="inline-flex w-full justify-between hover:text-[#ebebeb] text-left capitalize hover:bg-[#606060] px-[12px] py-[3px] rounded-[6px] cursor-default"
         >
           {item}
         </button>

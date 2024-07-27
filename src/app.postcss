@@ -7,3 +7,19 @@
   font-family: 'Inter';
   src: url('/fonts/Inter-VariableFont.ttf');
 }
+
+.toast {
+  @apply rounded-[6px] text-[#dedede] font-medium space-x-0;
+}
+
+.toast .text-base {
+  @apply text-[14px];
+}
+
+.toast .toast-actions .btn-icon {
+  @apply text-[13px] font-medium p-0;
+}
+
+[data-popup] {
+  transition-duration: 0s;
+}
