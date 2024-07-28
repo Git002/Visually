@@ -59,13 +59,13 @@
     {#if showRadiusSwitch}
       <MiniInputBar
         id={'border-top-left-radius'}
-        Icon={'/Icons/Border/corner.svg'}
+        Icon={'Icons/Border/corner.svg'}
         value={$clickedElementStyle?.borderTopLeftRadius}
         on:blur={applyChanges}
       />
       <MiniInputBar
         id={'border-top-right-radius'}
-        Icon={'/Icons/Border/corner.svg'}
+        Icon={'Icons/Border/corner.svg'}
         rowReverse
         rotateIcon={90}
         value={$clickedElementStyle?.borderTopRightRadius}
@@ -92,14 +92,14 @@
     {#if showRadiusSwitch}
       <MiniInputBar
         id={'border-bottom-left-radius'}
-        Icon={'/Icons/Border/corner.svg'}
+        Icon={'Icons/Border/corner.svg'}
         rotateIcon={270}
         value={$clickedElementStyle?.borderBottomLeftRadius}
         on:blur={applyChanges}
       />
       <MiniInputBar
         id={'border-bottom-right-radius'}
-        Icon={'/Icons/Border/corner.svg'}
+        Icon={'Icons/Border/corner.svg'}
         rowReverse
         rotateIcon={180}
         value={$clickedElementStyle?.borderBottomRightRadius}

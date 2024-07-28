@@ -3,8 +3,6 @@
   import { storePopup, initializeStores } from '@skeletonlabs/skeleton';
   import { Toast } from '@skeletonlabs/skeleton';
 
-  export const ssr = false;
-
   storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 
   initializeStores();

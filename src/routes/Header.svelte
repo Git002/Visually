@@ -55,7 +55,7 @@
 >
   <div class="flex flex-row items-center">
     <button class="rounded-full py-[8px] px-[8px] bg-[#393a3c]">
-      <object data="../Icons/Header/menu.svg" title="" style="pointer-events: none;" />
+      <object data="Icons/Header/menu.svg" title="" style="pointer-events: none;" />
     </button>
   </div>
 
@@ -70,7 +70,7 @@
       class="font-sans text-[12px] font-semibold tracking-wide text-center text-[#ebebeb] bg-[#cf672b] rounded-md px-[10px] hover:bg-[#d46a2c] inline-flex items-center gap-[8px]"
       on:click={exportCode}
     >
-      <object data="../Icons/Header/export.svg" title="" style="pointer-events: none;" /> Export
+      <object data="Icons/Header/export.svg" title="" style="pointer-events: none;" /> Export
     </button>
   </div>
 </div>
